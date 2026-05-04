@@ -1,0 +1,218 @@
+/* ── Section — mesmo padrão da Reality ── */
+.section {
+  background-color: var(--color-bg);
+  border-top: 1px dashed rgba(0, 0, 0, 0.12);
+  border-bottom: 1px dashed rgba(0, 0, 0, 0.12);
+  position: relative;
+}
+
+/* Linhas tracejadas verticais (mesmas da Reality) */
+.section::before,
+.section::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 0;
+  border-left: 1px dashed rgba(0, 0, 0, 0.12);
+  pointer-events: none;
+  z-index: 1;
+}
+
+.section::before {
+  left: max(clamp(1.5rem, 4vw, 3rem), calc((100% - 1440px) / 2));
+}
+
+.section::after {
+  right: max(clamp(1.5rem, 4vw, 3rem), calc((100% - 1440px) / 2));
+}
+
+.inner {
+  max-width: 1440px;
+  margin: 0 auto;
+  padding: clamp(3.5rem, 8vw, 7.5rem) clamp(3rem, 6vw, 5rem);
+  display: flex;
+  flex-direction: column;
+  gap: clamp(2.5rem, 5vw, 3.75rem);
+}
+
+/* ── Header: título (esq) + subtexto (dir) ── */
+.header {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+@media (min-width: 768px) {
+  .header {
+    flex-direction: row;
+    align-items: flex-end;
+    gap: clamp(6rem, 16vw, 20rem);
+  }
+}
+
+.titleBlock {
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+  flex-shrink: 0;
+}
+
+@media (min-width: 768px) {
+  .titleBlock {
+    flex: 0 0 clamp(260px, 35%, 520px);
+  }
+}
+
+.tag {
+  font-family: var(--font-primary);
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: var(--color-title);
+  border: 1px solid #cfcfcf;
+  border-radius: 4px;
+  padding: 4px 10px;
+  width: fit-content;
+  letter-spacing: 0.04em;
+}
+
+.headline {
+  font-family: var(--font-primary);
+  font-size: clamp(1.75rem, 2.8vw, 2.6rem);
+  font-weight: 800;
+  line-height: 1.15;
+  letter-spacing: -0.03em;
+  color: var(--color-title);
+  margin: 0;
+}
+
+.headlineFade {
+  color: var(--color-subtitle);
+  font-weight: 700;
+}
+
+.subtext {
+  font-family: var(--font-primary);
+  font-size: clamp(0.815rem, 1vw, 1.05rem);
+  line-height: 1.65;
+  color: var(--color-subtitle);
+  margin: 0;
+  max-width: 42ch;
+  /* cola na base do título no desktop */
+  padding-bottom: 0.25rem;
+}
+
+/* ── Grid de 4 cards ── */
+.grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+}
+
+@media (min-width: 640px) {
+  .grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (min-width: 1024px) {
+  .grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+/* ── Card ── */
+.card {
+  background: #ffffff;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  border-radius: var(--radius-lg);
+  padding: clamp(1.25rem, 2vw, 1.75rem);
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  opacity: 0;
+}
+
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.card.visible {
+  animation: fadeUp 0.55s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+/* ── Topo do card: label + barras de sinal ── */
+.cardMeta {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+
+.cardLabel {
+  font-family: var(--font-primary);
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: rgba(0, 0, 0, 0.808);
+  letter-spacing: 0.02em;
+  line-height: 1.4;
+}
+
+/* Barras de sinal (estilo indicador de intensidade) */
+.signalBars {
+  display: flex;
+  align-items: flex-end;
+  gap: 2.5px;
+  flex-shrink: 0;
+}
+
+.signalBar {
+  display: block;
+  width: 3px;
+  background: var(--color-accent);
+  border-radius: 1.5px;
+}
+
+/* ── Número da métrica ── */
+.metricValue {
+  font-family: var(--font-primary);
+  font-size: clamp(2.25rem, 4vw, 3rem);
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  color: var(--color-title);
+  margin: 0;
+  line-height: 1;
+}
+
+/* ── Mini gráfico SVG ── */
+.chartWrapper {
+  flex: 1;
+  min-height: 60px;
+  display: flex;
+  align-items: flex-end;
+}
+
+.chart {
+  width: 100%;
+  height: 70px;
+  display: block;
+  overflow: visible;
+}
+
+/* ── Descrição ── */
+.cardDesc {
+  font-family: var(--font-primary);
+  font-size: clamp(0.75rem, 1.1vw, 0.85rem);
+  line-height: 1.55;
+  color: var(--color-subtitle);
+  margin: 0;
+  border-top: 1px dashed rgba(0, 0, 0, 0.1);
+  padding-top: 0.75rem;
+}

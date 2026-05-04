@@ -1,0 +1,127 @@
+/* ── Footer ── */
+.footer {
+  background-color: #111111;
+  color: rgba(255, 255, 255, 0.7);
+  position: relative;
+  overflow: hidden;
+}
+
+.gradientBar {
+  height: 3px;
+  width: 100%;
+  background: linear-gradient(90deg, #ffb347 0%, #ff4c00 50%, #cc2200 100%);
+}
+
+.inner {
+  max-width: 1440px;
+  margin: 0 auto;
+  padding: clamp(3.5rem, 8vw, 6rem) clamp(3rem, 6vw, 5rem) clamp(2rem, 4vw, 3rem);
+  display: flex;
+  flex-direction: column;
+  gap: clamp(3rem, 6vw, 5rem);
+}
+
+/* ── Logo ── */
+.logoRow {
+  display: flex;
+  align-items: center;
+}
+
+.logo {
+  font-family: var(--font-primary);
+  font-size: clamp(1.5rem, 2.5vw, 2rem);
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  color: #ffffff;
+}
+
+/* ── Colunas ── */
+.columns {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: clamp(2.5rem, 4vw, 3.5rem);
+}
+
+@media (min-width: 640px) {
+  .columns {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.column {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.columnTag {
+  font-family: var(--font-primary);
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  color: rgba(255, 255, 255, 0.4);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 4px;
+  padding: 4px 10px;
+  width: fit-content;
+}
+
+/* ── Lista de links ── */
+.list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.listItem {
+  position: relative;
+  padding-left: 1.25rem;
+}
+
+/* Dash tracejado antes de cada item */
+.listItem::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 50%;
+  width: 10px;
+  height: 0;
+  border-top: 1px dashed rgba(255, 255, 255, 0.2);
+  transform: translateY(-50%);
+}
+
+.link {
+  font-family: var(--font-primary);
+  font-size: clamp(0.85rem, 1.1vw, 0.95rem);
+  color: rgba(255, 255, 255, 0.6);
+  text-decoration: none;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 4px;
+  padding: 6px 12px;
+  display: inline-block;
+  transition: color 0.25s ease, border-color 0.25s ease;
+}
+
+.link:hover {
+  color: #ffffff;
+  border-color: rgba(255, 255, 255, 0.3);
+}
+
+/* ── Bottom bar ── */
+.bottom {
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  padding-top: clamp(1.5rem, 3vw, 2rem);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.legal {
+  font-family: var(--font-primary);
+  font-size: 0.8rem;
+  color: rgba(255, 255, 255, 0.3);
+  text-align: center;
+}

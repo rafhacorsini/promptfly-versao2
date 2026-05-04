@@ -1,0 +1,248 @@
+/* ── Section Wrapper ── */
+.section {
+  background-color: var(--color-bg);
+  border-top: 1px dashed rgba(0, 0, 0, 0.12);
+  border-bottom: 1px dashed rgba(0, 0, 0, 0.12);
+  position: relative;
+}
+
+.section::before,
+.section::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 0;
+  border-left: 1px dashed rgba(0, 0, 0, 0.12);
+  pointer-events: none;
+  z-index: 1;
+}
+
+.section::before {
+  left: max(clamp(1.5rem, 4vw, 3rem), calc((100% - 1440px) / 2));
+}
+
+.section::after {
+  right: max(clamp(1.5rem, 4vw, 3rem), calc((100% - 1440px) / 2));
+}
+
+.inner {
+  max-width: 1440px;
+  margin: 0 auto;
+  padding: clamp(3.5rem, 8vw, 7.5rem) clamp(3rem, 6vw, 5rem);
+  display: flex;
+  flex-direction: column;
+  gap: clamp(3rem, 6vw, 4.5rem);
+}
+
+/* ── Header ── */
+.header {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+@media (min-width: 768px) {
+  .header {
+    flex-direction: row;
+    align-items: flex-start;
+    gap: clamp(2rem, 4vw, 3.5rem);
+  }
+}
+
+.tagContainer {
+  display: flex;
+  align-items: flex-start;
+}
+
+@media (min-width: 768px) {
+  .tagContainer {
+    flex: 0 0 clamp(220px, 32%, 360px);
+  }
+}
+
+.tag {
+  font-family: var(--font-primary);
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: var(--color-title);
+  border: 1px solid #cfcfcf;
+  border-radius: 4px;
+  padding: 4px 10px;
+  white-space: nowrap;
+  letter-spacing: 0.04em;
+  flex-shrink: 0;
+  margin-top: 0.5rem;
+}
+
+.headline {
+  font-family: var(--font-primary);
+  font-size: clamp(1.75rem, 3vw, 2.6rem);
+  font-weight: 800;
+  line-height: 1.15;
+  letter-spacing: -0.025em;
+  color: var(--color-title);
+  margin: 0;
+  text-wrap: balance;
+  flex: 1;
+}
+
+.headlineFade {
+  color: var(--color-subtitle);
+  font-weight: 700;
+}
+
+/* ── Slide Container ── */
+.slideContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 2.5rem;
+  width: 100%;
+}
+
+/* ── Tabs / Controles ── */
+.tabs {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+}
+
+.tab {
+  background: transparent;
+  border: none;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  cursor: pointer;
+  text-align: left;
+  opacity: 0.5;
+  transition: opacity 0.3s ease;
+}
+
+.tab:hover,
+.activeTab {
+  opacity: 1;
+}
+
+.tabHeader {
+  display: flex;
+  align-items: baseline;
+  gap: 0.5rem;
+}
+
+.tabNumber {
+  font-family: var(--font-primary);
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--color-accent);
+}
+
+.tabTitle {
+  font-family: var(--font-primary);
+  font-size: clamp(0.9rem, 1.2vw, 1.1rem);
+  font-weight: 600;
+  color: var(--color-title);
+}
+
+.progressBarBg {
+  width: 100%;
+  height: 3px;
+  background-color: rgba(0, 0, 0, 0.08);
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.progressBarFill {
+  height: 100%;
+  background: linear-gradient(90deg, #ffb347 0%, #ff4c00 100%);
+  border-radius: 2px;
+}
+
+/* ── Slide Content ── */
+.slideContentWrapper {
+  display: grid;
+  width: 100%;
+}
+
+.slideCard {
+  grid-column: 1;
+  grid-row: 1;
+  position: relative;
+  background: #ffffff;
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  border-radius: var(--radius-lg);
+  padding: clamp(2.5rem, 5vw, 4rem);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  transition: opacity 0.6s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.03);
+  overflow: hidden;
+}
+
+.slideHidden {
+  opacity: 0;
+  transform: translateY(15px) scale(0.98);
+  pointer-events: none;
+}
+
+.slideActive {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+  pointer-events: auto;
+  z-index: 2;
+}
+
+/* Linha decorativa de topo no card */
+.slideActive::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 3px;
+  background: linear-gradient(90deg, #ffb347 0%, #ff4c00 50%, #cc2200 100%);
+}
+
+.cardInner {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+}
+
+.cardText {
+  max-width: 800px;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.hugeNumber {
+  font-family: var(--font-primary);
+  font-size: clamp(3rem, 6vw, 5rem);
+  font-weight: 900;
+  line-height: 1;
+  color: rgba(0, 0, 0, 0.04);
+  margin-bottom: 0.5rem;
+}
+
+.cardTitle {
+  font-family: var(--font-primary);
+  font-size: clamp(2rem, 3.5vw, 2.75rem);
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  color: var(--color-title);
+  margin: 0;
+  line-height: 1.1;
+}
+
+.cardDesc {
+  font-family: var(--font-primary);
+  font-size: clamp(1rem, 1.25vw, 1.2rem);
+  line-height: 1.6;
+  color: var(--color-subtitle);
+  margin: 0;
+}
