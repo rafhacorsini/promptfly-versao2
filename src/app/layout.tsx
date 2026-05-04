@@ -7,9 +7,85 @@ const inter = Inter({
   subsets: ["latin"],
 });
 
+const BASE_URL = "https://promptfly.com.br";
+
 export const metadata: Metadata = {
-  title: "Promptfly",
-  description: "Promptfly",
+  metadataBase: new URL(BASE_URL),
+
+  title: {
+    default: "Promptfly — Aprenda IA de verdade. Do prompt ao agent.",
+    template: "%s | Promptfly",
+  },
+
+  description:
+    "O ecossistema premium para quem constrói negócios com Inteligência Artificial. Guias, modelos e prompts prontos para usar — em português, sem hype.",
+
+  keywords: [
+    "engenharia de prompt",
+    "prompt engineering",
+    "inteligência artificial",
+    "IA para negócios",
+    "ChatGPT",
+    "Claude",
+    "prompts prontos",
+    "aprender IA",
+    "agentes de IA",
+    "Promptfly",
+  ],
+
+  authors: [{ name: "Promptfly", url: BASE_URL }],
+  creator: "Promptfly",
+  publisher: "Promptfly",
+
+  openGraph: {
+    type: "website",
+    locale: "pt_BR",
+    url: BASE_URL,
+    siteName: "Promptfly",
+    title: "Promptfly — Aprenda IA de verdade. Do prompt ao agent.",
+    description:
+      "O ecossistema premium para quem constrói negócios com Inteligência Artificial. Guias, prompts e modelos em português.",
+    images: [
+      {
+        url: "/og-image.png",
+        width: 1200,
+        height: 630,
+        alt: "Promptfly — Aprenda IA de verdade",
+      },
+    ],
+  },
+
+  twitter: {
+    card: "summary_large_image",
+    title: "Promptfly — Aprenda IA de verdade",
+    description:
+      "O ecossistema premium para quem constrói negócios com IA. Prompts, guias e modelos em português.",
+    images: ["/og-image.png"],
+    creator: "@promptfly",
+  },
+
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+    },
+  },
+
+  icons: {
+    icon: "/logo.png",
+    apple: "/logo.png",
+  },
+
+  alternates: {
+    canonical: BASE_URL,
+    languages: {
+      "pt-BR": BASE_URL,
+    },
+  },
 };
 
 export default function RootLayout({
@@ -19,9 +95,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="pt-BR" className={inter.variable}>
-      <body className="antialiased">
-        {children}
-      </body>
+      <body className="antialiased">{children}</body>
     </html>
   );
 }
