@@ -1,0 +1,25 @@
+.heroSection {
+  position: relative;
+  width: calc(100% - 2rem);
+  /* Removido o max-width para que não trave em telas >2000px */
+  height: clamp(280px, 40vh, 520px);
+  /* Altura fixa conforme Figma */
+  margin: 1rem auto;
+  /* Centralizado com margem nas laterais e topo */
+  border-radius: 2rem;
+  /* Bordas arredondadas em todos os cantos */
+  overflow: hidden;
+  background-color: #000;
+}
+
+.videoElement {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  /* O vídeo preenche o heroSection de 320px */
+  object-fit: cover;
+  display: block;
+  z-index: 0;
+}

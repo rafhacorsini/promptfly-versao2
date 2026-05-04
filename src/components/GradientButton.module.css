@@ -1,0 +1,71 @@
+.buttonBase {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem 1.5rem; /* Ajustado para melhor proporção interna */
+  border-radius: var(--radius-lg); /* 14px */
+  font-family: var(--font-primary);
+  font-size: 0.9375rem; /* ~15px, padrão luxo moderno invés do 16px grosseiro */
+  font-weight: 600; /* Mais peso e menos tamanho cria elegância técnica */
+  letter-spacing: 0.02em;
+  cursor: pointer;
+  text-decoration: none;
+  
+  /* Apple usa antialiasing severo em textos de botões pequenos */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+
+  /* Transição de luxo: suavizando opacidade e sombras */
+  transition: all 0.3s cubic-bezier(0.25, 1, 0.5, 1);
+  
+  /* Gradiente Angular na borda */
+  border: 2.5px solid transparent;
+  background-origin: border-box;
+  background-clip: padding-box, border-box;
+  width: 100%;
+}
+
+/* Variante Dark */
+.dark {
+  background-image: linear-gradient(#1A1A1A, #1A1A1A), var(--gradient-border); /* Quase preto para mais profundidade */
+  color: #FFFFFF;
+  box-shadow: 0 4px 14px 0 rgba(0,0,0,0.1);
+}
+
+.dark:hover {
+  background-image: linear-gradient(#2B2B2B, #2B2B2B), var(--gradient-border); /* Clareia de leve */
+  box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+  transform: translateY(-1px);
+}
+
+.dark:active {
+  transform: translateY(1px);
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+/* Variante Light */
+.light {
+  background-image: linear-gradient(#F3F3F3, #F3F3F3), var(--gradient-border);
+  color: #1A1A1A;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+}
+
+.light:hover {
+  background-image: linear-gradient(#FFFFFF, #FFFFFF), var(--gradient-border);
+  box-shadow: 0 6px 16px rgba(0,0,0,0.08);
+  transform: translateY(-1px);
+}
+
+.light:active {
+  transform: translateY(1px);
+  box-shadow: 0 2px 6px rgba(0,0,0,0.04);
+}
+
+/* Desktop override apenas para quando não estão esticados (ex: usados sozinhos) */
+@media (min-width: 768px) {
+  .buttonBase {
+    /* No CSS da seção configuramos que eles são flex:1, então a width: auto 
+       só será útil se usados isoladamente, ou sem o pai forçar o crescimento */
+    width: auto; 
+  }
+}

@@ -1,0 +1,96 @@
+.section {
+  background-color: var(--color-bg);
+  padding: clamp(2rem, 4vw, 5rem) 1.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  /* Cria um container flexível perfeito sem hardcoded margins excessivas */
+}
+
+.title {
+  font-family: var(--font-primary);
+  /* Typography fluida de 2.2rem até 4.2rem no desktop! Sem quebrar. */
+  font-size: clamp(2.2rem, 5vw, 4.2rem);
+  font-weight: 800;
+  color: var(--color-title);
+
+  /* Apple usa tracking super justo em headings (SF Pro / Inter) */
+  letter-spacing: -0.04em;
+  line-height: 1.05;
+
+  margin-bottom: clamp(0.75rem, 2vw, 1.25rem);
+
+  /* Evita as viúvas e balanceia em qualquer viewport */
+  text-wrap: balance;
+  max-width: 100%;
+}
+
+.textGray {
+  /* Contraste premium para destacar a palavra "IA" */
+  color: var(--color-subtitle);
+  display: inline-block;
+  /* Às vezes ajuda a não quebrar de forma feia */
+}
+
+.subtitle {
+  font-family: var(--font-primary);
+  /* Subtítulo mais respirável */
+  font-size: clamp(1rem, 1.2vw, 1.125rem);
+  font-weight: 400;
+  color: var(--color-subtitle);
+  line-height: 1.65;
+  margin-bottom: clamp(1.5rem, 4vw, 3rem);
+
+  text-wrap: balance;
+  max-width: 65ch;
+  /* Limita apenas no desktop para não ficar de ponta a ponta */
+}
+
+/* Área dos Botões */
+.buttonGroup {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+  width: 100%;
+  max-width: 380px;
+  /* Limita a largura dos blocos empilhados no mobile */
+}
+
+/* Os botões devem assumir 100% no mobile e preencher no flex */
+.buttonGroup>* {
+  width: 100%;
+}
+
+/* Apenas quando passar de mobile para tablet/desktop -> Lado a Lado */
+@media (min-width: 768px) {
+  .buttonGroup {
+    flex-direction: row;
+    max-width: clamp(500px, 50vw, 65ch);
+    /* Cresce junto com o texto para emparelhar as pontas */
+    gap: 1.25rem;
+    justify-content: center;
+  }
+
+  .buttonGroup>* {
+    flex: 1;
+    /* Estica exatamente 50/50 em grandes telas */
+    width: auto;
+  }
+
+  @media (min-width: 1420px) {
+    .title {
+      font-size: 4.2rem;
+      max-width: 900px;
+    }
+
+    .subtitle {
+      max-width: 600px;
+    }
+
+    .buttonGroup {
+      max-width: 600px;
+    }
+  }
+}

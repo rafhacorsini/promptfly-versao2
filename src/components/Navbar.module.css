@@ -1,0 +1,289 @@
+/* Navbar */
+.navbar {
+  position: absolute;
+  top: 1rem;
+  left: 50%;
+  transform: translateX(-50%);
+  width: calc(100% - 2.5rem);
+  max-width: 860px;
+  background-color: #F3F3F3;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-radius: 0.875rem;
+  padding: 0.5rem 1.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  z-index: 10;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08), 0 4px 16px rgba(0, 0, 0, 0.06);
+  border: 1px solid rgba(0, 0, 0, 0.06);
+}
+
+@media (max-width: 1024px) {
+  .navbar {
+    max-width: 100%;
+    width: calc(100% - 2.5rem);
+  }
+}
+
+@media (max-width: 480px) {
+  .navbar {
+    width: calc(100% - 1.5rem);
+    top: 0.75rem;
+    left: 0.75rem;
+    transform: none;
+  }
+}
+
+/* Logo */
+.logoArea {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.logoIcon {
+  filter: grayscale(80%) brightness(0.2);
+  opacity: 0.85;
+  width: 22px;
+  height: 22px;
+  object-fit: contain;
+}
+
+.logoText {
+  font-family: var(--font-inter), sans-serif;
+  font-size: 0.85rem;
+  font-weight: 800;
+  letter-spacing: 0.03em;
+  color: #2B2B2B;
+  text-transform: uppercase;
+}
+
+/* Links centro */
+.navLinks {
+  display: none;
+  align-items: center;
+  gap: 1.6rem;
+}
+
+@media (min-width: 1024px) {
+  .navLinks {
+    display: flex;
+  }
+}
+
+.navLink {
+  position: relative;
+  font-family: var(--font-inter), sans-serif;
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: #2B2B2B;
+  text-decoration: none;
+  transition: color 0.2s ease;
+  opacity: 0.75;
+}
+
+.navLink:hover {
+  opacity: 1;
+}
+
+.navLink::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 100%;
+  height: 1px;
+  background-color: #2B2B2B;
+  transform: scaleX(0);
+  transform-origin: bottom right;
+  transition: transform 0.25s ease;
+}
+
+.navLink:hover::after {
+  transform: scaleX(1);
+  transform-origin: bottom left;
+}
+
+/* Botão CTA desktop */
+.ctaButton {
+  display: none;
+  color: #F3F3F3;
+  padding: 0.4rem 1rem;
+  border-radius: 8px;
+  font-family: var(--font-inter), sans-serif;
+  font-size: 0.75rem;
+  font-weight: 600;
+  cursor: pointer;
+  white-space: nowrap;
+  letter-spacing: 0.01em;
+  border: 2.5px solid transparent;
+  background-image: linear-gradient(#2B2B2B, #2B2B2B),
+    conic-gradient(from 0deg, #7B7B7B, #FF4C00, #656565, #7B7B7B);
+  background-origin: border-box;
+  background-clip: padding-box, border-box;
+  transition: opacity 0.2s;
+}
+
+.ctaButton:hover {
+  opacity: 0.8;
+}
+
+@media (min-width: 1024px) {
+  .ctaButton {
+    display: block;
+  }
+}
+
+/* Mobile: dois tracinhos */
+.mobileMenu {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  cursor: pointer;
+  padding: 4px;
+}
+
+@media (min-width: 1024px) {
+  .mobileMenu {
+    display: none;
+  }
+}
+
+.menuLine {
+  width: 18px;
+  height: 1.5px;
+  background-color: #2B2B2B;
+  border-radius: 2px;
+  transition: opacity 0.2s;
+}
+
+.mobileMenu:hover .menuLine {
+  opacity: 0.6;
+}
+
+/* ── DROPDOWN MOBILE — não toma tela toda ── */
+.mobileOverlay {
+  position: absolute;
+  top: calc(100% + 0.5rem);
+  left: 0;
+  width: 100%;
+  background-color: #F3F3F3;
+  border-radius: 0.875rem;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
+  z-index: 50;
+  overflow: hidden;
+
+  /* animação */
+  opacity: 0;
+  transform: translateY(-8px);
+  pointer-events: none;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.mobileOverlayOpen {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: all;
+}
+
+/* Header do dropdown */
+.mobileHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 1.25rem 0.75rem;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+}
+
+.logoTextDark {
+  font-family: var(--font-inter), sans-serif;
+  font-size: 0.75rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  color: #2B2B2B;
+  text-transform: uppercase;
+  opacity: 0.4;
+}
+
+.closeButton {
+  background: none;
+  border: none;
+  color: #2B2B2B;
+  cursor: pointer;
+  padding: 0.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0.5;
+  transition: opacity 0.2s;
+}
+
+.closeButton:hover {
+  opacity: 1;
+}
+
+/* Links do dropdown */
+.mobileLinks {
+  display: flex;
+  flex-direction: column;
+  padding: 0.5rem 0;
+}
+
+.mobileNavLink {
+  font-family: var(--font-inter), sans-serif;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #2B2B2B;
+  text-decoration: none;
+  padding: 0.75rem 1.25rem;
+  transition: background-color 0.15s;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.mobileNavLink::after {
+  content: '→';
+  font-size: 0.75rem;
+  opacity: 0.3;
+  transition: opacity 0.2s, transform 0.2s;
+}
+
+.mobileNavLink:hover {
+  background-color: rgba(0, 0, 0, 0.04);
+}
+
+.mobileNavLink:hover::after {
+  opacity: 0.8;
+  transform: translateX(3px);
+}
+
+/* Footer do dropdown */
+.mobileFooter {
+  padding: 0.75rem 1.25rem 1rem;
+  border-top: 1px solid rgba(0, 0, 0, 0.06);
+}
+
+.mobileCtaButton {
+  width: 100%;
+  color: #F3F3F3;
+  padding: 0.6rem 1rem;
+  border-radius: 8px;
+  font-family: var(--font-inter), sans-serif;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  cursor: pointer;
+  border: 2.5px solid transparent;
+  background-image: linear-gradient(#2B2B2B, #2B2B2B),
+    conic-gradient(from 0deg, #7B7B7B, #FF4C00, #656565, #7B7B7B);
+  background-origin: border-box;
+  background-clip: padding-box, border-box;
+  transition: opacity 0.2s;
+}
+
+.mobileCtaButton:hover {
+  opacity: 0.8;
+}

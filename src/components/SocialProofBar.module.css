@@ -1,0 +1,147 @@
+.bar {
+  position: relative;
+  width: 100%;
+  padding: 16px 24px;
+  background: #f2f2f0;
+  overflow: visible;
+  box-sizing: border-box;
+}
+
+.bar::before,
+.bar::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  width: 100%;
+  height: 0;
+  border-top: 1px dashed #cfcfcf;
+}
+
+.bar::before {
+  top: 0;
+}
+
+.bar::after {
+  bottom: 0;
+}
+
+.inner {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 24px;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding-left: 24px;
+}
+
+.leftBlock {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 10px;
+  flex-shrink: 0;
+}
+
+.avatarStack {
+  position: relative;
+  width: 112px;
+  height: 40px;
+  flex-shrink: 0;
+}
+
+.avatar {
+  position: absolute;
+  width: 40px !important;
+  height: 40px !important;
+  border-radius: 8px;
+  object-fit: cover;
+  border: 2px solid rgba(207, 207, 207, 0.5);
+}
+
+.avatar:nth-child(1) { left: 0px;  z-index: 4; }
+.avatar:nth-child(2) { left: 24px; z-index: 3; }
+.avatar:nth-child(3) { left: 48px; z-index: 2; }
+.avatar:nth-child(4) { left: 72px; z-index: 1; }
+
+.textBlock {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.stars {
+  color: #e05a2b;
+  font-size: 12px;
+  line-height: 1;
+  letter-spacing: 1px;
+}
+
+.count {
+  margin: 0;
+  color: #505050;
+  font-size: 13px;
+  font-weight: 400;
+  white-space: nowrap;
+}
+
+.countBold {
+  font-weight: 700;
+}
+
+.divider {
+  width: 1px;
+  height: 40px;
+  flex-shrink: 0;
+  border-right: 1px dashed #9c9c9c;
+}
+
+.marqueeWrapper {
+  flex: 1;
+  overflow: hidden;
+  mask-image: linear-gradient(to right, transparent 0%, black 8%, black 92%, transparent 100%);
+  -webkit-mask-image: linear-gradient(to right, transparent 0%, black 8%, black 92%, transparent 100%);
+}
+
+.marqueeTrack {
+  display: flex;
+  align-items: center;
+  gap: 40px;
+  width: max-content;
+  padding: 0;
+  margin: 0;
+  list-style: none;
+  animation: marquee 18s linear infinite;
+}
+
+.logoItem {
+  font-weight: 600;
+  color: #888;
+  font-size: 14px;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+@keyframes marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+/* Mobile */
+@media (max-width: 640px) {
+  .divider {
+    display: none;
+  }
+
+  .marqueeWrapper {
+    display: none;
+  }
+
+  .inner {
+    padding-left: 0;
+  }
+}
