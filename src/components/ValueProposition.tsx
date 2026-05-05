@@ -2,9 +2,6 @@ import React from "react";
 import styles from "./ValueProposition.module.css";
 import GradientButton from "./GradientButton";
 
-// Troque pela URL do seu Beehiiv quando criar a conta
-const NEWSLETTER_URL = "https://promptfly.beehiiv.com/subscribe";
-
 export default function ValueProposition() {
   return (
     <section className={styles.section}>
@@ -19,10 +16,10 @@ export default function ValueProposition() {
       </p>
 
       <div className={styles.buttonGroup}>
-        <GradientButton variant="dark" href={NEWSLETTER_URL} target="_blank">
+        <GradientButton variant="dark" href="#newsletter">
           Assinar newsletter grátis →
         </GradientButton>
-        <GradientButton variant="light" href="#guias">
+        <GradientButton variant="light" href="#newsletter">
           Explorar os guias
         </GradientButton>
       </div>
