@@ -30,9 +30,14 @@ export default function Navbar() {
         </div>
 
         {/* CTA — Desktop */}
-        <button className={styles.ctaButton}>
-          Assinar Newsletter →
-        </button>
+        <a
+          href="https://promptfly.beehiiv.com/subscribe"
+          target="_blank"
+          rel="noopener noreferrer"
+          className={styles.ctaButton}
+        >
+          Assinar grátis →
+        </a>
 
         {/* Mobile: dois tracinhos */}
         <div className={styles.mobileMenu} onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}>
@@ -57,9 +62,14 @@ export default function Navbar() {
         </div>
 
         <div className={styles.mobileFooter}>
-          <button className={styles.mobileCtaButton}>
-            ASSINAR NEWSLETTER
-          </button>
+          <a
+            href="https://promptfly.beehiiv.com/subscribe"
+            target="_blank"
+            rel="noopener noreferrer"
+            className={styles.mobileCtaButton}
+          >
+            ASSINAR GRÁTIS
+          </a>
         </div>
       </div>
     </nav>

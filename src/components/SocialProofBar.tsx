@@ -24,7 +24,7 @@ export default function SocialProofBar() {
           <div className={styles.textBlock}>
             <div className={styles.stars}>★★★★★</div>
             <p className={styles.count}>
-              <span className={styles.countBold}>+600</span> profissionais usando
+              <span className={styles.countBold}>+600</span> leitores ativos
             </p>
           </div>
         </div>
