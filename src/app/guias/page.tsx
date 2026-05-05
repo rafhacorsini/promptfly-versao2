@@ -1,12 +1,14 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { getAllGuides } from "@/lib/guides";
+import CategoryNav from "@/components/CategoryNav";
 import styles from "./page.module.css";
 
 export const metadata: Metadata = {
   title: "Guias de Engenharia de Prompt",
   description:
     "Guias práticos sobre engenharia de prompt, IA e como obter resultados reais com modelos de linguagem.",
+  alternates: { canonical: "https://promptfly.com.br/guias" },
 };
 
 export default function GuiasPage() {
@@ -30,6 +32,8 @@ export default function GuiasPage() {
           </div>
         </div>
 
+        <CategoryNav />
+
         <div className={styles.grid}>
           {guides.map((guide, i) => (
             <Link
@@ -43,9 +47,7 @@ export default function GuiasPage() {
                 </span>
                 <div className={styles.tags}>
                   {guide.tags.slice(0, 2).map((tag) => (
-                    <span key={tag} className={styles.tagBadge}>
-                      {tag}
-                    </span>
+                    <span key={tag} className={styles.tagBadge}>{tag}</span>
                   ))}
                 </div>
               </div>

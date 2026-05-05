@@ -1,0 +1,86 @@
+---
+title: "Chain-of-Thought: como fazer a IA pensar antes de responder"
+description: "A técnica mais poderosa de prompt engineering explicada do zero. Aprenda a fazer qualquer modelo raciocinar passo a passo e eliminar erros de lógica."
+date: "2026-05-04"
+tags: ["chain-of-thought", "técnicas", "raciocínio"]
+readTime: "7 min"
+category: "tecnicas"
+featured: true
+---
+
+Imagine que você pede para alguém resolver um problema de matemática. Se você pedir só a resposta, ela pode errar e nem perceber. Se você pedir que ela mostre o raciocínio, o erro aparece — e ela mesma se corrige.
+
+Com IA funciona exatamente assim.
+
+## O que é Chain-of-Thought
+
+Chain-of-Thought (CoT) é uma técnica que instrui o modelo a **mostrar o raciocínio passo a passo** antes de chegar à resposta final. Em vez de pular direto para a conclusão, a IA "pensa em voz alta".
+
+O resultado: respostas mais precisas, menos alucinações e decisões muito mais fáceis de verificar.
+
+## Por que funciona
+
+Modelos de linguagem geram texto token por token, da esquerda para a direita. Quando você pede uma resposta direta, o modelo "chuta" com base no padrão mais provável.
+
+Quando você pede o raciocínio primeiro, ele **constrói o contexto** antes de concluir — e a conclusão fica ancorada nesse contexto, não no chute.
+
+## Como ativar Chain-of-Thought
+
+Existem três formas:
+
+**1. Instrução explícita**
+```
+Resolva este problema passo a passo, mostrando cada etapa do raciocínio.
+```
+
+**2. A frase mágica**
+Adicionar `"Vamos pensar passo a passo."` ao final do prompt ativa o CoT na maioria dos modelos sem mais instrução.
+
+```
+Qual é a melhor estratégia de precificação para um SaaS B2B com foco em PMEs?
+Vamos pensar passo a passo.
+```
+
+**3. Few-Shot CoT — mostrar exemplos com raciocínio**
+```
+Pergunta: João tem 3 maçãs. Comprou mais 5 e deu 2 para Maria. Quantas tem?
+Raciocínio: Começou com 3. Comprou 5 → 3+5=8. Deu 2 → 8-2=6.
+Resposta: João tem 6 maçãs.
+
+Agora responda: [sua pergunta aqui]
+```
+
+## Quando usar
+
+| Situação | Usar CoT? |
+|---|---|
+| Análise complexa com múltiplas variáveis | ✓ Sim |
+| Decisões que precisam de justificativa | ✓ Sim |
+| Respostas factuais simples | ✗ Não necessário |
+| Criação de texto criativo | ✗ Raramente |
+| Debugging de código | ✓ Sim |
+| Cálculos ou lógica matemática | ✓ Sempre |
+
+## Prompt pronto para copiar
+
+```
+Você é um [especialista em X].
+
+Analise o seguinte problema com cuidado:
+[descreva o problema]
+
+Antes de responder, pense em voz alta:
+1. Quais são os fatores mais relevantes aqui?
+2. Quais são as possíveis abordagens?
+3. Qual abordagem faz mais sentido e por quê?
+
+Só depois apresente sua conclusão final.
+```
+
+## O erro mais comum
+
+Pedir CoT e ignorar o raciocínio. O valor não está só na resposta — está no processo. Leia o raciocínio. É nele que você vai encontrar premissas erradas, variáveis que você não considerou e insights que a resposta final esconde.
+
+---
+
+*Próximo guia: **Few-Shot Prompting** — como ensinar a IA com exemplos para obter respostas no formato exato que você quer.*

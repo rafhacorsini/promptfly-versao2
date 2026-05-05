@@ -10,6 +10,7 @@ export interface GuideFrontmatter {
   date: string;
   tags: string[];
   readTime: string;
+  category: string;
   featured?: boolean;
 }
 
@@ -34,6 +35,7 @@ export function getAllGuides(): Guide[] {
       date: data.date ?? "",
       tags: data.tags ?? [],
       readTime: data.readTime ?? "5 min",
+      category: data.category ?? "fundamentos",
       featured: data.featured ?? false,
     } as Guide;
   });
@@ -41,6 +43,10 @@ export function getAllGuides(): Guide[] {
   return guides.sort(
     (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
   );
+}
+
+export function getGuidesByCategory(category: string): Guide[] {
+  return getAllGuides().filter((g) => g.category === category);
 }
 
 export function getGuideSource(slug: string): string | null {
