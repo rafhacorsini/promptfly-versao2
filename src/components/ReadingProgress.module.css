@@ -1,0 +1,17 @@
+.track {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: rgba(0, 0, 0, 0.06);
+  z-index: 200;
+}
+
+.fill {
+  height: 100%;
+  background: linear-gradient(90deg, #ffb347, #ff4c00, #cc2200);
+  transform-origin: left;
+  transform: scaleX(0);
+  will-change: transform;
+}

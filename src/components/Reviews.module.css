@@ -268,21 +268,28 @@
 /* ── Colunas de marquee ── */
 .marqueeCol {
   overflow: hidden;
-  height: clamp(360px, 40vw, 500px);
-  mask-image: linear-gradient(
-    to bottom,
-    transparent 0%,
-    black 10%,
-    black 90%,
-    transparent 100%
-  );
+  height: 480px;
   -webkit-mask-image: linear-gradient(
     to bottom,
     transparent 0%,
-    black 10%,
-    black 90%,
+    black 12%,
+    black 88%,
     transparent 100%
   );
+  mask-image: linear-gradient(
+    to bottom,
+    transparent 0%,
+    black 12%,
+    black 88%,
+    transparent 100%
+  );
+}
+
+/* Mobile: altura adaptada */
+@media (max-width: 767px) {
+  .marqueeCol {
+    height: 420px;
+  }
 }
 
 /* Track base */
@@ -291,6 +298,7 @@
   display: flex;
   flex-direction: column;
   gap: 1rem;
+  will-change: transform;
 }
 
 /* Scroll UP */
@@ -300,7 +308,7 @@
 }
 
 .trackUp {
-  animation: scrollUp 28s linear infinite;
+  animation: scrollUp 26s linear infinite;
 }
 
 .trackUp:hover {
@@ -314,7 +322,7 @@
 }
 
 .trackDown {
-  animation: scrollDown 32s linear infinite;
+  animation: scrollDown 30s linear infinite;
 }
 
 .trackDown:hover {

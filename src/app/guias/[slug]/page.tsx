@@ -4,6 +4,8 @@ import { MDXRemote } from "next-mdx-remote/rsc";
 import matter from "gray-matter";
 import Link from "next/link";
 import { getAllGuides, getGuideSource } from "@/lib/guides";
+import ReadingProgress from "@/components/ReadingProgress";
+import ShareButtons from "@/components/ShareButtons";
 import styles from "./page.module.css";
 
 const BASE = "https://promptfly.com.br";
@@ -25,9 +27,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   return {
     title: data.title,
     description: data.description,
-    alternates: {
-      canonical: `${BASE}/guias/${slug}`,
-    },
+    alternates: { canonical: `${BASE}/guias/${slug}` },
     openGraph: {
       title: data.title,
       description: data.description,
@@ -53,6 +53,10 @@ export default async function GuidePage({ params }: Props) {
   if (!source) notFound();
 
   const { data } = matter(source);
+  const allGuides = getAllGuides();
+  const currentIndex = allGuides.findIndex((g) => g.slug === slug);
+  const prevGuide = currentIndex < allGuides.length - 1 ? allGuides[currentIndex + 1] : null;
+  const nextGuide = currentIndex > 0 ? allGuides[currentIndex - 1] : null;
 
   const articleJsonLd = {
     "@context": "https://schema.org",
@@ -64,11 +68,7 @@ export default async function GuidePage({ params }: Props) {
     inLanguage: "pt-BR",
     url: `${BASE}/guias/${slug}`,
     mainEntityOfPage: { "@type": "WebPage", "@id": `${BASE}/guias/${slug}` },
-    author: {
-      "@type": "Organization",
-      name: "Promptfly",
-      url: BASE,
-    },
+    author: { "@type": "Organization", name: "Promptfly", url: BASE },
     publisher: {
       "@type": "Organization",
       name: "Promptfly",
@@ -90,20 +90,14 @@ export default async function GuidePage({ params }: Props) {
 
   return (
     <>
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(articleJsonLd) }}
-      />
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
-      />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(articleJsonLd) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }} />
+
+      <ReadingProgress />
 
       <div className={styles.page}>
         <div className={styles.inner}>
-          <Link href="/guias" className={styles.back}>
-            ← Todos os guias
-          </Link>
+          <Link href="/guias" className={styles.back}>← Todos os guias</Link>
 
           <div className={styles.meta}>
             {(data.tags as string[]).map((tag: string) => (
@@ -120,12 +114,40 @@ export default async function GuidePage({ params }: Props) {
             <MDXRemote source={source} />
           </article>
 
+          {/* Share */}
+          <div className={styles.divider} />
+          <ShareButtons
+            title={data.title}
+            url={`${BASE}/guias/${slug}`}
+          />
+
+          {/* Prev / Next */}
+          {(prevGuide || nextGuide) && (
+            <nav className={styles.prevNext}>
+              <div className={styles.prevNextSide}>
+                {prevGuide && (
+                  <Link href={`/guias/${prevGuide.slug}`} className={styles.navCard}>
+                    <span className={styles.navDir}>← Anterior</span>
+                    <span className={styles.navTitle}>{prevGuide.title}</span>
+                  </Link>
+                )}
+              </div>
+              <div className={`${styles.prevNextSide} ${styles.nextSide}`}>
+                {nextGuide && (
+                  <Link href={`/guias/${nextGuide.slug}`} className={`${styles.navCard} ${styles.navCardNext}`}>
+                    <span className={styles.navDir}>Próximo →</span>
+                    <span className={styles.navTitle}>{nextGuide.title}</span>
+                  </Link>
+                )}
+              </div>
+            </nav>
+          )}
+
+          {/* Newsletter CTA */}
           <div className={styles.cta}>
             <div className={styles.ctaInner}>
               <p className={styles.ctaLabel}>[ NEWSLETTER ]</p>
-              <h2 className={styles.ctaTitle}>
-                Gostou? Receba um guia assim toda semana.
-              </h2>
+              <h2 className={styles.ctaTitle}>Gostou? Receba um guia assim toda semana.</h2>
               <p className={styles.ctaText}>
                 Engenharia de prompt na prática — direto no seu e-mail. Grátis.
               </p>
@@ -140,9 +162,7 @@ export default async function GuidePage({ params }: Props) {
             </div>
           </div>
 
-          <Link href="/guias" className={styles.backBottom}>
-            ← Ver todos os guias
-          </Link>
+          <Link href="/guias" className={styles.backBottom}>← Ver todos os guias</Link>
         </div>
       </div>
     </>
