@@ -1,4 +1,0 @@
-User-agent: *
-Allow: /
-
-Sitemap: https://promptfly.com.br/sitemap.xml

@@ -6,6 +6,8 @@ import Link from "next/link";
 import { getAllGuides, getGuideSource } from "@/lib/guides";
 import styles from "./page.module.css";
 
+const BASE = "https://promptfly.com.br";
+
 interface Props {
   params: Promise<{ slug: string }>;
 }
@@ -19,15 +21,28 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const source = getGuideSource(slug);
   if (!source) return {};
   const { data } = matter(source);
+
   return {
     title: data.title,
     description: data.description,
+    alternates: {
+      canonical: `${BASE}/guias/${slug}`,
+    },
     openGraph: {
       title: data.title,
       description: data.description,
       type: "article",
+      url: `${BASE}/guias/${slug}`,
       publishedTime: data.date,
+      authors: ["Promptfly"],
       tags: data.tags,
+      locale: "pt_BR",
+      siteName: "Promptfly",
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: data.title,
+      description: data.description,
     },
   };
 }
@@ -39,60 +54,97 @@ export default async function GuidePage({ params }: Props) {
 
   const { data } = matter(source);
 
+  const articleJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    headline: data.title,
+    description: data.description,
+    datePublished: data.date,
+    dateModified: data.date,
+    inLanguage: "pt-BR",
+    url: `${BASE}/guias/${slug}`,
+    mainEntityOfPage: { "@type": "WebPage", "@id": `${BASE}/guias/${slug}` },
+    author: {
+      "@type": "Organization",
+      name: "Promptfly",
+      url: BASE,
+    },
+    publisher: {
+      "@type": "Organization",
+      name: "Promptfly",
+      url: BASE,
+      logo: { "@type": "ImageObject", url: `${BASE}/logo.png` },
+    },
+    keywords: (data.tags as string[]).join(", "),
+  };
+
+  const breadcrumbJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      { "@type": "ListItem", position: 1, name: "Início", item: BASE },
+      { "@type": "ListItem", position: 2, name: "Guias", item: `${BASE}/guias` },
+      { "@type": "ListItem", position: 3, name: data.title, item: `${BASE}/guias/${slug}` },
+    ],
+  };
+
   return (
-    <div className={styles.page}>
-      <div className={styles.inner}>
-        {/* Breadcrumb */}
-        <Link href="/guias" className={styles.back}>
-          ← Todos os guias
-        </Link>
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(articleJsonLd) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
+      />
 
-        {/* Meta */}
-        <div className={styles.meta}>
-          {(data.tags as string[]).map((tag: string) => (
-            <span key={tag} className={styles.tag}>
-              {tag}
-            </span>
-          ))}
-          <span className={styles.readTime}>{data.readTime} de leitura</span>
-        </div>
+      <div className={styles.page}>
+        <div className={styles.inner}>
+          <Link href="/guias" className={styles.back}>
+            ← Todos os guias
+          </Link>
 
-        {/* Title */}
-        <h1 className={styles.title}>{data.title}</h1>
-        <p className={styles.description}>{data.description}</p>
-        <div className={styles.divider} />
-
-        {/* MDX Content */}
-        <article className={styles.article}>
-          <MDXRemote source={source} />
-        </article>
-
-        {/* Newsletter CTA */}
-        <div className={styles.cta}>
-          <div className={styles.ctaInner}>
-            <p className={styles.ctaLabel}>[ NEWSLETTER ]</p>
-            <h2 className={styles.ctaTitle}>
-              Gostou? Receba um guia assim toda semana.
-            </h2>
-            <p className={styles.ctaText}>
-              Engenharia de prompt na prática — direto no seu e-mail. Grátis.
-            </p>
-            <a
-              href="https://promptfly.beehiiv.com/subscribe"
-              target="_blank"
-              rel="noopener noreferrer"
-              className={styles.ctaBtn}
-            >
-              Assinar newsletter grátis →
-            </a>
+          <div className={styles.meta}>
+            {(data.tags as string[]).map((tag: string) => (
+              <span key={tag} className={styles.tag}>{tag}</span>
+            ))}
+            <span className={styles.readTime}>{data.readTime} de leitura</span>
           </div>
-        </div>
 
-        {/* Back */}
-        <Link href="/guias" className={styles.backBottom}>
-          ← Ver todos os guias
-        </Link>
+          <h1 className={styles.title}>{data.title}</h1>
+          <p className={styles.description}>{data.description}</p>
+          <div className={styles.divider} />
+
+          <article className={styles.article}>
+            <MDXRemote source={source} />
+          </article>
+
+          <div className={styles.cta}>
+            <div className={styles.ctaInner}>
+              <p className={styles.ctaLabel}>[ NEWSLETTER ]</p>
+              <h2 className={styles.ctaTitle}>
+                Gostou? Receba um guia assim toda semana.
+              </h2>
+              <p className={styles.ctaText}>
+                Engenharia de prompt na prática — direto no seu e-mail. Grátis.
+              </p>
+              <a
+                href="https://promptfly.beehiiv.com/subscribe"
+                target="_blank"
+                rel="noopener noreferrer"
+                className={styles.ctaBtn}
+              >
+                Assinar newsletter grátis →
+              </a>
+            </div>
+          </div>
+
+          <Link href="/guias" className={styles.backBottom}>
+            ← Ver todos os guias
+          </Link>
+        </div>
       </div>
-    </div>
+    </>
   );
 }

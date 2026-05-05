@@ -88,6 +88,25 @@ export const metadata: Metadata = {
   },
 };
 
+const websiteJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  name: "Promptfly",
+  url: BASE_URL,
+  description:
+    "Guias semanais de engenharia de prompt para quem quer resultado real com IA.",
+  publisher: {
+    "@type": "Organization",
+    name: "Promptfly",
+    url: BASE_URL,
+    logo: {
+      "@type": "ImageObject",
+      url: `${BASE_URL}/logo.png`,
+    },
+  },
+  inLanguage: "pt-BR",
+};
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -95,7 +114,13 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="pt-BR" className={inter.variable}>
-      <body className="antialiased">{children}</body>
+      <body className="antialiased">
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteJsonLd) }}
+        />
+        {children}
+      </body>
     </html>
   );
 }
