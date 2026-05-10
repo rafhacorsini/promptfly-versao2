@@ -52,7 +52,7 @@ export default async function GuidePage({ params }: Props) {
   const source = getGuideSource(slug);
   if (!source) notFound();
 
-  const { data } = matter(source);
+  const { data, content } = matter(source);
   const allGuides = getAllGuides();
   const currentIndex = allGuides.findIndex((g) => g.slug === slug);
   const prevGuide = currentIndex < allGuides.length - 1 ? allGuides[currentIndex + 1] : null;
@@ -111,7 +111,7 @@ export default async function GuidePage({ params }: Props) {
           <div className={styles.divider} />
 
           <article className={styles.article}>
-            <MDXRemote source={source} />
+            <MDXRemote source={content} />
           </article>
 
           {/* Share */}
