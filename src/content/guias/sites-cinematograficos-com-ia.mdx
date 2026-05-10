@@ -1,0 +1,145 @@
+---
+title: "Como criar sites cinematográficos com IA"
+description: "O método por trás de uma landing page que parece um set de filmagem: scroll como narrativa, luz como hierarquia, tipografia como coreografia — e os prompts que fazem a IA construir cada camada."
+date: "2026-05-10"
+tags: ["sites cinematográficos", "framer motion", "next.js", "prompts de design"]
+readTime: "7 min"
+category: "prompts"
+featured: true
+---
+
+A maioria dos sites animados impressiona por dois segundos e cansa por dois meses. O que separa "site com animação" de "site cinematográfico" não é a quantidade de movimento — é a **intenção** por trás de cada frame.
+
+Esse guia é a engenharia reversa de um projeto que construí ao vivo: um template em Next.js + Framer Motion onde cada seção é tratada como uma cena de filme. Aqui estão os três princípios e os prompts que fazem a IA executar cada um.
+
+---
+
+## A filosofia em uma frase
+
+> Cada seção é uma cena. Cada animação serve ao ritmo, não ao ego.
+
+Três regras derivam disso:
+
+- **Scroll como narrativa** — o usuário não rola para "ver mais", ele rola para avançar a história
+- **Luz como hierarquia** — o que importa é iluminado, o resto fica em sombra
+- **Tipografia como coreografia** — palavras entram e saem em tempos diferentes, como atores
+
+Tudo o que vier abaixo é consequência desses três.
+
+---
+
+## Princípio 1 — Scroll como narrativa
+
+A maior diferença entre um site bonito e um site cinematográfico é o que acontece **enquanto** o usuário rola. Não no fim do scroll, não no início — no meio.
+
+A técnica chama `scroll-linked animation`: o progresso do scroll vira input numérico que controla opacidade, escala, blur, posição. O Framer Motion entrega isso pronto com `useScroll` + `useTransform`.
+
+### Prompt — animação amarrada ao scroll
+
+```
+Você é engenheiro front-end sênior especialista em animação.
+
+Crie um componente React (Next.js 15, Framer Motion 11) que:
+- ocupe 100svh de viewport
+- mostre uma imagem que começa em escala 1.4 e blur(20px)
+- conforme o usuário rola DENTRO da seção, a imagem
+  vai pra escala 1.0 e blur(0px) suavemente
+- use useScroll com offset ["start end", "end start"]
+- use useTransform para mapear progresso → estilos
+- nada de transições CSS, tudo via motion values
+
+Sem comentários explicativos no código. Apenas o componente,
+limpo, pronto pra colar.
+```
+
+Por que funciona: a IA tem `useScroll` e `useTransform` no treino, mas tende a entregar versões genéricas. Forçar `offset`, `100svh` e "nada de transições CSS" remove o fallback preguiçoso.
+
+---
+
+## Princípio 2 — Luz como hierarquia
+
+Em filme, o diretor de fotografia decide o que você vê primeiro pela luz. No web, a maioria das pessoas decide pelo tamanho da fonte. Errado.
+
+Use `brightness`, `blur` e `opacity` em camadas para criar profundidade falsa. Uma silhueta com `filter: blur(8px) brightness(0.4)` no fundo + outra nítida no primeiro plano custa zero performance e parece 3D.
+
+### Prompt — mosaico com profundidade simulada
+
+```
+Crie uma seção React com 4 imagens posicionadas em
+absolute formando um mosaico assimétrico.
+
+Cada imagem tem uma "camada de profundidade" (1 a 4):
+- camada 1 (frente): blur 0, brightness 1, escala 1
+- camada 2: blur 2px, brightness 0.85, escala 0.95
+- camada 3: blur 5px, brightness 0.65, escala 0.9
+- camada 4 (fundo): blur 10px, brightness 0.4, escala 0.85
+
+Receba via prop um array de 4 objetos { src, layer, x, y }.
+Use Tailwind para layout. Sem bibliotecas extras.
+```
+
+A jogada está na escala decrescente conforme a profundidade aumenta. Sem isso, vira só "imagens borradas".
+
+---
+
+## Princípio 3 — Tipografia como coreografia
+
+Texto que aparece todo de uma vez é texto que ninguém lê. Texto que aparece **palavra por palavra** sincronizado com o scroll é cinema.
+
+Aqui o Framer Motion já não basta — fica pesado. A solução é `requestAnimationFrame` puro lendo `scrollY` e calculando opacidade individual de cada palavra. O componente fica complexo, mas é onde o site sai de "bonito" pra "diferente".
+
+### Prompt — manifesto palavra por palavra
+
+```
+Crie um componente "Manifesto" em React (TypeScript) que:
+
+- recebe uma string longa via prop `text`
+- divide o texto em palavras
+- usa um wrapper com 500svh de altura
+- conteúdo interno fica sticky em 100svh
+- conforme o usuário rola dentro do wrapper, cada palavra
+  passa de opacity 0.15 → 1.0 individualmente
+- use requestAnimationFrame puro, NÃO Framer Motion
+- aplique easing quartic (ease out) na transição
+- use refs para cada palavra, não re-render do React
+
+Tipografia: fonte display grande (clamp 3rem a 7rem),
+peso 300, letter-spacing -0.02em.
+```
+
+O segredo: pedir explicitamente "NÃO Framer Motion". Sem isso, a IA usa `useTransform` com 200 motion values e a página congela.
+
+---
+
+## A stack mínima
+
+Para um site cinematográfico real, você não precisa de muita coisa:
+
+| Ferramenta | Pra quê |
+|---|---|
+| Next.js 15 (App Router) | Estrutura |
+| Framer Motion 11 | 90% das animações |
+| Tailwind CSS 3 | Estilo sem CSS files separados |
+| `requestAnimationFrame` puro | Os 10% que o Framer Motion não dá conta |
+
+Nada de GSAP, nada de Three.js, nada de Lottie. A restrição é o que cria o estilo.
+
+---
+
+## A regra que separa amadores de profissionais
+
+Antes de adicionar qualquer animação, responda em voz alta:
+
+> O que essa animação está dizendo que o texto não diz sozinho?
+
+Se a resposta for "ela é legal", remove. Se for "ela mostra que o assunto é grande", "ela revela algo escondido", "ela puxa o olhar pro próximo bloco" — mantém.
+
+Animação cinematográfica não é decoração. É hierarquia visual aplicada ao tempo.
+
+---
+
+## Próximo passo
+
+Pega esses três prompts, abre o Claude (ou GPT, ou Cursor), e constrói uma seção de cada vez. Não tente fazer tudo num prompt só — a IA não tem contexto pra coreografar 7 seções de uma vez sem inventar coisa.
+
+Uma cena por vez. Como num filme.
