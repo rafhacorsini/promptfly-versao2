@@ -1,145 +1,133 @@
 ---
 title: "Como criar sites cinematográficos com IA"
-description: "O método por trás de uma landing page que parece um set de filmagem: scroll como narrativa, luz como hierarquia, tipografia como coreografia — e os prompts que fazem a IA construir cada camada."
+description: "Construí ao vivo no Instagram um template de site cinematográfico em Next.js + Framer Motion. Aqui está o passo a passo para clonar, rodar e adaptar — com explicação de cada arquivo, cada animação e a filosofia por trás."
 date: "2026-05-10"
-tags: ["sites cinematográficos", "framer motion", "next.js", "prompts de design"]
-readTime: "7 min"
+tags: ["sites cinematográficos", "framer motion", "next.js", "template"]
+readTime: "8 min"
 category: "prompts"
 featured: true
 ---
 
-A maioria dos sites animados impressiona por dois segundos e cansa por dois meses. O que separa "site com animação" de "site cinematográfico" não é a quantidade de movimento — é a **intenção** por trás de cada frame.
+Esse projeto nasceu de uma pergunta simples: **o que acontece quando você trata um website como se fosse um set de filmagem?**
 
-Esse guia é a engenharia reversa de um projeto que construí ao vivo: um template em Next.js + Framer Motion onde cada seção é tratada como uma cena de filme. Aqui estão os três princípios e os prompts que fazem a IA executar cada um.
+A resposta virou um template de sete seções, construído ao vivo no Instagram, e que agora está disponível no GitHub para qualquer pessoa clonar, estudar e adaptar.
+
+> **Repositório:** [github.com/rafhacorsini/cinematic-website-template](https://github.com/rafhacorsini/cinematic-website-template)
 
 ---
 
-## A filosofia em uma frase
+## A filosofia em três princípios
 
-> Cada seção é uma cena. Cada animação serve ao ritmo, não ao ego.
+A interface inteira é construída sobre três ideias:
 
-Três regras derivam disso:
-
-- **Scroll como narrativa** — o usuário não rola para "ver mais", ele rola para avançar a história
+- **Scroll como narrativa** — o usuário não rola para ver mais, ele rola para avançar a história
 - **Luz como hierarquia** — o que importa é iluminado, o resto fica em sombra
-- **Tipografia como coreografia** — palavras entram e saem em tempos diferentes, como atores
+- **Tipografia como coreografia** — palavras entram em tempos diferentes, como atores numa cena
 
-Tudo o que vier abaixo é consequência desses três.
-
----
-
-## Princípio 1 — Scroll como narrativa
-
-A maior diferença entre um site bonito e um site cinematográfico é o que acontece **enquanto** o usuário rola. Não no fim do scroll, não no início — no meio.
-
-A técnica chama `scroll-linked animation`: o progresso do scroll vira input numérico que controla opacidade, escala, blur, posição. O Framer Motion entrega isso pronto com `useScroll` + `useTransform`.
-
-### Prompt — animação amarrada ao scroll
-
-```
-Você é engenheiro front-end sênior especialista em animação.
-
-Crie um componente React (Next.js 15, Framer Motion 11) que:
-- ocupe 100svh de viewport
-- mostre uma imagem que começa em escala 1.4 e blur(20px)
-- conforme o usuário rola DENTRO da seção, a imagem
-  vai pra escala 1.0 e blur(0px) suavemente
-- use useScroll com offset ["start end", "end start"]
-- use useTransform para mapear progresso → estilos
-- nada de transições CSS, tudo via motion values
-
-Sem comentários explicativos no código. Apenas o componente,
-limpo, pronto pra colar.
-```
-
-Por que funciona: a IA tem `useScroll` e `useTransform` no treino, mas tende a entregar versões genéricas. Forçar `offset`, `100svh` e "nada de transições CSS" remove o fallback preguiçoso.
+Cada seção é uma cena. Cada animação serve ao ritmo, não ao ego.
 
 ---
 
-## Princípio 2 — Luz como hierarquia
+## Como clonar e rodar
 
-Em filme, o diretor de fotografia decide o que você vê primeiro pela luz. No web, a maioria das pessoas decide pelo tamanho da fonte. Errado.
-
-Use `brightness`, `blur` e `opacity` em camadas para criar profundidade falsa. Uma silhueta com `filter: blur(8px) brightness(0.4)` no fundo + outra nítida no primeiro plano custa zero performance e parece 3D.
-
-### Prompt — mosaico com profundidade simulada
-
-```
-Crie uma seção React com 4 imagens posicionadas em
-absolute formando um mosaico assimétrico.
-
-Cada imagem tem uma "camada de profundidade" (1 a 4):
-- camada 1 (frente): blur 0, brightness 1, escala 1
-- camada 2: blur 2px, brightness 0.85, escala 0.95
-- camada 3: blur 5px, brightness 0.65, escala 0.9
-- camada 4 (fundo): blur 10px, brightness 0.4, escala 0.85
-
-Receba via prop um array de 4 objetos { src, layer, x, y }.
-Use Tailwind para layout. Sem bibliotecas extras.
+```bash
+git clone https://github.com/rafhacorsini/cinematic-website-template.git
+cd cinematic-website-template
+npm install
+npm run dev
 ```
 
-A jogada está na escala decrescente conforme a profundidade aumenta. Sem isso, vira só "imagens borradas".
+Abre em `http://localhost:3000`.
+
+**Stack:** Next.js 15 (App Router), React 19, Framer Motion 11, Tailwind CSS 3, TypeScript 5.
+
+> **Nota sobre fontes:** O projeto usa Neue Haas Grot Display (versão trial). Se você não tiver os arquivos `.otf`, o sistema cai para Helvetica Neue como fallback — o layout aguenta.
 
 ---
 
-## Princípio 3 — Tipografia como coreografia
+## O que tem no repositório
 
-Texto que aparece todo de uma vez é texto que ninguém lê. Texto que aparece **palavra por palavra** sincronizado com o scroll é cinema.
+O repo vem com quatro documentos antes de qualquer linha de código. Eles são o mapa do projeto:
 
-Aqui o Framer Motion já não basta — fica pesado. A solução é `requestAnimationFrame` puro lendo `scrollY` e calculando opacidade individual de cada palavra. O componente fica complexo, mas é onde o site sai de "bonito" pra "diferente".
+### `README.md` — A introdução
+A filosofia ("cada seção é uma cena"), a tabela de stack, os comandos para rodar e a paleta intencionalmente restrita: preto quase absoluto (`#030303`), branco sujo (`#f0f0f0`), e o verde neon da seleção de texto.
 
-### Prompt — manifesto palavra por palavra
+### `STRUCTURE.md` — O mapa
+Árvore completa com uma linha por arquivo. Mostra onde fica cada coisa, como as camadas de z-index se empilham, e a decisão arquitetural principal: **nenhuma seção sabe da existência da outra.** Cada uma gerencia seu próprio scroll. Isso torna qualquer seção substituível ou removível sem quebrar o resto.
 
-```
-Crie um componente "Manifesto" em React (TypeScript) que:
+### `SNIPPETS.md` — Os trechos importantes
+Sete blocos de código comentados cobrindo todas as técnicas. É onde mora a parte difícil — e é o arquivo que você vai mais consultar quando for adaptar.
 
-- recebe uma string longa via prop `text`
-- divide o texto em palavras
-- usa um wrapper com 500svh de altura
-- conteúdo interno fica sticky em 100svh
-- conforme o usuário rola dentro do wrapper, cada palavra
-  passa de opacity 0.15 → 1.0 individualmente
-- use requestAnimationFrame puro, NÃO Framer Motion
-- aplique easing quartic (ease out) na transição
-- use refs para cada palavra, não re-render do React
-
-Tipografia: fonte display grande (clamp 3rem a 7rem),
-peso 300, letter-spacing -0.02em.
-```
-
-O segredo: pedir explicitamente "NÃO Framer Motion". Sem isso, a IA usa `useTransform` com 200 motion values e a página congela.
+### `DM_TEMPLATE.md` — Mensagens prontas para o direct
+Três versões da mensagem (curta, com contexto, para stories) caso você queira repassar o material para alguém. Inclui a dica de não mandar link cru do GitHub no direct.
 
 ---
 
-## A stack mínima
+## As sete seções do site
 
-Para um site cinematográfico real, você não precisa de muita coisa:
+Cada uma com sua própria linguagem de movimento. Em ordem:
 
-| Ferramenta | Pra quê |
-|---|---|
-| Next.js 15 (App Router) | Estrutura |
-| Framer Motion 11 | 90% das animações |
-| Tailwind CSS 3 | Estilo sem CSS files separados |
-| `requestAnimationFrame` puro | Os 10% que o Framer Motion não dá conta |
-
-Nada de GSAP, nada de Three.js, nada de Lottie. A restrição é o que cria o estilo.
+| # | Seção | Técnica principal |
+|---|---|---|
+| 1 | **Hero** | Parallax de mouse em 7 camadas + crossfade de backgrounds + rotação de palavras + partículas |
+| 2 | **CinematicReveal** | Imagem emergindo da escuridão via scrubbing de scroll |
+| 3 | **MaterialsStudy** | Três layouts editoriais com imagens em escala scroll-linked |
+| 4 | **SilhouettePresence** | Mosaico com profundidade simulada via blur e brightness por camada |
+| 5 | **ManifestoPhilosophy** | Tipografia palavra a palavra sincronizada com scroll (rAF puro, zero Framer Motion) |
+| 6 | **CinematicFooter** | Grid arquitetural com scanline animada |
+| 7 | **GlobalAtmosphere** | Camada fixa de fundo: grain, grids, luz difusa — tudo sutil |
 
 ---
 
-## A regra que separa amadores de profissionais
+## As técnicas que mais valem a pena entender
 
-Antes de adicionar qualquer animação, responda em voz alta:
+### A easing que dá identidade ao projeto
 
-> O que essa animação está dizendo que o texto não diz sozinho?
+A cubic-bezier `[0.16, 1, 0.3, 1]` aparece em quase tudo. Peso no início, soltura no final — o oposto do `ease-out` padrão. É essa curva que faz o movimento parecer "filmado" em vez de "animado".
 
-Se a resposta for "ela é legal", remove. Se for "ela mostra que o assunto é grande", "ela revela algo escondido", "ela puxa o olhar pro próximo bloco" — mantém.
+### Parallax de mouse com física de mola
 
-Animação cinematográfica não é decoração. É hierarquia visual aplicada ao tempo.
+Sete camadas com profundidades diferentes. A mola (`useSpring` com `stiffness: 6, damping: 60, mass: 3`) elimina o movimento mecânico — tudo flutua como se tivesse inércia. Camadas mais distantes recebem amplitude maior; o texto se move em direção contrária ao fundo, reforçando a profundidade.
+
+### Scroll-linked com `useScroll` + `useTransform`
+
+Sem duration, sem delay. O valor visual é uma função matemática direta da posição do scroll: opacidade, escala, blur, posição Y — tudo amarrado ao `scrollY`. É o que dá a sensação de "câmera" em vez de "transição".
+
+### Tipografia palavra a palavra (a parte mais sofisticada)
+
+O componente `ManifestoPhilosophy` **não usa Framer Motion**. Usa `requestAnimationFrame` puro para ler `scrollY` e calcular a opacidade de cada palavra individualmente com easing quartic. O "track" de scroll tem 500svh de altura, mas o conteúdo fica `sticky` em 100svh — efeito de câmera lenta sem `transition` CSS.
+
+A função `computeWordOpacity` divide cada frase em três fases: revela em 20% do segmento, sustenta por 60%, dissolve nos últimos 20%. Cada palavra dentro da frase tem stagger próprio.
+
+### Sistema de partículas estável
+
+30 partículas com posição, duração e atraso aleatórios — calculados **uma vez** na montagem com `useMemo`. Sem isso, cada re-render geraria valores novos e a animação reiniciaria.
+
+---
+
+## Como adaptar para o seu projeto
+
+A arquitetura foi pensada para isso. Como cada seção é independente:
+
+1. **Para trocar uma seção:** delete o componente em `src/components/sections/`, remova o import em `src/app/page.tsx`, coloque o novo no lugar
+2. **Para mudar a paleta:** edite as variáveis CSS em `src/app/globals.css` (são só três cores)
+3. **Para reusar uma animação fora do projeto:** copie o bloco correspondente do `SNIPPETS.md`, todos são autocontidos
+4. **Para mudar o ritmo geral:** ajuste o `staggerChildren` em `src/utils/motion.ts` e a easing `[0.16, 1, 0.3, 1]` para algo com curva diferente
+
+---
+
+## A regra implícita que atravessa o projeto
+
+> **Movimento que o usuário nota = movimento que falhou.**
+
+O parallax de mouse deve parecer que o site sempre foi assim. O scroll-linked deve parecer que o conteúdo tem peso. A poeira deve ser encontrada, não notada.
+
+Se você olhar para uma animação e pensar "que animação legal" — ela está errada. Animação cinematográfica não é decoração. É hierarquia visual aplicada ao tempo.
 
 ---
 
 ## Próximo passo
 
-Pega esses três prompts, abre o Claude (ou GPT, ou Cursor), e constrói uma seção de cada vez. Não tente fazer tudo num prompt só — a IA não tem contexto pra coreografar 7 seções de uma vez sem inventar coisa.
+Clona, roda, mexe. O projeto inteiro são 7 seções e ~10 arquivos relevantes. Em uma tarde dá para entender tudo.
 
-Uma cena por vez. Como num filme.
+Se construir algo em cima, marca [@rafhacorsini](https://instagram.com/rafhacorsini) — quero ver.
