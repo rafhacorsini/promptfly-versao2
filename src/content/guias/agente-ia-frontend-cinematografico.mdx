@@ -1,0 +1,234 @@
+---
+title: "Como criar um agente de IA para sites cinematográficos"
+description: "A diferença entre pedir um site bonito para a IA e ter um agente que sabe exatamente o que é um site bonito. Aqui está a estrutura de arquivos que eu uso para isso."
+date: "2026-05-13"
+tags: ["agentes", "frontend", "framer motion", "prompts"]
+readTime: "10 min"
+category: "tecnicas"
+featured: true
+---
+
+Tem um erro que quase todo mundo comete quando usa IA para programar.
+
+Eles abrem o chat e digitam: **"cria um site bonito pra mim".**
+
+E a IA cria. Mas o resultado parece template. Parece feito por IA. Porque instrução vaga gera resultado genérico — isso não é opinião, está na [documentação oficial do Claude](https://docs.anthropic.com/en/docs/build-with-claude/prompt-engineering/overview).
+
+A virada acontece quando você para de pedir coisas para a IA e começa a **ensinar como fazer**.
+
+## O que é um agente de IA, de verdade
+
+Agente de IA não precisa ser um sistema complexo com múltiplas ferramentas e orquestração. Na prática, um agente é um modelo com **contexto especializado**.
+
+Quando você dá para o Claude (ou qualquer modelo) um conjunto de regras específicas — sistema de cores, princípios de animação, arquitetura de componentes, referências visuais — ele para de agir como um assistente genérico e começa a agir como um desenvolvedor frontend sênior que conhece o seu projeto.
+
+É exatamente isso que eu fiz. Não criei um sistema complexo. Criei arquivos `.md` que definem como o agente deve pensar sobre frontend, animação e motion design.
+
+## A estrutura de arquivos
+
+Você vai criar três arquivos na raiz do seu projeto. Eles são o "cérebro" do agente:
+
+```
+seu-projeto/
+├── FRONTEND.md      # Regras de design e componentes
+├── ANIMATION.md     # Princípios de motion
+├── REFERENCES.md    # O que inspira e o que evitar
+└── src/
+    └── ...
+```
+
+Sempre que for conversar com a IA sobre o projeto, você inclui esses arquivos no contexto. No Claude.ai é só arrastar. No Cursor/Windsurf eles ficam no contexto automaticamente se estiverem na raiz.
+
+---
+
+## FRONTEND.md — As regras de design
+
+Esse arquivo define o que pode e o que não pode existir no projeto. Quanto mais específico, melhor.
+
+```markdown
+# Regras de Frontend
+
+## Sistema de Cores
+Paleta restrita. Nunca inventar cor fora daqui:
+- Fundo: #030303 (preto quase absoluto)
+- Texto: #f0f0f0 (branco sujo)
+- Acento: #00ff88 (verde neon — só para seleção de texto e detalhe)
+- Nunca usar branco puro #ffffff ou preto puro #000000
+
+## Tipografia
+- Fonte principal: Neue Haas Grot Display (fallback: Helvetica Neue)
+- Tamanhos com clamp() — nunca tamanho fixo que quebre em telas intermediárias
+- text-wrap: balance em todos os títulos
+- Line-height: 1.1 em títulos, 1.6 em corpo de texto
+
+## Componentes
+- Um componente = um arquivo .tsx + um .module.css
+- Nenhuma seção sabe da existência da outra
+- Cada seção gerencia seu próprio scroll
+- Sem classes Tailwind inline — todo CSS em .module.css
+
+## Proibido
+- Cores fora da paleta
+- Bordas coloridas decorativas
+- Gradientes de arco-íris
+- Sombras com cor (só sombras neutras)
+- Fontes além das definidas
+- Animações sem propósito narrativo
+```
+
+---
+
+## ANIMATION.md — Os princípios de motion
+
+Esse é o arquivo que mais muda o resultado. A maioria das IAs aplica animações decorativas por padrão — entradas fade genéricas, bounces desnecessários. Esse arquivo redefine o que animação significa no projeto.
+
+```markdown
+# Princípios de Animação
+
+## Filosofia
+Movimento que o usuário nota é movimento que falhou.
+Cada animação serve ao ritmo, nunca ao ego.
+O site é um set de filmagem, não uma apresentação de slides.
+
+## Três pilares
+- Scroll como narrativa: o usuário não rola para ver mais, rola para avançar a história
+- Luz como hierarquia: o que importa é iluminado, o resto fica em sombra
+- Tipografia como coreografia: palavras entram em tempos diferentes, como atores numa cena
+
+## Easing padrão do projeto
+cubic-bezier(0.16, 1, 0.3, 1)
+Peso no início, soltura no final. Oposto do ease-out padrão.
+Usar em TUDO. É essa curva que faz parecer "filmado" em vez de "animado".
+
+## Durations
+- Micro (hover, click): 150ms a 200ms
+- Transição de elemento: 600ms a 900ms
+- Entrada de seção: 800ms a 1200ms
+- Nunca usar duration round como 500ms ou 1000ms — parece robótico
+
+## Scroll-linked (Framer Motion)
+Preferir useScroll + useTransform a animations com duration.
+O valor visual deve ser função matemática da posição do scroll.
+Sem delay artificial — o scroll é o controle.
+
+## Stagger em listas
+staggerChildren: 0.08 (oito centésimos, não 0.1 que parece mecânico)
+Direção: top to bottom na maioria dos casos
+
+## Parallax de mouse
+Usar useSpring com stiffness: 6, damping: 60, mass: 3
+Camadas mais distantes recebem amplitude maior
+Texto se move em direção CONTRÁRIA ao fundo
+
+## O que nunca fazer
+- bounce ou spring exagerado
+- animate={{ scale: 1.1 }} em hover de texto
+- rotateY ou rotateX sem contexto 3D real
+- AnimatePresence em elementos que não saem do DOM
+- Animação que reinicia no re-render (sempre useMemo em valores aleatórios)
+```
+
+---
+
+## REFERENCES.md — O que inspira e o que evitar
+
+Esse arquivo calibra o gosto do agente. Referências visuais concretas valem mais do que adjetivos como "moderno" ou "premium".
+
+```markdown
+# Referências Visuais
+
+## O que inspira
+- Awwwards SOTD de sites com narrativa em scroll
+- Editoriais de moda de alta costura (Bottega Veneta, Maison Margiela)
+- Trailers de filmes A24
+- Sites: Linear.app, Vercel.com, Basement.studio
+
+## Palavras que descrevem o resultado esperado
+Cinematográfico. Editorial. Contido. Denso. Não decorativo.
+
+## Palavras que NÃO descrevem o resultado
+Colorido. Alegre. Moderno (muito genérico). Minimalista (muito vago).
+Corpo clean. Divertido. Vibrante.
+
+## Sites de referência para NÃO usar como base
+- Templates de Webflow gratuitos
+- Sites SaaS genéricos com hero azul e grid de features
+- Qualquer coisa com gradiente de roxo para azul
+
+## Como citar referência numa conversa com a IA
+Correto: "quero que a entrada do título se comporte como no hero do basement.studio — texto emergindo de baixo com máscara de clip"
+Errado: "quero algo bonito tipo site gringo"
+```
+
+---
+
+## Como usar esses arquivos
+
+Você tem duas formas principais de trabalhar com esse sistema:
+
+**No Claude.ai ou ChatGPT:**
+
+Arraste os três arquivos junto com sua mensagem. Comece sempre com:
+
+```
+Contexto do projeto nos arquivos anexados. Seguindo essas regras:
+[sua instrução específica aqui]
+```
+
+**No Cursor, Windsurf ou qualquer editor com IA:**
+
+Coloque os arquivos na raiz do projeto. O editor os inclui automaticamente no contexto. Você pode referenciar explicitamente: "seguindo as regras do ANIMATION.md, cria o componente de entrada da seção hero".
+
+**No Claude Code (terminal):**
+
+Renomeie o `FRONTEND.md` para `CLAUDE.md` — ele é carregado automaticamente em cada conversa dentro do projeto.
+
+---
+
+## O que muda na prática
+
+Antes desse sistema, quando eu pedia "cria uma animação de entrada para o título", a IA criava um `fadeIn` de 500ms com `ease-in-out`. Funcionava. Era genérico.
+
+Depois, com os arquivos de contexto, a mesma instrução gerava: entrada com clip-path revelando o texto de baixo para cima, cubic-bezier `(0.16, 1, 0.3, 1)`, 800ms, stagger de 80ms por palavra. Sem eu pedir nada disso.
+
+A diferença não é a IA. É o contexto que você deu para ela.
+
+---
+
+## Template para começar agora
+
+Você não precisa criar tudo do zero. Aqui está um ponto de partida mínimo que já funciona:
+
+```markdown
+# Regras do Projeto
+
+## Identidade visual
+[sua paleta de cores aqui]
+[sua fonte aqui]
+
+## O que nunca fazer
+- cores fora da paleta
+- animações decorativas sem propósito
+- [seus proibidos específicos]
+
+## Referências
+[dois ou três sites que você admira]
+
+## Tom visual
+[três adjetivos que descrevem o que você quer]
+[três adjetivos que descrevem o que você não quer]
+```
+
+Isso já é suficiente para mudar o resultado. Você vai refinando conforme o projeto evolui.
+
+---
+
+## A regra que resume tudo
+
+Um agente bom não é aquele que sabe tudo. É aquele que sabe **o que não fazer**.
+
+Quanto mais você especifica os limites — o que está fora da paleta, o que é animação proibida, o que é referência errada — mais o agente converge para o resultado que você quer.
+
+Instrução vaga gera resultado genérico. Restrição precisa gera identidade.
+
+Se quiser ver os arquivos completos que eu uso no meu workflow, estão no repositório do template cinematográfico: [github.com/rafhacorsini/cinematic-website-template](https://github.com/rafhacorsini/cinematic-website-template)
