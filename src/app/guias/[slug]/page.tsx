@@ -6,6 +6,7 @@ import Link from "next/link";
 import { getAllGuides, getGuideSource } from "@/lib/guides";
 import ReadingProgress from "@/components/ReadingProgress";
 import ShareButtons from "@/components/ShareButtons";
+import TemplateCard from "@/components/TemplateCard";
 import styles from "./page.module.css";
 
 const BASE = "https://promptfly.com.br";
@@ -143,6 +144,9 @@ export default async function GuidePage({ params }: Props) {
             </nav>
           )}
 
+          {/* Template CTA */}
+          <TemplateCard />
+
           {/* Newsletter CTA */}
           <div className={styles.cta}>
             <div className={styles.ctaInner}>
@@ -151,14 +155,9 @@ export default async function GuidePage({ params }: Props) {
               <p className={styles.ctaText}>
                 Engenharia de prompt na prática — direto no seu e-mail. Grátis.
               </p>
-              <a
-                href="https://promptfly.beehiiv.com/subscribe"
-                target="_blank"
-                rel="noopener noreferrer"
-                className={styles.ctaBtn}
-              >
+              <Link href="/#newsletter" className={styles.ctaBtn}>
                 Assinar newsletter grátis →
-              </a>
+              </Link>
             </div>
           </div>
 

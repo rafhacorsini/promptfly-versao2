@@ -1,0 +1,19 @@
+{
+  "title": "Template Cinematográfico",
+  "subtitle": "7 seções. Animações prontas. Documentação completa.",
+  "description": "O mesmo template construído ao vivo no Instagram. Pronto para clonar, rodar e adaptar. Com os arquivos de instrução para IA inclusos.",
+  "price": "R$ 97",
+  "hotmartUrl": "",
+  "videoUrl": "",
+  "badge": "Novo",
+  "features": [
+    "7 seções com animações cinematográficas prontas",
+    "Parallax de mouse em 7 camadas com física de mola",
+    "Tipografia palavra a palavra sincronizada com scroll",
+    "Sistema de partículas estável com useMemo",
+    "Arquivos FRONTEND.md, ANIMATION.md e REFERENCES.md inclusos",
+    "Stack: Next.js 15, React 19, Framer Motion 11, TypeScript"
+  ],
+  "stack": ["Next.js 15", "Framer Motion 11", "TypeScript", "Tailwind CSS"],
+  "repoUrl": "https://github.com/rafhacorsini/cinematic-website-template"
+}
