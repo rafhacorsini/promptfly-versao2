@@ -29,13 +29,12 @@ export default function TemplatePage() {
         {/* Vídeo */}
         {product.videoUrl && (
           <div className={styles.videoWrap}>
-            <video
+            <iframe
               src={product.videoUrl}
-              autoPlay
-              muted
-              loop
-              playsInline
               className={styles.video}
+              allow="autoplay; fullscreen"
+              allowFullScreen
+              title="Preview do template"
             />
           </div>
         )}
