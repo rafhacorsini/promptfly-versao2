@@ -24,20 +24,15 @@ export default function Navbar() {
 
         {/* Links Centro — Desktop */}
         <div className={styles.navLinks}>
-          <Link href="#" className={styles.navLink}>Guias</Link>
+          <Link href="/guias" className={styles.navLink}>Guias</Link>
           <Link href="#" className={styles.navLink}>Modelos</Link>
           <Link href="#" className={styles.navLink}>Prompts</Link>
         </div>
 
         {/* CTA — Desktop */}
-        <a
-          href="https://promptfly.beehiiv.com/subscribe"
-          target="_blank"
-          rel="noopener noreferrer"
-          className={styles.ctaButton}
-        >
+        <Link href="/#newsletter" className={styles.ctaButton}>
           Assinar grátis →
-        </a>
+        </Link>
 
         {/* Mobile: dois tracinhos */}
         <div className={styles.mobileMenu} onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}>
@@ -56,20 +51,19 @@ export default function Navbar() {
         </div>
 
         <div className={styles.mobileLinks}>
-          <Link href="#" className={styles.mobileNavLink} onClick={() => setIsMobileMenuOpen(false)}>GUIAS</Link>
+          <Link href="/guias" className={styles.mobileNavLink} onClick={() => setIsMobileMenuOpen(false)}>GUIAS</Link>
           <Link href="#" className={styles.mobileNavLink} onClick={() => setIsMobileMenuOpen(false)}>MODELOS</Link>
           <Link href="#" className={styles.mobileNavLink} onClick={() => setIsMobileMenuOpen(false)}>PROMPTS</Link>
         </div>
 
         <div className={styles.mobileFooter}>
-          <a
-            href="https://promptfly.beehiiv.com/subscribe"
-            target="_blank"
-            rel="noopener noreferrer"
+          <Link
+            href="/#newsletter"
             className={styles.mobileCtaButton}
+            onClick={() => setIsMobileMenuOpen(false)}
           >
             ASSINAR GRÁTIS
-          </a>
+          </Link>
         </div>
       </div>
     </nav>

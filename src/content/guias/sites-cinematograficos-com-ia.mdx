@@ -14,8 +14,6 @@ A resposta virou um template de sete seções, construído ao vivo no Instagram,
 
 > **Repositório:** [github.com/rafhacorsini/cinematic-website-template](https://github.com/rafhacorsini/cinematic-website-template)
 
----
-
 ## A filosofia em três princípios
 
 A interface inteira é construída sobre três ideias:
@@ -25,8 +23,6 @@ A interface inteira é construída sobre três ideias:
 - **Tipografia como coreografia** — palavras entram em tempos diferentes, como atores numa cena
 
 Cada seção é uma cena. Cada animação serve ao ritmo, não ao ego.
-
----
 
 ## Como clonar e rodar
 
@@ -41,24 +37,17 @@ Abre em `http://localhost:3000`.
 
 **Stack:** Next.js 15 (App Router), React 19, Framer Motion 11, Tailwind CSS 3, TypeScript 5.
 
-> **Nota sobre fontes:** O projeto usa Neue Haas Grot Display (versão trial). Se você não tiver os arquivos `.otf`, o sistema cai para Helvetica Neue como fallback — o layout aguenta.
-
----
+Sobre fontes: o projeto usa Neue Haas Grot Display na versão trial. Se você não tiver os arquivos `.otf`, o sistema cai para Helvetica Neue como fallback e o layout aguenta bem.
 
 ## O que tem no repositório
 
 O repo vem com três documentos antes de qualquer linha de código. Eles são o mapa do projeto:
 
-### `README.md` — A introdução
-A filosofia ("cada seção é uma cena"), a tabela de stack, os comandos para rodar e a paleta intencionalmente restrita: preto quase absoluto (`#030303`), branco sujo (`#f0f0f0`), e o verde neon da seleção de texto.
+**`README.md`** — a introdução. A filosofia, a tabela de stack, os comandos para rodar e a paleta intencionalmente restrita: preto quase absoluto (`#030303`), branco sujo (`#f0f0f0`), e o verde neon da seleção de texto.
 
-### `STRUCTURE.md` — O mapa
-Árvore completa com uma linha por arquivo. Mostra onde fica cada coisa, como as camadas de z-index se empilham, e a decisão arquitetural principal: **nenhuma seção sabe da existência da outra.** Cada uma gerencia seu próprio scroll. Isso torna qualquer seção substituível ou removível sem quebrar o resto.
+**`STRUCTURE.md`** — o mapa. Árvore completa com uma linha por arquivo, mostrando onde fica cada coisa, como as camadas de z-index se empilham, e a decisão arquitetural principal: nenhuma seção sabe da existência da outra. Cada uma gerencia seu próprio scroll. Isso torna qualquer seção substituível sem quebrar o resto.
 
-### `SNIPPETS.md` — Os trechos importantes
-Sete blocos de código comentados cobrindo todas as técnicas. É onde mora a parte difícil — e é o arquivo que você vai mais consultar quando for adaptar.
-
----
+**`SNIPPETS.md`** — os trechos importantes. Sete blocos de código comentados cobrindo todas as técnicas. É o arquivo que você vai mais consultar quando for adaptar.
 
 ## As sete seções do site
 
@@ -74,33 +63,29 @@ Cada uma com sua própria linguagem de movimento. Em ordem:
 | 6 | **CinematicFooter** | Grid arquitetural com scanline animada |
 | 7 | **GlobalAtmosphere** | Camada fixa de fundo: grain, grids, luz difusa — tudo sutil |
 
----
+## As técnicas que mais valem entender
 
-## As técnicas que mais valem a pena entender
-
-### A easing que dá identidade ao projeto
+**A easing que dá identidade ao projeto**
 
 A cubic-bezier `[0.16, 1, 0.3, 1]` aparece em quase tudo. Peso no início, soltura no final — o oposto do `ease-out` padrão. É essa curva que faz o movimento parecer "filmado" em vez de "animado".
 
-### Parallax de mouse com física de mola
+**Parallax de mouse com física de mola**
 
 Sete camadas com profundidades diferentes. A mola (`useSpring` com `stiffness: 6, damping: 60, mass: 3`) elimina o movimento mecânico — tudo flutua como se tivesse inércia. Camadas mais distantes recebem amplitude maior; o texto se move em direção contrária ao fundo, reforçando a profundidade.
 
-### Scroll-linked com `useScroll` + `useTransform`
+**Scroll-linked com `useScroll` + `useTransform`**
 
 Sem duration, sem delay. O valor visual é uma função matemática direta da posição do scroll: opacidade, escala, blur, posição Y — tudo amarrado ao `scrollY`. É o que dá a sensação de "câmera" em vez de "transição".
 
-### Tipografia palavra a palavra (a parte mais sofisticada)
+**Tipografia palavra a palavra (a parte mais sofisticada)**
 
-O componente `ManifestoPhilosophy` **não usa Framer Motion**. Usa `requestAnimationFrame` puro para ler `scrollY` e calcular a opacidade de cada palavra individualmente com easing quartic. O "track" de scroll tem 500svh de altura, mas o conteúdo fica `sticky` em 100svh — efeito de câmera lenta sem `transition` CSS.
+O componente `ManifestoPhilosophy` não usa Framer Motion. Usa `requestAnimationFrame` puro para ler `scrollY` e calcular a opacidade de cada palavra individualmente com easing quartic. O "track" de scroll tem 500svh de altura, mas o conteúdo fica `sticky` em 100svh — efeito de câmera lenta sem `transition` CSS.
 
 A função `computeWordOpacity` divide cada frase em três fases: revela em 20% do segmento, sustenta por 60%, dissolve nos últimos 20%. Cada palavra dentro da frase tem stagger próprio.
 
-### Sistema de partículas estável
+**Sistema de partículas estável**
 
-30 partículas com posição, duração e atraso aleatórios — calculados **uma vez** na montagem com `useMemo`. Sem isso, cada re-render geraria valores novos e a animação reiniciaria.
-
----
+30 partículas com posição, duração e atraso aleatórios — calculados uma vez na montagem com `useMemo`. Sem isso, cada re-render geraria valores novos e a animação reiniciaria.
 
 ## Como adaptar para o seu projeto
 
@@ -111,20 +96,16 @@ A arquitetura foi pensada para isso. Como cada seção é independente:
 3. **Para reusar uma animação fora do projeto:** copie o bloco correspondente do `SNIPPETS.md`, todos são autocontidos
 4. **Para mudar o ritmo geral:** ajuste o `staggerChildren` em `src/utils/motion.ts` e a easing `[0.16, 1, 0.3, 1]` para algo com curva diferente
 
----
-
 ## A regra implícita que atravessa o projeto
 
-> **Movimento que o usuário nota = movimento que falhou.**
+> **Movimento que o usuário nota é movimento que falhou.**
 
 O parallax de mouse deve parecer que o site sempre foi assim. O scroll-linked deve parecer que o conteúdo tem peso. A poeira deve ser encontrada, não notada.
 
 Se você olhar para uma animação e pensar "que animação legal" — ela está errada. Animação cinematográfica não é decoração. É hierarquia visual aplicada ao tempo.
 
----
-
 ## Próximo passo
 
-Clona, roda, mexe. O projeto inteiro são 7 seções e ~10 arquivos relevantes. Em uma tarde dá para entender tudo.
+Clona, roda, mexe. O projeto inteiro são 7 seções e uns 10 arquivos relevantes. Em uma tarde você entende tudo.
 
 Se construir algo em cima, marca [@rafhacorsini](https://instagram.com/rafhacorsini) — quero ver.
