@@ -1,0 +1,137 @@
+---
+title: "As Skills gratuitas do Claude Code que uso pra criar sites cinematográficos"
+description: "No vídeo mostrei ferramentas como GSAP e Lenis. Mas tem uma camada que não mostrei — e é ela que acelera tudo. Aqui estão as skills do Claude Code que usei, e como você pode usar também."
+date: "2026-05-16"
+tags: ["claude code", "gsap", "skills", "workflow", "frontend"]
+readTime: "8 min"
+category: "ferramentas"
+featured: true
+---
+
+Se você assistiu ao vídeo, sabe que ferramentas como GSAP, Lenis e tipografia são a base de um site que parece um filme. Mas existe uma camada que não mostrei — e é ela que acelera tudo.
+
+Claude Code tem um sistema de **skills** — comandos especializados que você chama direto no terminal. Algumas são nativas da ferramenta, disponíveis pra qualquer um. Outras são personalizadas — eu mesmo criei pra resolver problemas específicos do meu fluxo.
+
+Nesse guia, você vai conhecer as gratuitas que usei no projeto do vídeo.
+
+## Como funciona uma skill
+
+Dentro do Claude Code, você digita `/nome-da-skill` e o agente executa um workflow especializado — lê o projeto, toma decisões e implementa. Não é um prompt genérico. É uma sequência de instruções com contexto real do seu código.
+
+A diferença prática: em vez de descrever o que você quer em cada conversa, você chama um comando e o agente já sabe o que fazer — incluindo onde salvar o arquivo, quais padrões do projeto respeitar e o que verificar no final.
+
+---
+
+## As Skills Gratuitas
+
+### `/gsap-component`
+
+Cria um componente React com GSAP + ScrollTrigger pronto para usar no projeto.
+
+Você chama com um argumento opcional descrevendo o componente e o tipo de animação:
+
+```
+/gsap-component HeroText fade-up
+/gsap-component ImageReveal clip-path
+```
+
+O agente lê a versão do Next.js do projeto, adiciona `"use client"` no topo, importa `useGSAP` corretamente, registra o ScrollTrigger, aplica o estado inicial com `gsap.set()`, configura o cleanup e salva o arquivo em `src/components/ui/`. No final, mostra um exemplo de uso.
+
+Nada disso é difícil de fazer manualmente. Mas quando você está no meio de uma sessão longa, não ter que lembrar cada detalhe de setup faz diferença.
+
+---
+
+### `/section-hero`
+
+Gera uma seção Hero cinematográfica completa para o projeto.
+
+```
+/section-hero dark editorial
+/section-hero light minimal
+```
+
+O que a skill entrega:
+- Preloader com logo e texto, animado com timeline GSAP
+- Fundo fullscreen com parallax no scroll
+- Headline com tipografia responsiva usando `clamp()`
+- HUD superior (logo + nav) e inferior (info + scroll indicator)
+- Entrada cinematográfica: fundo desfoca e clareia, elementos sobem com blur
+- Lock de scroll via Lenis durante o loader
+
+É o ponto de partida que uso antes de customizar qualquer detalhe visual. A estrutura já está certa — o trabalho que sobra é de identidade, não de arquitetura.
+
+---
+
+### `/palette`
+
+Mapeia a paleta atual do projeto e gera três variações mantendo a identidade visual.
+
+```
+/palette mais quente
+/palette high contrast
+/palette monocromático
+```
+
+O agente lê o `globals.css`, identifica todas as cores nos tokens e nos componentes, monta um mapa visual no terminal e propõe três variações:
+
+- **A:** mantém o tom escuro, muda a cor de acento
+- **B:** inverte o esquema claro/escuro das seções
+- **C:** mantém estrutura, ajusta saturação e temperatura
+
+Você escolhe qual aplicar. Ele atualiza os tokens no `globals.css` e as cores hardcoded nos componentes. No final, lista todos os arquivos modificados.
+
+Útil quando você quer testar direções sem perder a coerência do que já existe.
+
+---
+
+### `/perf-audit`
+
+Audita o projeto por problemas de performance e aplica as correções que você aprovar.
+
+O agente verifica quatro categorias:
+
+**Vídeos:** autoPlay sem IntersectionObserver, `preload` ausente em vídeos abaixo do fold, múltiplos vídeos tocando ao mesmo tempo sem controle.
+
+**Imagens:** tag `Image` do Next.js sem `priority` acima do fold, `sizes` inadequado ao layout real, assets externos que deveriam ser locais.
+
+**Animações:** `filter: blur()` animado sem `force3D: true`, uso de `clip: rect()` deprecated (deve ser `clip-path: inset()`), animações com `repeat: -1` sem pausa fora do viewport.
+
+**Geral:** imports não utilizados, `useEffect` sem cleanup de ScrollTrigger, componentes pesados carregados sem `dynamic import`.
+
+Para cada problema: arquivo, linha, problema e correção sugerida. Você decide o que corrigir. No final, roda `npx tsc --noEmit` para garantir zero erros.
+
+---
+
+### `/responsive-fix`
+
+Escaneia o projeto inteiro e corrige valores que não são responsivos.
+
+O agente varre todos os `.tsx` e `.css` em `src/` e identifica:
+- Valores fixos em `px` para `width`, `height` e `font-size` que deveriam ser `clamp()` ou `vw/vh`
+- Layouts flex/grid sem breakpoints `md:` ou `lg:` do Tailwind
+- Textos grandes (acima de 24px fixo) sem variantes responsivas
+- Elementos absolutamente posicionados com `px` fixos que quebram em telas pequenas
+
+A correção padrão para tamanhos fixos é `clamp(min, valor_vw, max)`, onde `min` é aproximadamente 60% do original. Você revisa a lista e aprova o que quer corrigir.
+
+---
+
+<TemplateCTAInline />
+
+## Essas são as gratuitas. E as minhas?
+
+As skills acima estão disponíveis pra qualquer usuário do Claude Code — são abertas, sem custo.
+
+Mas ao longo dos projetos eu desenvolvi **skills personalizadas** — construídas especificamente para criação de sites com estética cinematográfica. Elas cobrem o que as nativas não resolvem: direção visual, ritmo de scroll, composição tipográfica com intenção editorial, estrutura de seções que parecem frames de filme.
+
+São os arquivos `.md` que ficam na pasta `.claude/commands/` do projeto. Você instala uma vez e usa em qualquer projeto.
+
+**Disponíveis por R$ 37,00.**
+
+Por que R$ 37? Porque é menos que uma hora de freelancer e entrega um workflow que você usa em todo projeto daqui pra frente.
+
+→ **[Quero as skills personalizadas](https://pay.hotmart.com/D105815506X)**
+
+---
+
+*Dúvida sobre instalação ou uso? Me chama no Instagram ou deixa um comentário abaixo.*
