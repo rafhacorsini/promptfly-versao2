@@ -1,0 +1,18 @@
+{
+  "title": "Skills Cinematográficas",
+  "subtitle": "5 comandos. Instala em 2 minutos. Usa em todo projeto.",
+  "description": "Comandos personalizados para o Claude Code que automatizam o que mais consome tempo na criação de sites com estética cinematográfica. Cada skill já sabe como o seu projeto funciona — você só chama e o agente entrega.",
+  "price": "R$ 37",
+  "hotmartUrl": "https://pay.hotmart.com/L105868575N",
+  "badge": "Novo",
+  "features": [
+    "5 skills prontas para instalar em qualquer projeto Next.js",
+    "/gsap-component — componente GSAP + ScrollTrigger com cleanup correto",
+    "/section-hero — Hero cinematográfica completa com preloader e parallax",
+    "/palette — mapeia paleta atual e gera 3 variações para aplicar",
+    "/perf-audit — auditoria de vídeos, imagens e animações com correção interativa",
+    "/responsive-fix — converte px fixos para clamp() e adiciona breakpoints Tailwind",
+    "Guia de instalação incluso"
+  ],
+  "stack": ["Claude Code", "Next.js", "GSAP", "Tailwind CSS"]
+}
