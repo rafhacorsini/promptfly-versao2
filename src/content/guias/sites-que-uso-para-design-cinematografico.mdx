@@ -1,0 +1,201 @@
+---
+title: "Os sites que eu uso para criar interfaces que parecem obra de arte"
+description: "Postei 5 no Instagram. Aqui estão os 15 que realmente uso — incluindo os que nunca mostro. Para quem faz vibe code e quer sair do genérico de vez."
+date: "2026-05-17"
+tags: ["design", "ferramentas", "frontend", "vibe code", "referências"]
+readTime: "9 min"
+category: "ferramentas"
+featured: true
+---
+
+No Instagram eu postei 5. Aqui estão os 15 que realmente uso.
+
+A diferença entre um site que parece template e um site que parece obra não está na stack. Está no repertório visual de quem está construindo. E repertório se constrói com referências certas — não com os mesmos 3 sites que todo mundo já conhece.
+
+Essa é a lista completa. Com os que mostrei e os que nunca mostrei.
+
+---
+
+## Os 5 do post
+
+### 1. Awwwards — [awwwards.com](https://www.awwwards.com)
+
+A referência. Não para copiar — para treinar o olho.
+
+Todo site premiado aqui tem uma decisão visual não óbvia. Passa um tempo observando o que eles fazem com tipografia, espaçamento e transição de scroll. Você começa a perceber padrões que o seu olho vai carregar para o próximo projeto.
+
+Filtro que eu uso: **SOTD** (Site of the Day) + categoria **Portfolio**. São os que mais ousam.
+
+---
+
+### 2. GSAP — [gsap.com](https://gsap.com)
+
+Controle total sobre tudo que se move na tela.
+
+GSAP não é só uma biblioteca de animação — é uma linguagem para descrever intenção visual. Com `ScrollTrigger`, `Timeline`, e `useGSAP`, você para de animar elementos e começa a coreografar cenas.
+
+O que a maioria não usa: os **demos** dentro da documentação. Tem reveais com clip-path, efeitos de cursor customizado, page transitions e parallax que servem de modelo para qualquer projeto.
+
+---
+
+### 3. Lenis — [lenis.dev](https://lenis.dev)
+
+Uma instância. Transforma o scroll inteiro em algo que parece mais caro.
+
+```javascript
+const lenis = new Lenis({ lerp: 0.08 });
+```
+
+Isso é tudo. `lerp: 0.08` dá inércia suave. Diminui para `0.04` e o scroll fica cinematográfico — pesado, controlado, como uma câmera em dolly.
+
+---
+
+### 4. Easings.net — [easings.net](https://easings.net)
+
+Você escolhe a curva visualmente e copia o valor exato.
+
+A maioria usa `ease-in-out` em tudo. A curva `easeInOutQuart` com `cubic-bezier(0.76, 0, 0.24, 1)` tem um caráter completamente diferente — aceleração mais intensa, parada mais decisiva. É esse tipo de detalhe que separa o que parece feito por dev do que parece feito por diretor de arte.
+
+---
+
+### 5. Haikei — [haikei.app](https://haikei.app)
+
+Backgrounds SVG cinematográficos gerados em segundos, sem abrir o Illustrator.
+
+Ondas, blobs, gradientes em camadas. Você exporta como SVG ou PNG e usa direto. O segredo é usar com `opacity` baixo — `0.03` a `0.06` — como textura de fundo, não como elemento principal.
+
+---
+
+## Os 10 que nunca mostrei
+
+### 6. Codrops — [tympanus.net/codrops](https://tympanus.net/codrops)
+
+O meu favorito secreto. E de longe.
+
+Codrops é onde as técnicas avançadas aparecem antes de virar mainstream. Tem demos completos com código de:
+
+- **Clip-path reveals** sincronizados com scroll
+- **Custom cursors** com física de mola
+- **Page transitions** com GSAP e View Transitions API
+- **Efeitos de distorção** com shaders WebGL simplificados
+
+É diferente do Awwwards. Awwwards mostra o resultado. Codrops mostra **como fazer**. Para quem faz vibe code, é o melhor dos dois mundos — você entende o efeito e pode descrever para a IA com precisão cirúrgica.
+
+---
+
+### 7. Godly — [godly.website](https://godly.website)
+
+Curadoria rigorosa dos melhores sites da web. Atualizado toda semana.
+
+O que diferencia do Awwwards: o Godly é mais selecionado, mais editorial. Menos quantidade, mais qualidade. Funciona como um filtro do barulho visual que existe por aí.
+
+Eu uso para responder uma pergunta específica: **o que uma interface pode ser, além do que eu já imagino?**
+
+---
+
+### 8. Cosmos — [cosmos.so](https://cosmos.so)
+
+Pinterest para designers que levam design a sério.
+
+O Cosmos tem coleções curadas por pessoas que sabem o que estão fazendo. Você segue os designers que têm o olho que você quer desenvolver e o feed fica cheio de referências que você nunca buscaria por conta própria.
+
+Serve como moodboard antes de começar qualquer projeto — antes de escrever uma linha de código ou um prompt.
+
+---
+
+### 9. Fontshare — [fontshare.com](https://fontshare.com)
+
+Fontes editoriais gratuitas. Digo gratuitas de verdade — sem licença comercial bloqueada.
+
+O problema com Google Fonts: todo mundo usa as mesmas. Inter, Poppins, DM Sans — são fontes boas, mas estão em milhares de sites. O Fontshare tem famílias como **Satoshi**, **Cabinet Grotesk** e **Clash Display** que ainda não estão em tudo quanto é template.
+
+Tipografia é identidade. Essa distinção importa mais do que parece.
+
+---
+
+### 10. Realtime Colors — [realtimecolors.com](https://realtimecolors.com)
+
+Você cola uma paleta e vê ela aplicada num site de verdade — não em swatches.
+
+A maioria cria paleta no Coolors e acha ótima. Aí aplica no projeto e fica estranha. O Realtime Colors resolve isso: você vê como as cores interagem em tipografia, fundo, botão e surface antes de escrever uma variável CSS.
+
+---
+
+### 11. Josh W. Comeau — [joshwcomeau.com](https://joshwcomeau.com)
+
+Os artigos mais interativos sobre CSS que existem.
+
+Não é um agregador de referências. É um blog. Mas cada post tem demos interativos que explicam **por que** o CSS faz o que faz, não só como usar. Artigos sobre `animation-fill-mode`, `stacking context`, `clamp()` e `subgrid` que mudaram como eu penso sobre layout.
+
+Para quem usa IA para programar: você precisa saber o suficiente para reconhecer quando a IA errou. Josh te dá essa base.
+
+---
+
+### 12. Refero — [refero.design](https://refero.design)
+
+Interfaces reais de produtos reais, organizadas por padrão.
+
+Quer ver como sites profissionais estruturam uma seção de pricing? Uma hero com vídeo? Um card de depoimento? O Refero tem capturas de tela com busca por componente.
+
+A diferença para o Dribbble: aqui são screenshots de produtos que estão no ar, não ilustrações de conceito que nunca existiram.
+
+---
+
+### 13. UI Verse — [uiverse.io](https://uiverse.io)
+
+Componentes CSS puros com código copiável.
+
+Botões com efeito de hover complexo, inputs com animação de label flutuante, cards com glassmorphism técnico. Tudo com código limpo que você adapta ou usa como referência para descrever o efeito para a IA.
+
+Útil especialmente para elementos pontuais — quando você quer um detalhe específico sem construir do zero.
+
+---
+
+### 14. Vercel Ship / Build — [vercel.com/design](https://vercel.com/design)
+
+A Vercel tem um sistema de design impecável e o site deles é uma referência de como tratar produto como editorial.
+
+Observe como eles usam gradientes em texto, como o spacing funciona em diferentes breakpoints, como o dark mode é implementado sem parecer genérico. É um estudo de caso de marca que virou estética.
+
+---
+
+### 15. Motion One — [motion.dev](https://motion.dev)
+
+Alternativa ao GSAP para projetos que já usam React 19 e Server Components.
+
+A Motion One (da equipe do Framer Motion) tem API mais próxima do CSS nativo e integração limpa com o `useAnimate` hook. Para projetos Next.js sem necessidade do peso do GSAP completo, é a escolha certa.
+
+---
+
+## Como eu uso essa lista na prática
+
+Antes de começar qualquer projeto, eu faço um ciclo curto de referências:
+
+1. **Godly** — 10 minutos olhando sites na categoria do projeto
+2. **Cosmos** — 5 minutos no moodboard do estilo visual que quero
+3. **Codrops** — 1 demo técnico que serve de referência para a principal animação
+4. **Fontshare + Realtime Colors** — definir tipografia e paleta com contexto real
+
+Depois disso eu sei o que preciso construir. A IA executa melhor quando você sabe exatamente o que quer — não quando você quer que ela decida por você.
+
+---
+
+## O que separa vibe code genérico de vibe code profissional
+
+Não é a ferramenta. É a instrução.
+
+Quando você descreve para a IA "cria um efeito de reveal no scroll" — ela cria algo funcional e genérico. Quando você diz "quero um clip-path reveal do tipo que o Codrops usa, sincronizado com ScrollTrigger, com easing `cubic-bezier(0.76, 0, 0.24, 1)`, começando quando o elemento entra em 20% do viewport" — o resultado é diferente.
+
+Repertório visual gera instrução precisa. Instrução precisa gera resultado profissional.
+
+---
+
+## Se quiser encurtar esse caminho
+
+Esse processo de traduzir referência visual em código funcionando é o que os **Skills Cinematográficos** automatizam.
+
+São 5 comandos para o Claude Code — `/gsap-component`, `/section-hero`, `/palette`, `/perf-audit`, `/responsive-fix` — que já carregam o contexto técnico de sites como os que estão nessa lista. Você chama, o agente lê o projeto, implementa com as boas práticas certas e entrega.
+
+**R$ 37. Acesso vitalício. Entrega imediata.**
+
+→ [Ver os Skills Cinematográficos](/skills)
