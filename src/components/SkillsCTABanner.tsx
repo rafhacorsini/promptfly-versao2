@@ -1,6 +1,3 @@
-"use client";
-
-import { useEffect, useRef } from "react";
 import styles from "./SkillsCTABanner.module.css";
 import product from "@/content/skills-product.json";
 
@@ -13,31 +10,11 @@ const features = [
 ];
 
 export default function SkillsCTABanner() {
-  const cardRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    const card = cardRef.current;
-    if (!card) return;
-
-    const handleMove = (e: MouseEvent) => {
-      const rect = card.getBoundingClientRect();
-      const x = ((e.clientX - rect.left) / rect.width) * 100;
-      const y = ((e.clientY - rect.top) / rect.height) * 100;
-      card.style.setProperty("--mouse-x", `${x}%`);
-      card.style.setProperty("--mouse-y", `${y}%`);
-    };
-
-    card.addEventListener("mousemove", handleMove);
-    return () => card.removeEventListener("mousemove", handleMove);
-  }, []);
-
   if (!product.hotmartUrl) return null;
 
   return (
     <div className={styles.wrapper}>
-      <div className={styles.card} ref={cardRef}>
-        <div className={styles.glow} />
-
+      <div className={styles.card}>
         <div className={styles.header}>
           <span className={styles.badge}>Skills para Claude Code</span>
           <span className={styles.badgeNew}>{product.badge}</span>
