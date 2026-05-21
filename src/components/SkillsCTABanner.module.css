@@ -14,8 +14,8 @@
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  margin-bottom: 1rem;
   padding: 1.5rem 1.5rem 0;
+  margin-bottom: 1rem;
 }
 
 .badge {
@@ -24,7 +24,7 @@
   font-weight: 700;
   letter-spacing: 0.06em;
   text-transform: uppercase;
-  color: #666;
+  color: #888;
 }
 
 .badgeNew {
@@ -43,7 +43,7 @@
   font-family: var(--font-primary);
   font-size: clamp(1.25rem, 3vw, 1.6rem);
   font-weight: 800;
-  color: #ececec;
+  color: #f2f2f2;
   margin: 0 0 0.65rem;
   line-height: 1.2;
   text-wrap: balance;
@@ -57,7 +57,7 @@
 .subtitle {
   font-family: var(--font-primary);
   font-size: 0.88rem;
-  color: #777;
+  color: #b0b0b0;
   line-height: 1.65;
   margin: 0 0 1.25rem;
   padding: 0 1.5rem;
@@ -66,11 +66,13 @@
 .code {
   font-family: "Courier New", monospace;
   font-size: 0.82rem;
-  background: rgba(255, 255, 255, 0.07);
-  color: #ccc;
+  background: rgba(255, 255, 255, 0.08);
+  color: #e0e0e0;
   padding: 0.1rem 0.35rem;
   border-radius: 4px;
 }
+
+/* ── feature list ── */
 
 .features {
   list-style: none;
@@ -86,9 +88,22 @@
   align-items: flex-start;
   gap: 0.55rem;
   font-family: var(--font-primary);
-  font-size: 0.82rem;
-  color: #888;
+  font-size: 0.83rem;
+  color: #c8c8c8;
   line-height: 1.5;
+
+  /* stagger animation */
+  opacity: 0;
+  transform: translateY(10px);
+  transition:
+    opacity 0.4s ease,
+    transform 0.4s ease;
+  transition-delay: calc(var(--i, 0) * 0.1s);
+}
+
+.visible .feature {
+  opacity: 1;
+  transform: translateY(0);
 }
 
 .check {
@@ -98,6 +113,8 @@
   margin-top: 0.05rem;
 }
 
+/* ── footer ── */
+
 .footer {
   display: flex;
   align-items: center;
@@ -106,7 +123,6 @@
   flex-wrap: wrap;
   padding: 1.25rem 1.5rem 1.5rem;
   border-top: 1px solid rgba(255, 255, 255, 0.06);
-  margin-top: 0.25rem;
 }
 
 .priceBlock {
@@ -121,14 +137,14 @@
   font-weight: 600;
   letter-spacing: 0.05em;
   text-transform: uppercase;
-  color: #555;
+  color: #666;
 }
 
 .price {
   font-family: var(--font-primary);
   font-size: clamp(1.4rem, 4vw, 1.85rem);
   font-weight: 800;
-  color: #ececec;
+  color: #f2f2f2;
   line-height: 1;
 }
 

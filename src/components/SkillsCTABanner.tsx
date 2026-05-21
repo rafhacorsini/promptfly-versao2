@@ -1,3 +1,6 @@
+"use client";
+
+import { useEffect, useRef, useState } from "react";
 import styles from "./SkillsCTABanner.module.css";
 import product from "@/content/skills-product.json";
 
@@ -10,11 +13,25 @@ const features = [
 ];
 
 export default function SkillsCTABanner() {
+  const cardRef = useRef<HTMLDivElement>(null);
+  const [visible, setVisible] = useState(false);
+
+  useEffect(() => {
+    const el = cardRef.current;
+    if (!el) return;
+    const observer = new IntersectionObserver(
+      ([entry]) => { if (entry.isIntersecting) { setVisible(true); observer.disconnect(); } },
+      { threshold: 0.15 }
+    );
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, []);
+
   if (!product.hotmartUrl) return null;
 
   return (
     <div className={styles.wrapper}>
-      <div className={styles.card}>
+      <div className={`${styles.card} ${visible ? styles.visible : ""}`} ref={cardRef}>
         <div className={styles.header}>
           <span className={styles.badge}>Skills para Claude Code</span>
           <span className={styles.badgeNew}>{product.badge}</span>
@@ -33,7 +50,11 @@ export default function SkillsCTABanner() {
 
         <ul className={styles.features}>
           {features.map((f, i) => (
-            <li key={i} className={styles.feature}>
+            <li
+              key={i}
+              className={styles.feature}
+              style={{ "--i": i } as React.CSSProperties}
+            >
               <span className={styles.check}>✓</span>
               <span>{f}</span>
             </li>
