@@ -1,0 +1,244 @@
+---
+title: "Os 5 prompts completos para criar sites cinematográficos no Claude Code"
+description: "Não é só copiar e colar. Aqui está o contexto por trás de cada prompt — o que cada instrução faz, por que funciona, e como usar do jeito certo para o Claude Code entregar um site que parece filmado."
+date: "2026-05-20"
+tags: ["claude code", "gsap", "prompts", "sites cinematográficos", "workflow"]
+readTime: "12 min"
+category: "prompts"
+featured: true
+---
+
+Postei no Instagram os 5 prompts que uso nos meus projetos. Muita gente pediu a versão completa — então aqui está.
+
+Mas antes de sair copiando: prompt sem contexto é código sem comentário. Funciona, mas você não sabe por que. E quando quebra, não sabe onde consertar.
+
+Então vou te dar os prompts **e** o raciocínio por trás de cada um. Porque a diferença entre um dev que usa IA bem e um que usa mal não é o prompt em si — é saber o que ele está fazendo.
+
+---
+
+## 01 — A base que não deixa o Claude adivinhar
+
+Esse é o primeiro prompt. Ele roda antes de qualquer componente existir.
+
+O erro mais comum é pular essa etapa. As pessoas abrem o terminal, pedem um hero, e o Claude entrega qualquer coisa — porque sem contexto, ele chuta.
+
+Aqui você não está pedindo código. Você está **ensinando o agente como pensar** antes de ele escrever uma linha sequer.
+
+```
+Cria um projeto Next.js 15 com App Router e TypeScript.
+Instala as dependências: gsap, @gsap/react, lenis, @studio-freight/lenis.
+Instala também: @types/gsap.
+
+Cria o arquivo CLAUDE.md na raiz com as seguintes regras obrigatórias:
+
+# Regras do Projeto
+
+## Animação
+- Todo scroll usa Lenis. Nunca scroll nativo.
+- Todo movimento usa GSAP. Nunca CSS transition em animações de entrada.
+- Ease padrão do projeto: power3.out
+- Duration mínima de entrada: 0.6s
+- Nenhuma animação abaixo de 0.6s — sites cinematográficos são lentos com intenção.
+
+## Lenis + ScrollTrigger
+- Inicializar Lenis uma única vez no layout.tsx como Provider.
+- Lenis deve alimentar o ScrollTrigger via lenis.on('scroll', ScrollTrigger.update).
+- NUNCA usar window.addEventListener('scroll') quando Lenis estiver ativo.
+
+## Componentes
+- Um componente = um .tsx + um .module.css. Sem exceções.
+- Sem Tailwind inline. Todo CSS em .module.css.
+- Todo componente com GSAP: useGSAP do @gsap/react, cleanup no return.
+
+## O que nunca fazer
+- bounce ou elastic em qualquer animação
+- ease-in-out (parece slideshow de PowerPoint)
+- translateY menor que 20px em entradas (não tem peso visual)
+- Duration round como 500ms ou 1000ms (parece relógio)
+
+Depois de criar o CLAUDE.md, para. Não cria nenhum componente ainda.
+Me mostra a estrutura de arquivos e aguarda instruções.
+```
+
+**Por que isso funciona:** você está gravando as regras no arquivo que o Claude Code carrega automaticamente em cada conversa dentro do projeto. Tudo que você define aqui vira lei — o agente não vai inventar ease-in-out, não vai usar scroll nativo, não vai criar animações de 200ms. A restrição precisa gera identidade.
+
+---
+
+<SkillsCTABanner />
+
+## 02 — O hero cinematográfico
+
+Agora que o projeto tem contexto, você pode pedir o componente. O Claude já sabe as regras. Você só instrui o que construir.
+
+```
+Cria o componente Hero.tsx.
+
+Layout: fullscreen (100svh), fundo preto (#030303).
+Vídeo em loop no background: fullscreen, object-fit cover, sem controles, muted, autoPlay, playsInline.
+O vídeo é passado como prop videoSrc.
+
+Elementos sobre o vídeo (z-index acima):
+- Overlay escuro: rgba(0,0,0,0.55) cobrindo tudo
+- HUD superior: logo à esquerda + nav links à direita (Home, Sobre, Projetos, Contato)
+- Headline central: fonte grande, clamp(2.8rem, 7vw, 5.5rem), text-wrap balance
+- Sub-headline: clamp(0.9rem, 2vw, 1.15rem), cor rgba(255,255,255,0.55)
+- Scroll indicator no rodapé: texto "scroll" + linha vertical animada que pulsa
+
+Animação de entrada com GSAP (seguindo o CLAUDE.md):
+1. No mount: tudo começa invisível (gsap.set)
+2. Timeline: overlay faz fade in em 0.8s
+3. HUD superior desce de -30px, opacity 0 → 1, delay 0.3s, 0.7s, ease power3.out
+4. Headline: palavras reveladas de baixo para cima com clip-path inset(100% 0 0 0) → inset(0% 0 0 0), stagger 0.08s por palavra, 0.9s cada
+5. Sub-headline: fade up depois da headline, delay 0.2s
+6. Scroll indicator: aparece por último, pulsa infinitamente com opacity 0.4 → 1 → 0.4, 2s, ease sine.inOut
+
+O scroll indicator some quando o usuário rola mais de 100px (ScrollTrigger, scrub 1).
+
+Tipografia cria tensão antes da primeira palavra aparecer: 0.4s de silêncio antes da timeline começar.
+```
+
+**Por que isso funciona:** você está descrevendo comportamento, não código. "Palavras reveladas de baixo para cima com clip-path" é uma instrução visual — o Claude converte isso para GSAP. "0.4s de silêncio" é direção de cinema aplicada a desenvolvimento.
+
+---
+
+## 03 — O scroll que parece câmera
+
+Essa é a seção que transforma um site bonito em algo que parece filmado. A diferença entre scroll e câmera está no controle — o usuário sente que está dirigindo algo, não que está vendo.
+
+```
+Cria o componente ScrollCamera.tsx.
+
+Seção com height: 300vh. Conteúdo fica sticky em height: 100vh enquanto o usuário rola.
+
+Dentro da área sticky:
+- Título grande (clamp(3rem, 8vw, 6rem)) que se move no eixo Y conforme o scroll (parallax)
+- Três cards de imagem (360x480px cada) que entram em sequência
+- Background que muda de #030303 para #0a0a0a gradualmente
+
+Comportamento com ScrollTrigger (pin: true, scrub: 1.2):
+- Trigger: início da seção, end: "+=200%"
+- Card 1: entra da esquerda (translateX -120%, opacity 0 → 0,0) quando scroll atinge 20%
+- Card 2: entra do centro de baixo (translateY 80px, opacity 0 → 0,0) quando scroll atinge 45%
+- Card 3: entra da direita (translateX 120%, opacity 0 → 0,0) quando scroll atinge 70%
+- Timing de 0.2s de diferença entre cada elemento (stagger via porcentagem do scrub)
+- Ease: power3.out em todos
+
+O título se move em parallax inverso ao scroll: quando o usuário rola para baixo, o título sobe 40px.
+Isso cria profundidade — o texto parece mais próximo da câmera que as imagens.
+
+Cards recebem imagens como props: card1Src, card2Src, card3Src.
+```
+
+**Por que isso funciona:** `scrub: 1.2` (e não `scrub: true`) adiciona um lag suave — o scroll responde, mas com inércia. Parece câmera na mão de cinematógrafo experiente. A diferença de 0.2s entre os elementos cria um ritmo que o olho segue sem perceber que está sendo guiado.
+
+---
+
+## 04 — Quando a animação quebra no mobile
+
+Esse é o prompt que todo mundo precisa mas quase ninguém tem. Porque o debug é diferente de construção — você não está descrevendo o que criar, você está descrevendo o problema.
+
+O segredo: dar contexto antes do diagnóstico.
+
+```
+Essa animação GSAP está pulando no mobile (iPhone 13, Safari 16).
+
+O comportamento esperado: elementos entram suavemente com translateY e opacity no scroll.
+O que está acontecendo: no primeiro scroll, os elementos pulam direto para o estado final sem animar. Às vezes desaparecem completamente por um frame.
+
+Antes de propor qualquer solução:
+1. Lê o CLAUDE.md para entender as regras do projeto
+2. Verifica se o Lenis está inicializado antes do ScrollTrigger no ciclo de vida do componente
+3. Verifica se há conflito entre o Lenis e o ScrollTrigger.refresh() — no Safari mobile, refresh() chamado cedo demais quebra o scrub
+4. Verifica se o gsap.set() está sendo chamado antes do ScrollTrigger ser registrado
+
+Depois do diagnóstico, propõe a correção mais cirúrgica possível.
+Não muda nenhum valor visual — só corrige o timing de inicialização.
+No final, mostra exatamente o que mudou e por quê.
+```
+
+**Por que isso funciona:** você está impedindo o Claude de chutar uma solução. "Lê o CLAUDE.md" garante que a correção respeita as regras do projeto. "Não muda nenhum valor visual" impede que ele quebre o desktop enquanto conserta o mobile — que é o erro número um de devs corrigindo animações.
+
+O problema do Safari com Lenis + ScrollTrigger é real: o `ScrollTrigger.refresh()` chamado antes do Lenis terminar de calcular as alturas gera um race condition que aparece como "pulo". A correção é atrasar o refresh ou usar o callback `onComplete` do Lenis.
+
+---
+
+## 05 — O prompt que transforma site bonito em obra
+
+Esse é o último prompt. Ele não constrói nada novo — ele refina o que existe.
+
+Sites cinematográficos não são feitos de grandes gestos. São feitos de ajustes de 0.1s. De ease substituído. De uma entrada que durava 400ms e agora dura 700ms.
+
+```
+Revisa todas as animações do projeto inteiro.
+
+Para cada animação que encontrar em qualquer .tsx dentro de src/:
+
+1. Duration abaixo de 0.6s: aumenta para 0.7s mínimo
+   Exceção: micro-interações de hover (abaixo de 0.25s), essas ficam como estão.
+
+2. Ease que não seja power3, power4, expo ou sine: substitui por power3.out
+   Exceção: animações de loop infinito (pulse, float), essas ficam com sine.inOut.
+
+3. staggerChildren abaixo de 0.07s: ajusta para 0.08s
+   stagger acima de 0.15s: reduz para 0.12s (acima disso parece lento demais, não cinematográfico)
+
+4. translateY em entradas abaixo de 24px: aumenta para 28px mínimo
+   translateY acima de 80px: reduz para 60px (acima disso parece que o elemento caiu, não chegou)
+
+Depois de identificar tudo:
+- Me mostra a lista completa (arquivo, linha, problema, correção)
+- Aguarda minha aprovação antes de aplicar qualquer mudança
+- Aplica só o que eu aprovar
+
+Regra geral que guia tudo isso:
+Sites cinematográficos são lentos com intenção. Rápido demais parece nervoso. Lento demais parece pesado. O ritmo certo é aquele que o usuário não nota — ele só sente que o site tem peso.
+```
+
+**Por que isso funciona:** você está fazendo o que um diretor de fotografia faz na pós-produção — revisando cada frame com intenção. A maioria das pessoas termina o código e considera feito. Os 20 minutos que você gasta rodando esse prompt são os 20 que fazem a diferença entre um site que funciona e um que impressiona.
+
+---
+
+## As skills — porque prompts manuais têm limite
+
+Esses cinco prompts funcionam. Uso eles todo projeto.
+
+O problema é que você vai escrever variações deles em cada projeto novo. Em cada sessão nova. Vai adaptar para o contexto atual, lembrar de algumas regras, esquecer de outras.
+
+É por isso que criei as **skills para Claude Code** — comandos instalados uma vez, disponíveis em qualquer projeto. Você chama `/section-hero` e o agente entrega o hero completo seguindo todas as regras. Você chama `/perf-audit` e ele varre o projeto inteiro por problemas de performance.
+
+Não é um prompt. É um workflow especializado que o agente executa com contexto real do seu código.
+
+<SkillsCTABanner />
+
+---
+
+## Como instalar as skills no seu projeto
+
+Quando você receber os arquivos, o processo é:
+
+```bash
+# Na raiz do seu projeto Next.js
+mkdir -p .claude/commands
+
+# Copia os arquivos .md das skills para essa pasta
+cp skills/*.md .claude/commands/
+
+# Pronto. Abre o Claude Code e chama:
+/gsap-component HeroTitle fade-up
+```
+
+O Claude Code detecta automaticamente qualquer arquivo `.md` dentro de `.claude/commands/` e trata como skill disponível. Não precisa reiniciar, não precisa configurar nada.
+
+---
+
+## O que muda de verdade
+
+Antes de ter um sistema assim: eu abria cada sessão descrevendo o projeto do zero, lembrando das regras de animação, explicando que o projeto usa Lenis e não scroll nativo. Gastava 10-15 minutos de contexto antes de qualquer coisa útil acontecer.
+
+Depois: o `CLAUDE.md` já tem as regras. As skills já sabem como o projeto funciona. Eu abro uma sessão e digo `/section-hero dark cinematic` — o agente lê o projeto, respeita as regras, entrega. Eu ajusto.
+
+A IA não ficou mais inteligente. O contexto que eu dou pra ela ficou.
+
+---
+
+*Dúvida sobre algum dos prompts? Me chama no Instagram [@rafhacorsini](https://instagram.com/rafhacorsini).*

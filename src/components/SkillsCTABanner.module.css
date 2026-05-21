@@ -1,0 +1,234 @@
+.wrapper {
+  margin: 2.5rem 0;
+  position: relative;
+}
+
+.card {
+  --mouse-x: 50%;
+  --mouse-y: 50%;
+
+  position: relative;
+  background: #111111;
+  border-radius: var(--radius-lg);
+  padding: 2px;
+  background: conic-gradient(
+    from var(--angle, 0deg),
+    #333 0deg,
+    var(--color-accent) 90deg,
+    #555 180deg,
+    var(--color-accent) 270deg,
+    #333 360deg
+  );
+  animation: rotateBorder 4s linear infinite;
+  overflow: hidden;
+}
+
+@property --angle {
+  syntax: "<angle>";
+  initial-value: 0deg;
+  inherits: false;
+}
+
+@keyframes rotateBorder {
+  to {
+    --angle: 360deg;
+  }
+}
+
+.glow {
+  position: absolute;
+  inset: -40px;
+  background: radial-gradient(
+    circle at var(--mouse-x, 50%) var(--mouse-y, 50%),
+    rgba(255, 76, 0, 0.12) 0%,
+    transparent 60%
+  );
+  pointer-events: none;
+  z-index: 0;
+  border-radius: inherit;
+  transition: background 0.15s ease;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.badge {
+  font-family: var(--font-primary);
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #888;
+}
+
+.badgeNew {
+  font-family: var(--font-primary);
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--color-accent);
+  background: rgba(255, 76, 0, 0.12);
+  padding: 0.15rem 0.45rem;
+  border-radius: 4px;
+}
+
+.title {
+  font-family: var(--font-primary);
+  font-size: clamp(1.35rem, 3vw, 1.75rem);
+  font-weight: 800;
+  color: #f0f0f0;
+  margin: 0 0 0.75rem;
+  line-height: 1.2;
+  text-wrap: balance;
+}
+
+.titleAccent {
+  color: var(--color-accent);
+}
+
+.subtitle {
+  font-family: var(--font-primary);
+  font-size: 0.9rem;
+  color: #999;
+  line-height: 1.6;
+  margin: 0 0 1.25rem;
+}
+
+.code {
+  font-family: "Courier New", monospace;
+  font-size: 0.83rem;
+  background: rgba(255, 255, 255, 0.08);
+  color: #f0f0f0;
+  padding: 0.1rem 0.35rem;
+  border-radius: 4px;
+}
+
+.features {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.feature {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.6rem;
+  font-family: var(--font-primary);
+  font-size: 0.83rem;
+  color: #aaa;
+  line-height: 1.5;
+}
+
+.check {
+  color: var(--color-accent);
+  font-weight: 700;
+  flex-shrink: 0;
+  margin-top: 0.05rem;
+}
+
+.footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+  padding-top: 1.25rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.priceBlock {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+}
+
+.priceLabel {
+  font-family: var(--font-primary);
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: #666;
+}
+
+.price {
+  font-family: var(--font-primary);
+  font-size: clamp(1.5rem, 4vw, 2rem);
+  font-weight: 800;
+  color: #f0f0f0;
+  line-height: 1;
+}
+
+.cta {
+  display: inline-flex;
+  align-items: center;
+  font-family: var(--font-primary);
+  font-size: 0.92rem;
+  font-weight: 700;
+  color: #111;
+  background: var(--color-accent);
+  text-decoration: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 10px;
+  transition: transform 0.18s ease, opacity 0.18s ease;
+  white-space: nowrap;
+}
+
+.cta:hover {
+  transform: translateY(-2px);
+  opacity: 0.9;
+}
+
+.cta:active {
+  transform: translateY(1px);
+}
+
+/* Inner card surface */
+.card::after {
+  content: "";
+  position: absolute;
+  inset: 2px;
+  background: #111111;
+  border-radius: calc(var(--radius-lg) - 2px);
+  z-index: -1;
+}
+
+/* All content above the pseudo */
+.header,
+.title,
+.subtitle,
+.features,
+.footer {
+  position: relative;
+  z-index: 1;
+  padding-left: 1.5rem;
+  padding-right: 1.5rem;
+}
+
+.header {
+  padding-top: 1.5rem;
+}
+
+.footer {
+  padding-bottom: 1.5rem;
+}
+
+@media (max-width: 480px) {
+  .footer {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .cta {
+    width: 100%;
+    justify-content: center;
+  }
+}
