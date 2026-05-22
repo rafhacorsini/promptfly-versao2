@@ -10,6 +10,7 @@ import TemplateCard from "@/components/TemplateCard";
 import TemplateCTAInline from "@/components/TemplateCTAInline";
 import GuideCarousel from "@/components/GuideCarousel";
 import SkillsCTABanner from "@/components/SkillsCTABanner";
+import VipGroupBanner from "@/components/VipGroupBanner";
 import styles from "./page.module.css";
 
 const BASE = "https://promptfly.com.br";
@@ -115,7 +116,7 @@ export default async function GuidePage({ params }: Props) {
           <div className={styles.divider} />
 
           <article className={styles.article}>
-            <MDXRemote source={content} components={{ TemplateCTAInline, GuideCarousel, SkillsCTABanner }} />
+            <MDXRemote source={content} components={{ TemplateCTAInline, GuideCarousel, SkillsCTABanner, VipGroupBanner }} />
           </article>
 
           {/* Share */}

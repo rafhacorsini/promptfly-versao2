@@ -1,0 +1,198 @@
+---
+title: "Como economizar tokens no Claude Code e fazer 4x mais com o mesmo limite"
+description: "Quem não sabe economizar token trava no limite toda semana. Quem sabe faz 4 projetos completos usando só 30% do limite semanal. Aqui está o guia completo."
+date: "2026-05-22"
+tags: ["claude code", "produtividade", "tokens", "workflow", "dicas"]
+readTime: "11 min"
+category: "workflow"
+featured: true
+---
+
+Essa é uma das habilidades mais importantes pra quem usa Claude Code no dia a dia.
+
+Quem não sabe economizar token trava no limite toda semana. Quem sabe faz 4 projetos completos usando só 30% do limite semanal.
+
+---
+
+## Primeiro entenda o que são tokens
+
+Token é a unidade de medida que o Claude usa pra processar texto. Cada palavra, símbolo ou espaço consome tokens — tanto o que você manda quanto o que ele responde.
+
+O Claude tem dois limites que você precisa conhecer:
+
+| Limite | O que é |
+| --- | --- |
+| **Context Window** | Quantidade máxima de texto que o Claude enxerga numa conversa — tudo que já foi dito, seu código, arquivos abertos |
+| **Uso do plano** | Quantidade total de tokens que você pode usar no período — reinicia em horas ou dias dependendo do plano |
+
+Quando a context window enche, o Claude começa a esquecer o início da conversa. Quando o uso do plano esgota, você trava até reiniciar.
+
+---
+
+## O que consome tokens desnecessariamente
+
+### 1. Arquivos abertos demais no contexto
+
+Cada arquivo que o Claude lê consome tokens. Se você tem 20 arquivos abertos e ele só precisa de 3 pra resolver o problema — você tá desperdiçando.
+
+### 2. Conversas longas sem checkpoint
+
+Quanto mais longa a conversa, mais tokens gastos pra manter o histórico. E pior: o Claude começa a perder o fio e você precisa repetir contexto, gastando ainda mais.
+
+### 3. Pedir pra IA explicar tudo
+
+Quando você pede "me explique o que você fez", a IA gera uma resposta longa. Se você só quer que funcione, não precisa da explicação.
+
+### 4. Código completo em vez de diff
+
+Se você tem um componente de 200 linhas e quer mudar 3 linhas — não peça pra IA reescrever o arquivo inteiro. Peça só a correção.
+
+### 5. Contexto redundante
+
+Ficar repetindo no prompt coisas que já foram estabelecidas na conversa. Se você já disse que usa CSS Module, não precisa repetir isso em todo prompt.
+
+---
+
+## Como economizar tokens na prática
+
+### 1. Trabalhe em conversas curtas e focadas
+
+Uma conversa por seção ou por problema. Quando terminar uma seção — fecha a conversa e abre uma nova com o contexto limpo.
+
+```
+❌ Errado: uma conversa gigante pra todo o projeto
+✅ Certo: uma conversa nova pra cada seção
+```
+
+### 2. Abra só os arquivos necessários
+
+Antes de rodar o Claude Code, pensa: quais arquivos ele realmente precisa ver pra resolver esse problema? Abre só esses.
+
+```
+❌ Errado: abrir o projeto inteiro
+✅ Certo: abrir só o componente com problema + o CSS relacionado
+```
+
+### 3. Peça só o que precisa
+
+```
+❌ Errado:
+"Corrija esse bug e me explique detalhadamente o que estava errado,
+por que aconteceu e como você corrigiu"
+
+✅ Certo:
+"Corrija esse bug. Só me diz a causa raiz em uma linha."
+```
+
+### 4. Use diff em vez de reescrita completa
+
+```
+❌ Errado:
+"Reescreva esse componente adicionando a animação de fade"
+
+✅ Certo:
+"Adicione animação de fade nesse componente.
+Me mostra só as linhas que precisam mudar — não reescreve o arquivo inteiro."
+```
+
+### 5. Faça checkpoint antes da conversa ficar longa
+
+Quando sentir que a conversa tá crescendo demais, use esse prompt antes de continuar:
+
+```
+Antes de continuar faça um resumo do que já foi feito:
+1. O que foi implementado
+2. Decisões técnicas tomadas
+3. O que falta
+
+Vou usar esse resumo pra abrir uma nova conversa com contexto limpo.
+```
+
+Copia o resumo, abre conversa nova, cola o resumo como primeiro contexto. Context window limpa, zero desperdício.
+
+---
+
+<VipGroupBanner />
+
+---
+
+### 6. Use arquivos CLAUDE.md pra contexto permanente
+
+No Claude Code você pode criar um arquivo `CLAUDE.md` na raiz do projeto com as regras fixas do projeto. O Claude lê esse arquivo automaticamente — você não precisa repetir as regras em todo prompt.
+
+```markdown
+# CLAUDE.md
+
+## Stack
+- Next.js 14 App Router
+- CSS Modules — sem Tailwind
+- Framer Motion + GSAP + Lenis
+
+## Paleta
+- Fundo: #0D0D0D
+- Texto: #F2EDE4
+- Acento: #C8FF00
+
+## Regras de design
+- Nunca use gradiente roxo ou blur excessivo
+- Nunca reescreva o arquivo inteiro — use diff
+- Sempre construa uma seção por vez
+- CSS Module apenas — nunca inline
+
+## Forma de trabalho
+- Mostre estrutura antes de codar
+- Aguarde aprovação antes de avançar
+```
+
+Isso sozinho economiza centenas de tokens por sessão.
+
+### 7. Seja específico sobre o output esperado
+
+```
+❌ Errado:
+"Melhore esse componente"
+
+✅ Certo:
+"Esse componente tem um problema de layout no mobile abaixo de 375px.
+A imagem está saindo da tela. Corrija só isso.
+Não mude mais nada."
+```
+
+---
+
+## Resumo — quanto cada hábito economiza
+
+| Hábito | Economia estimada |
+| --- | --- |
+| Conversa por seção | 40–60% |
+| Arquivo CLAUDE.md | 20–30% |
+| Diff em vez de reescrita | 30–50% |
+| Checkpoint antes de nova sessão | 20–40% |
+| Pedidos específicos sem explicação | 15–25% |
+
+Combinados, você consegue fazer 3–4x mais trabalho com o mesmo limite de tokens.
+
+---
+
+## Prompt de sessão econômica — use sempre
+
+Cole esse prompt no início de toda sessão de desenvolvimento:
+
+```
+Contexto do projeto — leia o CLAUDE.md antes de qualquer ação.
+
+Regras desta sessão:
+- Nunca reescreva arquivos inteiros — use diff
+- Não explique o que fez a menos que eu peça
+- Mostre estrutura antes de codar — aguarde aprovação
+- Se precisar de mais de 3 arquivos me avise antes de abrir
+- Respostas curtas e diretas
+
+Tarefa desta sessão: [descreva o que precisa fazer]
+```
+
+É simples, mas a maioria nunca faz. E aí fica travado no limite enquanto outras pessoas entregam projetos inteiros.
+
+---
+
+<VipGroupBanner />
