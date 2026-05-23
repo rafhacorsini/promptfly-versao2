@@ -43,29 +43,29 @@ export default function VipGroupBanner() {
           <span className={styles.badgeLive}>Vagas abertas</span>
         </div>
 
-        <h3 className={styles.title}>
+        <div className={styles.title}>
           Aprende na prática.{" "}
           <span className={styles.titleAccent}>Com quem já fez.</span>
-        </h3>
+        </div>
 
-        <p className={styles.subtitle}>
+        <div className={styles.subtitle}>
           Tudo que não cabe num post. Os hacks reais, os templates completos,
           os sites cinematográficos construídos do zero — e eu acompanhando
           o seu projeto de perto.
-        </p>
+        </div>
 
-        <ul className={styles.perks}>
+        <div className={styles.perks}>
           {perks.map((p, i) => (
-            <li
+            <div
               key={i}
               className={styles.perk}
               style={{ "--i": i } as React.CSSProperties}
             >
               <span className={styles.check}>✓</span>
               <span>{p}</span>
-            </li>
+            </div>
           ))}
-        </ul>
+        </div>
 
         <a
           href={VIP_URL}
