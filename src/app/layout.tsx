@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Inter } from "next/font/google";
 import { Analytics } from "@vercel/analytics/next";
 import "./globals.css";
@@ -9,6 +9,13 @@ const inter = Inter({
 });
 
 const BASE_URL = "https://promptfly.com.br";
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 5,
+  themeColor: "#F5F5F5",
+};
 
 export const metadata: Metadata = {
   metadataBase: new URL(BASE_URL),
@@ -96,6 +103,7 @@ const websiteJsonLd = {
   url: BASE_URL,
   description:
     "Guias semanais de engenharia de prompt para quem quer resultado real com IA.",
+  inLanguage: "pt-BR",
   publisher: {
     "@type": "Organization",
     name: "Promptfly",
@@ -103,9 +111,18 @@ const websiteJsonLd = {
     logo: {
       "@type": "ImageObject",
       url: `${BASE_URL}/logo.png`,
+      width: 512,
+      height: 512,
     },
   },
-  inLanguage: "pt-BR",
+  potentialAction: {
+    "@type": "SearchAction",
+    target: {
+      "@type": "EntryPoint",
+      urlTemplate: `${BASE_URL}/guias?q={search_term_string}`,
+    },
+    "query-input": "required name=search_term_string",
+  },
 };
 
 export default function RootLayout({
