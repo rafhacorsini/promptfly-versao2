@@ -6,7 +6,6 @@ import Link from "next/link";
 import { getAllGuides, getGuideSource } from "@/lib/guides";
 import ReadingProgress from "@/components/ReadingProgress";
 import ShareButtons from "@/components/ShareButtons";
-import TemplateCard from "@/components/TemplateCard";
 import TemplateCTAInline from "@/components/TemplateCTAInline";
 import GuideCarousel from "@/components/GuideCarousel";
 import SkillsCTABanner from "@/components/SkillsCTABanner";
@@ -148,8 +147,8 @@ export default async function GuidePage({ params }: Props) {
             </nav>
           )}
 
-          {/* Template CTA */}
-          <TemplateCard />
+          {/* Skills CTA */}
+          <SkillsCTABanner />
 
           {/* Newsletter CTA */}
           <div className={styles.cta}>
