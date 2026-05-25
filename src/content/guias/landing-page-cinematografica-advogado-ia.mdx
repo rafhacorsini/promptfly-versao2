@@ -1,0 +1,343 @@
+---
+title: "Como criar uma landing page cinematográfica para advogado usando IA"
+description: "4 prompts para construir um site de advocacia que transmite autoridade de verdade: vídeo de fundo, animações cinematográficas e aquela sensação de que custa caro. Sem escrever código."
+date: "2026-05-25"
+tags: ["sites cinematográficos", "prompts", "advocacia", "next.js", "framer motion"]
+readTime: "12 min"
+category: "prompts"
+featured: true
+---
+
+Sites de advocacia são quase todos iguais. Fundo branco, foto de aperto de mão, lista de serviços e um botão de WhatsApp perdido no canto. Nada que transmita autoridade de verdade.
+
+O que você vai encontrar aqui é diferente. Um site com vídeo de fundo, animações cinematográficas e aquela sensação de "isso aqui custa caro" que os clientes percebem antes mesmo de ler qualquer texto.
+
+E o melhor: você vai construir isso conversando com uma IA. Quatro prompts. Cada um constrói uma parte do site. No final você tem uma landing page completa, pronta para hospedar.
+
+<video autoPlay muted loop playsInline style={{width: "100%", borderRadius: "12px", margin: "2rem 0", border: "1px solid rgba(0,0,0,0.08)"}}>
+  <source src="/prints/landing-advogado-preview.mp4" type="video/mp4" />
+</video>
+
+---
+
+## Qual IA usar
+
+Usa o **Gemini 2.5 Pro** (versão High, não a gratuita). Ele é o único que consegue gerar código complexo de animação sem travar no meio do caminho.
+
+Se aparecer algum erro no site, abre o **Claude** e cola o erro lá. O Claude é muito melhor para corrigir coisas específicas e custa muito menos do que usar o Gemini para tudo. Essa combinação economiza uns 70% dos seus créditos.
+
+---
+
+## O que você precisa instalar
+
+- **Node.js** (nodejs.org, versão 18 ou maior)
+- **VS Code** (code.visualstudio.com)
+- Uma conta no **Vercel** (vercel.com) para hospedar no final
+
+Com tudo instalado, abre o VS Code, abre o terminal e segue os prompts abaixo.
+
+---
+
+## Prompt 1 — Base do projeto
+
+Esse primeiro prompt monta toda a estrutura. Design system, fontes, cores, configuração de scroll suave. É a fundação de tudo.
+
+Cola isso no Gemini 2.5 Pro:
+
+```
+Crie um projeto Next.js 15 com TypeScript para uma landing page de escritório de advocacia com visual cinematográfico e premium.
+
+SETUP INICIAL:
+Execute os seguintes comandos para instalar as dependências:
+npm install framer-motion lenis
+
+PALETA DE CORES (use exatamente estas, não invente outras):
+- Fundo escuro principal: #1A1814
+- Texto claro: #F5F0E8
+- Destaque areia/dourado: #9A8B7A
+- Texto secundário: #6B6560
+
+FONTES:
+- Títulos grandes: fonte "Author" carregada via @font-face a partir de /public/fonts/
+- Subtítulos em itálico: Playfair Display via next/font/google
+- Corpo e botões: Inter via next/font/google
+
+Crie o arquivo app/globals.css com:
+1. @import "tailwindcss"
+2. Variáveis CSS com as cores acima
+3. @theme inline mapeando as cores para o Tailwind
+4. @font-face para a fonte Author nos pesos 200, 300, 400, 400 italic, 500, 700, cada um apontando para o arquivo correspondente em /public/fonts/ (ex: Author-Extralight.otf, Author-Light.otf, Author-Regular.otf, Author-Italic.otf, Author-Medium.otf, Author-Bold.otf)
+5. Reset básico: box-sizing border-box, margin 0, padding 0 em todos os elementos
+6. Scrollbar customizada: largura 3px, fundo #1A1814, thumb #6B6560
+7. Classe .film-grain: posição absolute, inset 0, opacity 0.006, pointer-events none, z-index 2. O background deve ser um SVG inline de ruído fractal usando feTurbulence com baseFrequency="1.3" e numOctaves="3". Adicione um keyframe chamado grain-animation que translada o elemento aleatoriamente entre -3% e 3% em 10 etapas, e aplique esse keyframe na classe com duration 0.4s e steps infinito.
+
+Crie app/layout.tsx:
+- Importe Playfair_Display e Inter do next/font/google
+- Playfair: variável --font-playfair, subset latin, pesos 400 a 800
+- Inter: variável --font-inter, subset latin, pesos 300 400 500
+- Metadata com title "Nome do Escritório" e description placeholder
+- Importe e use o componente SmoothScroll envolvendo o children
+
+Crie app/components/SmoothScroll.tsx:
+"use client"
+import { ReactLenis } from 'lenis/react'
+export function SmoothScroll({ children }: { children: React.ReactNode }) {
+  return (
+    <ReactLenis root options={{ lerp: 0.05, duration: 1.5, smoothWheel: true }}>
+      {children}
+    </ReactLenis>
+  )
+}
+
+Crie app/page.tsx importando os componentes Hero, Manifesto, Cases, Metrics, FAQ e Footer. Adicione estado isIntroComplete que começa false. Quando a Hero chamar o callback onIntroComplete, mude para true. Enquanto false, bloqueie document.body.style.overflow. Quando true, libere. Renderize todos os componentes dentro de uma tag main.
+
+Os componentes ainda não existem, então comente os imports por enquanto e deixe apenas a estrutura pronta.
+```
+
+Salva tudo e roda `npm run dev` no terminal para ver se não deu erro. Se der, copia a mensagem e leva pro Claude assim: "Estou configurando um projeto Next.js 15 com Tailwind v4 e esse erro apareceu: [erro]. Me diz o que está errado e como corrigir sem mudar o resto."
+
+---
+
+## Prompt 2 — Hero (a parte que choca o cliente)
+
+A Hero é a seção que aparece quando o site abre. Ela define se o cliente fica ou sai em 3 segundos.
+
+O que ela tem: uma animação de intro com o símbolo do escritório, um vídeo de fundo que vai abrindo cinematograficamente, navbar com efeito de telefone no hover, headline grande na esquerda e um card de métricas na direita.
+
+```
+Crie o arquivo app/components/Hero.tsx para uma landing page de advocacia com visual cinematográfico.
+
+"use client" no topo. Use framer-motion para todas as animações.
+
+CONSTANTES DE ANIMAÇÃO:
+const FILM = [0.4, 0, 0.15, 1]  // curva cinematográfica
+const SOFT = [0.25, 0.1, 0.25, 1.0]  // curva suave
+const GUTTER = "max(3rem, 5.5vw)"  // espaçamento lateral padrão
+
+CORES:
+const C = {
+  bunker: "#1A1814",
+  shuttle: "#6B6560",
+  zircon: "#F5F0E8",
+  acento: "#E8E2D9",
+}
+
+O componente tem 3 fases controladas por um state chamado "phase" do tipo "intro" | "expanding" | "hero":
+
+FASE 1 - INTRO (primeiros 2200ms):
+Tela preta centralizada com um símbolo SVG animado. O símbolo tem viewBox "0 0 100 100" e 7 paths:
+- 4 paths de canto (stroke rgba(245,240,232,0.45), strokeWidth 0.75): M 30 17 L 17 17 L 17 30 / M 70 17 L 83 17 L 83 30 / M 30 83 L 17 83 L 17 70 / M 70 83 L 83 83 L 83 70
+- 3 paths centrais (stroke rgba(245,240,232,0.92), strokeWidth 0.75): M 50 28 L 50 72 / M 34 43 L 66 43 / M 39 57 L 61 57
+Cada path anima pathLength de 0 para 1 com opacity 0 para 1. Delay escalonado: 0.12 + (index * 0.12). Duração 0.72s, ease FILM.
+Abaixo do símbolo (marginTop 80px), dois textos animam com opacity após 1.1s:
+- Nome do escritório: 12px, tracking 0.38em, uppercase, cor zircon
+- Especialidade: 9px, tracking 0.22em, uppercase, cor shuttle
+
+FASE 2 - EXPANDING (2200ms a 4000ms):
+A div do vídeo expande: width 40% e height 48% e borderRadius 14px viram width 100% e height 100% e borderRadius 0. Duração 1.8s, delay 0.5s, ease FILM. Opacity vai de 0 para 1.
+
+FASE 3 - HERO:
+Mostra a interface completa com fade-in de 0.9s, ease SOFT.
+
+VÍDEO DE FUNDO:
+Tag video com src="/videos/video-bg.mp4", autoPlay, muted, loop, playsInline. Filter: brightness(0.78) contrast(1.02).
+Sobre o vídeo, dois gradientes absolutos sobrepostos:
+1. Da esquerda: linear-gradient(to right, rgba(26,24,20,0.95) 0%, rgba(26,24,20,0.6) 40%, transparent 100%)
+2. De baixo: linear-gradient(to top, rgba(26,24,20,1) 0%, rgba(26,24,20,1) 3%, rgba(26,24,20,0.85) 12%, rgba(26,24,20,0) 35%)
+
+NAVBAR (visível apenas na fase hero):
+Posição absolute, left-0 right-0, top: max(2.5rem, 5.5vh), paddingLeft e paddingRight usando GUTTER, paddingBottom 16px, borderBottom: 1px solid rgba(245,240,232,0.08).
+Anima de opacity 0 y -12 para opacity 1 y 0, duração 1.4s, delay 0.15s, ease FILM.
+Esquerda: nome do escritório em fonte Author, fontWeight 200, fontSize 1.05rem, letterSpacing 0.32em, uppercase, cor rgba(245,240,232,0.95). Ao lado: símbolo SVG 18px dos mesmos paths acima que rotaciona 90deg no hover do grupo.
+Direita: lista de 3 links de navegação ["Início", "Soluções", "Contato"] com anchor para ["#inicio", "#solucoes", "#contato"]. Cada link: Inter, 0.72rem, uppercase. Cor padrão rgba(245,240,232,0.38), no hover rgba(245,240,232,0.85). Ao lado dos links: ícone de telefone SVG (path do ícone de phone do lucide). No hover do grupo de telefone, um span anima de width 0 para 290px mostrando "Falar Conosco | +55 (11) 00000-0000" (TODO).
+
+COLUNA ESQUERDA (absolute, paddingLeft GUTTER, top 52%):
+Anima de opacity 0 y 16 para opacity 1 y 0, duração 1.0s, delay 0.28s.
+Componente de badge: div com backdrop-filter blur(8px), background rgba(26,24,20,0.25), border 1px solid rgba(245,240,232,0.08), borderRadius 18px, padding 18px 20px. Contém:
+- Dois logos sobrepostos (Google e Facebook) como círculos de 26px com marginLeft -8px entre eles, usando SVG paths das logos
+- 5 estrelas amarelas (#FBBC05) como SVGs de 16px
+- Nota "4.9" em Author fontSize 16.5, fontWeight 400
+- Texto "98% Avaliações Positivas" em Author 12px, fontWeight 300, tracking 0.08em, uppercase (TODO)
+No hover do badge: background rgba(26,24,20,0.4), borderColor rgba(245,240,232,0.15).
+
+Headline h1 com lineHeight 0.75, marginTop 0.2rem:
+- Linha 1: uma palavra em Author italic fontWeight 300 + uma palavra em Author fontWeight 200. Ambas fontSize clamp(3.2rem, 6.5vw, 7.5rem), letterSpacing -0.02em
+- Linha 2: complemento em Author fontWeight 200, mesmo tamanho
+- Cor: zircon para palavra itálica, acento para as demais
+- textShadow: "0 2px 24px rgba(26,24,20,0.45), 0 1px 8px rgba(26,24,20,0.25)"
+Todos os textos são TODO com comentários.
+
+Subtítulo: Inter fontWeight 300, clamp(0.95rem, 1.3vw, 1.25rem), lineHeight 1.2, cor acento, marginTop clamp(1.5rem, 3vh, 2.5rem). Texto placeholder com TODO.
+
+Botão CTA: link para #contato, background #F5F0E8, border 1px solid #F5F0E8, borderRadius 8px, padding 12px 28px, marginTop 2rem. Texto em Inter fontWeight 500, 0.78rem, uppercase, tracking 0.2em, cor #453E36. No hover: background e border ficam brancos, texto fica #1A1814. Ao lado do texto, uma seta que translada 3px nos dois eixos no hover.
+
+COLUNA DIREITA (hidden lg:flex, absolute, right alinhado ao GUTTER, top calc(52% + 165px)):
+Card glassmorphism igual ao badge. Anima de opacity 0 x 20 para opacity 1 x 0, duração 1.0s, delay 0.38s.
+Número grande (ex: "12K") em Author fontWeight 200, clamp(2.4rem, 3.8vw, 3.8rem), lineHeight 0.9, cor zircon. TODO.
+Label em Inter 0.68rem, uppercase, tracking 0.22em, cor acento, marginBottom 0.7rem. TODO.
+5 avatares sobrepostos: divs circulares 30px com border 1.5px #F5F0E8 e marginLeft -8px. Dentro de cada um: ícone silhueta SVG (path de pessoa genérica) como fallback + tag img com src="/images/avatar-{i+1}.jpg" que aparece com opacity transition quando carrega (onLoad). Sexto elemento: link para #contato, circle 30px, background #F5F0E8, com seta centralizada. No hover: scale 1.08, background branco.
+
+EFEITO DE SCROLL:
+useScroll e useMotionValueEvent. Quando scrollY > 30, um state isScrolled vira true. Toda a coluna esquerda e direita (não a navbar) recebe animate: quando isScrolled, opacity 0 y -30 scale 0.98 filter blur(8px), duração 0.25s ease "easeInOut".
+
+Adicione a classe .film-grain como primeiro filho da section para o efeito de granulação de filme.
+
+Props do componente: onIntroComplete?: () => void. Chamar essa função quando a fase virar "hero".
+```
+
+Com os dois prompts rodados você já tem a estrutura e a seção mais impactante do site. Coloca um vídeo em `/public/videos/video-bg.mp4` e veja a diferença.
+
+---
+
+<VipGroupBanner />
+
+---
+
+## Prompt 3 — Manifesto, Serviços e Números
+
+Essas três seções são o coração do site. É onde o cliente lê sobre o escritório, vê as áreas de atuação e entende o tamanho da operação.
+
+Abre uma conversa nova no Gemini 2.5 Pro e cola isso:
+
+```
+Crie três componentes em sequência para uma landing page de advocacia cinematográfica em Next.js 15 com Framer Motion.
+
+DESIGN SYSTEM (respeite sem alterar):
+Cores: bunker #1A1814, zircon #F5F0E8, acento #9A8B7A, acentoGold #C5B39E, shuttle #6B6560
+Curvas de animação: EASE=[0.16,1,0.3,1]
+Fonte de título: "Author". Fonte de corpo: var(--font-inter). Itálicos: var(--font-serif) com Playfair Display.
+
+COMPONENTE 1: app/components/Manifesto.tsx
+Seção escura (#1A1814) com texto que aparece palavra por palavra ao entrar na viewport, e uma imagem de fundo que se revela conforme o mouse se move sobre a seção.
+
+Comportamento do spotlight:
+- useMotionValue para mouseX e mouseY
+- useSpring nos dois valores (stiffness 40, damping 20, mass 0.8)
+- useMotionTemplate gerando: `radial-gradient(circle at ${smoothX}px ${smoothY}px, black 0%, transparent 600px)`
+- div de background absoluta com backgroundImage url('/img/manifesto_bg.png'), WebkitMaskImage e maskImage usando o template acima, filter brightness(0.35) contrast(1.15), opacity 0.05 normalmente e 0.95 quando isHovering (transition 1.5s cubic-bezier(0.16,1,0.3,1))
+
+Animação palavra por palavra:
+Crie um componente Word recebendo: word, index, total, isInView, isHighlighted.
+Cada palavra: initial opacity 0, filter blur(12px), letterSpacing 0.08em. Quando isInView: opacity 1, filter blur(0px), letterSpacing -0.01em (ou 0.02em se highlighted). Delay = 0.4 + (index/total)*1.8, duração 1.2s, ease EASE.
+Palavras highlighted: fontFamily var(--font-serif), fontStyle italic, fontWeight 400, cor #C5B39E.
+Palavras normais: fontFamily Author, fontWeight 200, cor rgba(245,240,232,0.85).
+
+Layout central (maxWidth 1100px, text-center, z-index 20):
+- Label com duas linhas decorativas de 48px h-[1px] bg-[#C5B39E]/30 nas laterais. Texto 0.65rem uppercase tracking 0.3em cor #C5B39E. TODO.
+- Parágrafo com as palavras: fontSize clamp(1.15rem, 2vw, 2.05rem), lineHeight 1.45
+- Botão após texto (delay 2.2s): link para #contato, borderRadius 40px, border 1px solid, backdrop-filter blur(10px). Hover: fundo #F5F0E8, texto #1A1814.
+- Dois textos editoriais de canto (absolute top-left e bottom-right, hidden em mobile): "CAPÍTULO I // FUNDAÇÃO" e "02. SIGLA". 0.6rem, tracking 0.3em, opacity 0.3, cor zircon. Aparecem com delay 1s. TODO.
+
+O texto do manifesto e as palavras destacadas são TODO com comentários explicando como trocar.
+
+COMPONENTE 2: app/components/Cases.tsx
+Seção clara (#F5F0E8) com bordas arredondadas no topo: borderTopLeftRadius e borderTopRightRadius clamp(24px, 4vw, 48px). MarginTop: clamp(-3.5rem, -7vh, -5.5rem) para sobrepor a seção anterior. ZIndex 2. Overflow hidden.
+
+Array CARDS com interface CardData { video: string; tag: string; title: [string, string]; subtitle: string }. Três cards com conteúdo TODO. O campo title é uma tupla onde o primeiro elemento vai normal e o segundo em itálico Playfair cor acento.
+
+Header da seção: flex space-between alignItems flex-end. Esquerda: label uppercase 0.65rem acento + linha 32px + h2 em Author fontWeight 200 clamp(2.8rem, 5vw, 4.8rem) lineHeight 0.95 letterSpacing -0.02em. Segunda linha do h2 em Playfair italic fontWeight 400 cor acento. Direita: parágrafo descritivo 0.85rem cor #6B6560 maxWidth 340px textAlign right. Todo esse header anima whileInView opacity 0 y 20 para opacity 1 y 0, duração 1.4s.
+
+Grid de cards: CSS grid, gridTemplateColumns "1.8fr 1fr", gridTemplateRows "1fr 1fr", gap clamp(0.7rem, 1.2vw, 1rem), height clamp(28rem, 65vh, 45rem). Stagger com staggerChildren 0.25s usando whileInView.
+
+Cada card (componente VideoCard recebendo card e isLarge boolean):
+- isLarge=true: gridRow "1/3", ocupa toda a altura
+- borderRadius 24px, overflow hidden, cursor pointer
+- video autoPlay muted loop playsInline, absolute inset-0 w-full h-full object-cover
+- Gradiente sobre vídeo: to top, rgba(26,24,20,0.98) 0% para rgba(26,24,20,0.5) 45% para transparent 100%
+- Tag absoluta no canto superior esquerdo: Inter 0.6rem fontWeight 500 tracking 0.28em uppercase cor acento opacity 0.85
+- Conteúdo inferior (absolute bottom-0): h3 em Author fontWeight 200 (clamp(2rem,3.5vw,3.2rem) se isLarge, clamp(1.4rem,2vw,1.8rem) se não). Segunda linha do título em Playfair italic cor acento. Subtítulo e link "Ver detalhes" aparecem no hover.
+Animações de hover: card sobe 8px e escala 1.015. Vídeo vai de scale 1.05 brightness(0.35) para scale 1 brightness(0.65). Conteúdo inferior vai de y:20 para y:0. Subtítulo vai de opacity 0 para 0.75.
+
+COMPONENTE 3: app/components/Metrics.tsx
+Seção clara (#F5F0E8) com imagem à esquerda com efeito parallax e contadores animados à direita.
+
+Parallax: useScroll com target na seção, offset ["start end", "end start"]. useTransform(scrollYProgress, [0,1], ["-12%","12%"]) para yImage. Container da imagem: height clamp(450px,70vh,850px), overflow hidden, borderRadius clamp(16px,3vw,32px). motion.div interno: backgroundImage url('/img/pen_document.png'), backgroundSize cover, width 100%, height 124%, position absolute, top -12%, y: yImage.
+
+Array METRICS com interface { value: number; prefix?: string; suffix?: string; label: string; duration?: number; decimals?: number }. Três métricas TODO.
+
+Componente Counter: useRef no span do número, useInView once:true. Quando entra na view: animate(0, metric.value) com onUpdate atualizando o textContent formatado. Delay escalonado: index * 0.2. O número em Author fontWeight 200 clamp(3.5rem,6vw,4.8rem) lineHeight 0.85 letterSpacing -0.03em cor bunker. Prefix e suffix em Playfair italic clamp(1.5rem,2.5vw,2.2rem) cor acento. Label em Inter 0.65rem uppercase tracking 0.22em cor #6B6560.
+
+Grid 12 colunas: imagem col-span-12 lg:col-span-6, texto col-span-12 lg:col-span-6. Gap clamp(3rem,6vw,8rem). MaxWidth 1500px margin auto.
+
+Lado direito: label + linha 40px + h2 Author fontWeight 200 clamp(2rem,3.5vw,3.8rem) com palavra em Playfair italic acento. Contadores com gap clamp(2rem,4vh,3.5rem). Tudo animando whileInView.
+
+Todos os textos e números são TODO.
+```
+
+---
+
+## Prompt 4 — FAQ, Footer e colocar no ar
+
+Último prompt. Fecha o site com perguntas frequentes e rodapé com CTA final.
+
+Abre uma conversa nova no Gemini 2.5 Pro e cola isso:
+
+```
+Crie dois componentes finais para uma landing page de advocacia cinematográfica em Next.js 15 com Framer Motion.
+
+DESIGN SYSTEM:
+Cores: bunker #1A1814, zircon #F5F0E8, acento #9A8B7A, shuttle #6B6560
+Curvas: EASE=[0.16,1,0.3,1]
+
+COMPONENTE 1: app/components/FAQ.tsx
+Seção clara (#F5F0E8) com bordas arredondadas no FUNDO: borderBottomLeftRadius e borderBottomRightRadius clamp(24px, 4vw, 48px). BoxShadow: "0 25px 50px rgba(0,0,0,0.25)" para criar profundidade sobre o footer escuro. ZIndex: 10. Padding: clamp(5rem,10vh,8rem) max(2rem,5vw) clamp(6rem,12vh,10rem).
+
+Array FAQS com 4 perguntas e respostas TODO genéricas sobre o escritório.
+
+Componente AccordionItem recebe item, isOpen, onClick:
+- Container: borderBottom 1px solid rgba(154,139,122,0.2), padding 1.5rem 0
+- Botão: width 100%, flex space-between center, sem borda ou background nativo
+- Pergunta: Inter clamp(1rem,1.2vw,1.25rem) fontWeight 400 cor bunker paddingRight 2rem
+- Ícone "+": motion.div que rotaciona 45deg quando isOpen. 32x32px, fontSize 1.5rem, cor acento
+- Resposta: AnimatePresence + motion.div com height 0 para auto e opacity 0 para 1, duração 0.4s. Parágrafo Inter 0.95rem lineHeight 1.6 cor #6B6560 paddingTop 1rem maxWidth 800px
+
+Layout: maxWidth 900px margin auto. Label + linha 40px + h2 Author fontWeight 200 clamp(2.5rem,4vw,4rem) com palavra em Playfair italic acento. Lista começa com borderTop 1px solid rgba(154,139,122,0.2). Cada item anima whileInView com delay index*0.15.
+
+useState openIndex iniciando em 0 (primeiro item aberto).
+
+COMPONENTE 2: app/components/Footer.tsx
+Seção escura (#1A1814). ZIndex: 1 para ficar embaixo do FAQ. Padding: clamp(12rem,18vh,16rem) max(2rem,5vw) clamp(3rem,5vh,4rem). Overflow hidden.
+
+Glow decorativo: div absolute top:0% left:50% transform translate(-50%,-50%), width e height 80vw, background radial-gradient(circle, rgba(154,139,122,0.10) 0%, transparent 60%).
+
+CTA central (flex column, text-center, marginBottom clamp(6rem,15vh,10rem)):
+Anima whileInView opacity 0 filter blur(10px) y 40 para opacity 1 blur(0) y 0, duração 1.5s.
+h2: Author fontWeight 200 clamp(3rem,6vw,6rem) lineHeight 1.05 cor zircon letterSpacing -0.03em maxWidth 800px. Uma palavra em Playfair italic cor acento. TODO.
+Botão: border 1px solid acento, borderRadius 4px, padding 1.2rem 3rem, fundo transparente, cor zircon, Inter 0.85rem uppercase tracking 0.2em. Hover: fundo acento, cor bunker.
+
+Grid de rodapé (gridTemplateColumns repeat(auto-fit, minmax(200px,1fr)), gap 3rem):
+Separado do CTA por borderTop 1px solid rgba(154,139,122,0.2), paddingTop 4rem.
+4 colunas com whileInView e stagger (delays 0.1, 0.2, 0.3, 0.4):
+1. Nome do escritório em Author 1.3rem + parágrafo descritivo
+2. "Contato" + email + telefone
+3. "Endereço" + endereço completo
+4. "Conecte-se" + links LinkedIn e Instagram. Hover nos links muda cor para acento.
+
+Linha final: borderTop 1px solid rgba(154,139,122,0.1), flex space-between, marginTop 4rem, paddingTop 2rem. Copyright com o ano dinâmico e crédito à direita. Tudo TODO.
+
+Depois de criar os dois componentes, mostre como atualizar app/page.tsx descomentando todos os imports e adicionando os componentes na ordem: Hero, Manifesto, Cases, Metrics, FAQ, Footer.
+```
+
+---
+
+## Subindo o site no ar
+
+Com todos os componentes criados, o último passo é hospedar.
+
+Cria uma conta no GitHub (github.com) e um repositório novo, depois rode esses comandos no terminal:
+
+```bash
+git init
+git add .
+git commit -m "primeiro commit"
+git remote add origin https://github.com/seuusuario/seu-repositorio.git
+git push -u origin main
+```
+
+Vai em vercel.com, clica em "Add New Project", conecta sua conta do GitHub e importa o repositório. Clica em Deploy. Em 2 minutos o site tem uma URL pública.
+
+Sites nesse nível são vendidos entre R$8.000 e R$15.000 por projeto. Com o método certo, um site por mês já muda seu padrão de vida.
+
+---
+
+<VipGroupBanner />

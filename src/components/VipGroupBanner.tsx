@@ -6,10 +6,10 @@ import styles from "./VipGroupBanner.module.css";
 const VIP_URL = "https://pay.kiwify.com.br/M5DbuZg";
 
 const perks = [
-  "Hacks e técnicas que não estão em nenhum guia público",
-  "Templates de animação completos prontos para usar",
-  "Passo a passo para sites cinematográficos do zero",
-  "Acompanhamento do seu projeto — eu reviso pessoalmente",
+  "Todos os prompts completos, incluindo os que não estão nos guias",
+  "Código completo do site para clonar e adaptar direto no GitHub",
+  "Processo completo do zero ao avançado: criar projetos e colocar no ar",
+  "Como captar clientes e transformar isso num negócio real",
 ];
 
 export default function VipGroupBanner() {
