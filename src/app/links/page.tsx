@@ -4,46 +4,55 @@ import styles from "./links.module.css";
 
 export const metadata: Metadata = {
   title: "Promptfly — Links",
-  description: "Guias, mentoria, grupo VIP e skills para quem constrói com IA.",
+  description: "Crie projetos incríveis com IA.",
   robots: { index: false },
 };
 
 const links = [
   {
     id: "guias",
+    num: "01",
     label: "Guias",
-    description: "Aprenda IA do prompt ao agent, do zero.",
+    description: "Do prompt ao agent. Aprenda no ritmo certo.",
     href: "https://promptfly.com.br/guias",
-    tag: "Gratuito",
+    tag: "Grátis",
     tagStyle: "free",
-    icon: "📚",
+  },
+  {
+    id: "artigo-3d",
+    num: "02",
+    label: "Como construir um site 3D",
+    description: "Transições dentro de shaders, scroll-driven e WebGPU pipeline.",
+    href: "https://tympanus.net/codrops/2026/05/19/80s-business-tech-seamless-scene-transitions-inside-shader-ses-scroll-driven-webgpu-pipeline/",
+    tag: "Artigo",
+    tagStyle: "neutral",
   },
   {
     id: "mentoria",
+    num: "03",
     label: "Mentoria Individual",
-    description: "2 encontros por mês, sem horário fixo. Do zero a criar sites com IA — no seu ritmo.",
+    description: "2 encontros por mês, sem horário fixo. Do zero a criar sites com IA.",
     href: "https://pay.kiwify.com.br/b9rbVdm",
     tag: "Vagas limitadas",
     tagStyle: "accent",
-    icon: "🎓",
   },
   {
     id: "vip",
+    num: "04",
     label: "Grupo VIP",
-    description: "Prompts, templates e acesso direto a mim. Tudo que funciona, sem enrolação.",
+    description: "Prompts, templates e acesso direto. O que funciona, sem enrolação.",
     href: "https://pay.kiwify.com.br/M5DbuZg",
     tag: "Comunidade",
     tagStyle: "dark",
-    icon: "👑",
   },
   {
     id: "skills",
+    num: "05",
     label: "Skills para Claude Code",
-    description: "5 comandos prontos para instalar em 2 minutos. Sites cinematográficos no piloto automático.",
+    description: "5 comandos. Instala em 2 minutos. Usa em todo projeto.",
     href: "https://pay.hotmart.com/L105868575N",
     tag: "R$ 37",
     tagStyle: "dark",
-    icon: "⚡",
   },
 ];
 
@@ -51,43 +60,40 @@ export default function LinksPage() {
   return (
     <main className={styles.page}>
       <div className={styles.container}>
-        <div className={styles.profile}>
-          <div className={styles.avatarWrapper}>
-            <Image
-              src="/logo.png"
-              alt="Promptfly"
-              width={72}
-              height={72}
-              className={styles.avatar}
-            />
+
+        <header className={styles.profile}>
+          <div className={styles.logoWrap}>
+            <Image src="/logo.png" alt="Promptfly" width={48} height={48} className={styles.logo} />
           </div>
-          <h1 className={styles.name}>Promptfly</h1>
-          <p className={styles.bio}>
-            Engenharia de prompt e IA em português.<br />
-            Para quem constrói negócios reais.
-          </p>
-        </div>
+          <div className={styles.profileText}>
+            <h1 className={styles.name}>Promptfly</h1>
+            <p className={styles.bio}>Crie projetos incríveis com IA.</p>
+          </div>
+        </header>
 
         <nav className={styles.links}>
-          {links.map((link) => (
+          {links.map((link, i) => (
             <a
               key={link.id}
               href={link.href}
               target="_blank"
               rel="noopener noreferrer"
               className={styles.card}
+              style={{ "--delay": `${i * 80}ms` } as React.CSSProperties}
             >
-              <span className={styles.cardIcon}>{link.icon}</span>
-              <div className={styles.cardBody}>
-                <div className={styles.cardTop}>
-                  <span className={styles.cardLabel}>{link.label}</span>
-                  <span className={`${styles.tag} ${styles[link.tagStyle]}`}>
-                    {link.tag}
-                  </span>
+              <span className={styles.num}>{link.num}</span>
+              <div className={styles.body}>
+                <div className={styles.top}>
+                  <span className={styles.label}>{link.label}</span>
+                  <span className={`${styles.tag} ${styles[link.tagStyle]}`}>{link.tag}</span>
                 </div>
-                <p className={styles.cardDescription}>{link.description}</p>
+                <p className={styles.desc}>{link.description}</p>
               </div>
-              <span className={styles.arrow}>→</span>
+              <span className={styles.arrow}>
+                <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+                  <path d="M2 7h10M8 3l4 4-4 4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                </svg>
+              </span>
             </a>
           ))}
         </nav>
