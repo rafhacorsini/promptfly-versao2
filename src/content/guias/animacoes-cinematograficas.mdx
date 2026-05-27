@@ -1,0 +1,71 @@
+---
+title: "3 animações que uso para deixar sites cinematográficos"
+description: "Galeria 3D com Three.js, Mouse Reveal com CSS mask e Text Reveal com GSAP ScrollTrigger — os três efeitos que aparecem em quase todos os meus projetos. Com preview ao vivo, prompt e código completo para copiar."
+date: "2026-05-27"
+tags: ["animações", "CSS", "Three.js", "GSAP", "cinematográfico"]
+readTime: "5 min"
+category: "prompts"
+featured: true
+---
+
+Toda vez que alguém vê um site meu pela primeira vez, me pergunta a mesma coisa: **"como você fez isso?"**
+
+A resposta honesta é: com três animações. Só três. Que eu uso, remixo e combino de formas diferentes dependendo do projeto.
+
+Não são efeitos complexos. São efeitos com intenção — cada um resolve um problema específico de linguagem visual.
+
+Abaixo você encontra o preview ao vivo de cada um, o prompt exato que uso e o código completo para copiar.
+
+---
+
+## 01 — 3D Infinite Gallery
+
+A galeria que dá profundidade de cinema para qualquer página. Fotos avançando no eixo Z com blur direcional e título sobreposto com `mix-blend-mode: difference` — esse detalhe é o que cria aquele efeito de inversão de cor que parece saído de um editorial de moda.
+
+O scroll controla a velocidade. Para por 3 segundos após interação. Retoma sozinho.
+
+<AnimationCard id="gallery-3d" />
+
+**Por que funciona:** a profundidade Z cria a sensação de que o site tem volume. Quando o título inverte as cores das fotos embaixo, parece que ele existe num espaço diferente da galeria — é dissonância cognitiva usada a favor do design.
+
+---
+
+## 02 — Mouse Reveal Effect
+
+Fundo escuro com texto na frente. Imagem escondida atrás. O cursor é uma lanterna: revelando a imagem com um `radial-gradient` de falloff longo e suave — `480px` de raio, quase invisível nas bordas.
+
+Zero dependências. CSS puro + 15 linhas de JavaScript.
+
+<AnimationCard id="mouse-reveal" />
+
+**Por que funciona:** cria curiosidade imediata. O usuário move o mouse compulsivamente porque quer ver o que está escondido. É o mesmo princípio de um menu escondido atrás de uma cortina — a revelação parcial é mais poderosa que a revelação total.
+
+---
+
+<VipGroupBanner />
+
+---
+
+## 03 — Text Reveal by Word
+
+Palavras que ganham vida com o scroll. Cada palavra tem dois layers: um ghost com `opacity: 0.15` mostrando o que vai vir, e um reveal que passa de `0` para `1` à medida que você rola.
+
+GSAP ScrollTrigger com `scrub: 1` cria o vínculo perfeito entre scroll e animação. O texto inteiro fica `position: sticky` — a página rola, o texto fica parado enquanto as palavras se iluminam.
+
+<AnimationCard id="text-reveal" />
+
+**Por que funciona:** transforma leitura em performance. O leitor não lê um parágrafo — ele assiste as palavras chegando. Isso desacelera o consumo de conteúdo de forma intencional, dando peso a cada palavra.
+
+---
+
+## Como uso esses três juntos
+
+Na prática, a maioria dos meus projetos combina:
+
+- **Galeria 3D** no hero (impacto imediato, cinematic desde o primeiro frame)
+- **Text Reveal** nas seções de conteúdo (ritmo, peso, intenção narrativa)
+- **Mouse Reveal** em seções de portfolio ou before/after (interatividade sem ruído)
+
+Cada um tem uma função. Nenhum existe por vaidade.
+
+O prompt acima é o ponto de partida — mas o real trabalho é saber onde colocar cada animação e por quê. Isso é o que separa um site com efeitos de um site cinematográfico.

@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Mouse Reveal Effect</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: #0d0d0d;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 48px;
+      font-family: system-ui, sans-serif;
+    }
+
+    .reveal-wrapper {
+      position: relative;
+      width: min(860px, 90vw);
+      height: 500px;
+      border-radius: 20px;
+      overflow: hidden;
+      cursor: none;
+    }
+
+    .reveal-front {
+      position: absolute;
+      inset: 0;
+      background: #120F17;
+      border: 2px solid #FF79C6;
+      border-radius: inherit;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 2;
+    }
+
+    .reveal-front h1 {
+      color: #fff;
+      font-size: clamp(1.5rem, 4vw, 3rem);
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      text-align: center;
+      user-select: none;
+    }
+
+    .reveal-front p {
+      color: #aaa;
+      font-size: 1rem;
+      margin-top: 8px;
+      text-align: center;
+    }
+
+    .reveal-back {
+      position: absolute;
+      inset: 0;
+      z-index: 3;
+      pointer-events: none;
+
+      background-image: url('https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1200&auto=format&fit=crop');
+      background-size: cover;
+      background-position: center;
+
+      opacity: 0.55;
+
+      -webkit-mask-image: radial-gradient(
+        circle at var(--mx, -9999px) var(--my, -9999px),
+        rgba(255,255,255,0.9)  0px,
+        rgba(255,255,255,0.75) 80px,
+        rgba(255,255,255,0.45) 200px,
+        rgba(255,255,255,0.15) 340px,
+        rgba(255,255,255,0)    480px
+      );
+      mask-image: radial-gradient(
+        circle at var(--mx, -9999px) var(--my, -9999px),
+        rgba(255,255,255,0.9)  0px,
+        rgba(255,255,255,0.75) 80px,
+        rgba(255,255,255,0.45) 200px,
+        rgba(255,255,255,0.15) 340px,
+        rgba(255,255,255,0)    480px
+      );
+      -webkit-mask-repeat: no-repeat;
+      mask-repeat: no-repeat;
+    }
+
+    .cursor-dot {
+      position: fixed;
+      width: 28px;
+      height: 28px;
+      border: 1px solid rgba(255, 255, 255, 0.35);
+      border-radius: 50%;
+      pointer-events: none;
+      transform: translate(-50%, -50%);
+      z-index: 9999;
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+
+    .cursor-dot.visible { opacity: 1; }
+
+    .label {
+      color: #555;
+      font-size: 0.85rem;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="cursor-dot" id="dot"></div>
+
+  <div class="reveal-wrapper" id="wrapper">
+    <div class="reveal-front">
+      <div>
+        <h1>Passe o mouse aqui</h1>
+        <p>O fundo se revela em volta do cursor</p>
+      </div>
+    </div>
+
+    <div class="reveal-back" id="back"></div>
+  </div>
+
+  <p class="label">
+    Troque <code>background-image</code> em <code>.reveal-back</code> por qualquer foto ou gradiente.
+  </p>
+
+  <script>
+    const wrapper = document.getElementById('wrapper');
+    const back    = document.getElementById('back');
+    const dot     = document.getElementById('dot');
+
+    wrapper.addEventListener('mousemove', (e) => {
+      const rect = wrapper.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+      back.style.setProperty('--mx', `${x}px`);
+      back.style.setProperty('--my', `${y}px`);
+    });
+
+    wrapper.addEventListener('mouseleave', () => {
+      back.style.setProperty('--mx', '-9999px');
+      back.style.setProperty('--my', '-9999px');
+    });
+
+    document.addEventListener('mousemove', (e) => {
+      dot.style.left = `${e.clientX}px`;
+      dot.style.top  = `${e.clientY}px`;
+    });
+
+    wrapper.addEventListener('mouseenter', () => dot.classList.add('visible'));
+    wrapper.addEventListener('mouseleave', () => dot.classList.remove('visible'));
+  </script>
+
+</body>
+</html>

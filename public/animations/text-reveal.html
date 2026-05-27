@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Text Reveal by Word</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;700&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    html { scroll-behavior: auto; }
+
+    body {
+      background: #0d0d0d;
+      font-family: 'Inter', system-ui, sans-serif;
+      color: #f2f2f2;
+      overflow-x: hidden;
+    }
+
+    .page-header {
+      padding: 72px 60px 28px;
+      border-bottom: 1px solid #1c1c1c;
+      max-width: 100%;
+    }
+
+    .page-eyebrow {
+      font-family: monospace;
+      font-size: 0.6rem;
+      letter-spacing: 0.28em;
+      color: #333;
+      text-transform: uppercase;
+      margin-bottom: 10px;
+    }
+
+    .page-title {
+      font-size: 1.3rem;
+      font-weight: 300;
+      color: #555;
+      letter-spacing: -0.01em;
+    }
+
+    .page-title strong {
+      color: #f2f2f2;
+      font-weight: 400;
+    }
+
+    .page-hint {
+      margin-top: 10px;
+      font-family: monospace;
+      font-size: 0.58rem;
+      letter-spacing: 0.22em;
+      color: #2a2a2a;
+      text-transform: uppercase;
+    }
+
+    .ex-section { position: relative; }
+
+    .ex-bar {
+      position: sticky;
+      top: 0;
+      z-index: 30;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 13px 28px;
+      background: #0d0d0d;
+      border-bottom: 1px solid #1c1c1c;
+    }
+
+    .ex-label {
+      font-family: monospace;
+      font-size: 0.58rem;
+      letter-spacing: 0.32em;
+      color: #3d3d3d;
+      text-transform: uppercase;
+    }
+
+    .ex-tag {
+      font-family: monospace;
+      font-size: 0.52rem;
+      letter-spacing: 0.22em;
+      color: #272727;
+      text-transform: uppercase;
+    }
+
+    .scroll-zone {
+      height: 300vh;
+      position: relative;
+    }
+
+    .sticky-panel {
+      position: sticky;
+      top: 44px;
+      height: calc(100vh - 44px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+
+    .reveal-text {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: baseline;
+      max-width: 820px;
+      padding: 0 48px;
+      font-size: clamp(1.6rem, 3.5vw, 3rem);
+      font-weight: 700;
+      line-height: 1.55;
+    }
+
+    .word-wrap {
+      position: relative;
+      display: inline-block;
+      margin-right: 0.3em;
+      margin-bottom: 0.05em;
+    }
+
+    .word-ghost {
+      display: block;
+      opacity: 0.15;
+      user-select: none;
+    }
+
+    .word-reveal {
+      position: absolute;
+      inset: 0;
+      opacity: 0;
+      white-space: nowrap;
+    }
+
+    #zone1 .sticky-panel  { background: #0d0d0d; }
+    #zone1 .word-ghost    { color: #f2f2f2; }
+    #zone1 .word-reveal   { color: #f2f2f2; }
+
+    #zone2 .sticky-panel  { background: #0e0d0b; }
+    #zone2 .word-ghost    { color: #F2EDE4; }
+    #zone2 .word-reveal   { color: #F2EDE4; }
+    #zone2 .reveal-text   { font-weight: 300; font-size: clamp(1.4rem, 3vw, 2.5rem); }
+
+    #zone3 .sticky-panel  { background: #090d0c; }
+    #zone3 .word-ghost    { color: #f2f2f2; }
+    #zone3 .word-reveal   { color: #A8D5BA; }
+
+    .progress-track {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 1px;
+      background: rgba(255,255,255,0.05);
+    }
+
+    .progress-fill {
+      height: 100%;
+      background: rgba(255,255,255,0.18);
+      width: 0%;
+      transition: width 0.05s linear;
+    }
+
+    .word-counter {
+      position: absolute;
+      bottom: 22px;
+      right: 28px;
+      font-family: monospace;
+      font-size: 0.5rem;
+      letter-spacing: 0.25em;
+      color: rgba(255,255,255,0.15);
+    }
+
+    .scroll-hint {
+      position: absolute;
+      bottom: 22px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-family: monospace;
+      font-size: 0.5rem;
+      letter-spacing: 0.3em;
+      color: rgba(255,255,255,0.18);
+      white-space: nowrap;
+      animation: breathe 2.5s ease-in-out infinite;
+    }
+
+    @keyframes breathe {
+      0%, 100% { opacity: 0.3; }
+      50%       { opacity: 1; }
+    }
+
+    .ex-footer {
+      padding: 18px 28px;
+      background: #0a0a0a;
+      border-top: 1px solid #161616;
+      border-bottom: 1px solid #1c1c1c;
+      font-family: monospace;
+      font-size: 0.58rem;
+      letter-spacing: 0.06em;
+      color: #2e2e2e;
+    }
+
+    .page-footer {
+      padding: 40px 60px;
+      text-align: right;
+      font-family: monospace;
+      font-size: 0.5rem;
+      letter-spacing: 0.3em;
+      color: #1f1f1f;
+      text-transform: uppercase;
+      border-top: 1px solid #161616;
+    }
+  </style>
+</head>
+<body>
+
+<div class="page-header">
+  <p class="page-eyebrow">02 — text animations</p>
+  <h1 class="page-title"><strong>Text Reveal by Word</strong> — palavras reveladas pelo scroll</h1>
+  <p class="page-hint">↓ &nbsp; role a página para ver o efeito em cada exemplo</p>
+</div>
+
+<section class="ex-section">
+  <div class="ex-bar">
+    <span class="ex-label">Exemplo 1</span>
+    <span class="ex-tag">dark · branco · frase em inglês · bold</span>
+  </div>
+  <div class="scroll-zone" id="zone1">
+    <div class="sticky-panel">
+      <p class="reveal-text" id="text1"></p>
+      <div class="progress-track"><div class="progress-fill" id="prog1"></div></div>
+      <div class="word-counter" id="count1"></div>
+      <div class="scroll-hint">↓ &nbsp; role para revelar &nbsp; ↓</div>
+    </div>
+  </div>
+  <div class="ex-footer">
+    texto: "Magic UI will change the way you design and build digital products forever." — 14 words · scroll 300vh
+  </div>
+</section>
+
+<section class="ex-section">
+  <div class="ex-bar">
+    <span class="ex-label">Exemplo 2</span>
+    <span class="ex-tag">dark warm · creme · português · light weight</span>
+  </div>
+  <div class="scroll-zone" id="zone2">
+    <div class="sticky-panel">
+      <p class="reveal-text" id="text2"></p>
+      <div class="progress-track"><div class="progress-fill" id="prog2"></div></div>
+      <div class="word-counter" id="count2"></div>
+    </div>
+  </div>
+  <div class="ex-footer">
+    texto: "O design em movimento transforma a experiência e conecta marcas a pessoas de forma inesquecível." — 15 words · scroll 300vh
+  </div>
+</section>
+
+<section class="ex-section">
+  <div class="ex-bar">
+    <span class="ex-label">Exemplo 3</span>
+    <span class="ex-tag">dark green · accent verde no reveal · português</span>
+  </div>
+  <div class="scroll-zone" id="zone3">
+    <div class="sticky-panel">
+      <p class="reveal-text" id="text3"></p>
+      <div class="progress-track"><div class="progress-fill" id="prog3"></div></div>
+      <div class="word-counter" id="count3"></div>
+    </div>
+  </div>
+  <div class="ex-footer">
+    texto: "Cada animação carrega uma intenção. Cada frame tem alma. Cada transição conta uma história que o usuário nunca esquece." — 19 words · scroll 300vh
+  </div>
+</section>
+
+<div class="page-footer">@rafha.gpt &nbsp;·&nbsp; animation-lab</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+
+<script>
+  gsap.registerPlugin(ScrollTrigger);
+
+  function buildReveal({ zoneId, textId, progId, countId, text }) {
+    const zone  = document.getElementById(zoneId);
+    const textEl = document.getElementById(textId);
+    const prog  = document.getElementById(progId);
+    const count = document.getElementById(countId);
+
+    const words = text.split(' ');
+    const n = words.length;
+    const revealEls = [];
+
+    words.forEach((word, i) => {
+      const wrap = document.createElement('span');
+      wrap.className = 'word-wrap';
+
+      const ghost = document.createElement('span');
+      ghost.className = 'word-ghost';
+      ghost.textContent = word;
+      ghost.setAttribute('aria-hidden', 'true');
+
+      const reveal = document.createElement('span');
+      reveal.className = 'word-reveal';
+      reveal.textContent = word;
+
+      wrap.appendChild(ghost);
+      wrap.appendChild(reveal);
+      textEl.appendChild(wrap);
+      revealEls.push(reveal);
+    });
+
+    const tl = gsap.timeline({ paused: true });
+    revealEls.forEach((el, i) => {
+      tl.to(el, { opacity: 1, ease: 'none', duration: 1 }, i);
+    });
+
+    ScrollTrigger.create({
+      trigger: zone,
+      start: 'top top',
+      end: 'bottom bottom',
+      scrub: 1,
+      animation: tl,
+      onUpdate(self) {
+        prog.style.width = `${self.progress * 100}%`;
+        const revealed = Math.round(self.progress * n);
+        count.textContent = `${String(revealed).padStart(2, '0')} / ${String(n).padStart(2, '0')}`;
+      },
+    });
+  }
+
+  buildReveal({
+    zoneId:  'zone1',
+    textId:  'text1',
+    progId:  'prog1',
+    countId: 'count1',
+    text: 'Magic UI will change the way you design and build digital products forever.',
+  });
+
+  buildReveal({
+    zoneId:  'zone2',
+    textId:  'text2',
+    progId:  'prog2',
+    countId: 'count2',
+    text: 'O design em movimento transforma a experiência e conecta marcas a pessoas de forma inesquecível.',
+  });
+
+  buildReveal({
+    zoneId:  'zone3',
+    textId:  'text3',
+    progId:  'prog3',
+    countId: 'count3',
+    text: 'Cada animação carrega uma intenção. Cada frame tem alma. Cada transição conta uma história que o usuário nunca esquece.',
+  });
+</script>
+
+</body>
+</html>
