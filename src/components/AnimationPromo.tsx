@@ -43,10 +43,10 @@ export default function AnimationPromo() {
         <span className={styles.badgeLive}>Vagas abertas</span>
       </div>
 
-      <h2 className={styles.title}>
+      <p className={styles.title}>
         Quer saber cobrar{" "}
         <span className={styles.accent}>R$10.000 por uma página?</span>
-      </h2>
+      </p>
 
       <p className={styles.subtitle}>
         No grupo você tem acesso a tudo que precisa para construir sites cinematográficos do zero e vender como serviço premium. Não é curso. É o material completo mais a comunidade de quem já está fazendo.
