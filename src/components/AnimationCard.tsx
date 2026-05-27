@@ -11,33 +11,36 @@ interface Props {
 export default function AnimationCard({ id }: Props) {
   const anim = getAnimation(id);
   const [blobUrl, setBlobUrl] = useState<string | null>(null);
-  const [loading, setLoading] = useState(false);
   const [copied, setCopied] = useState<"prompt" | "code" | null>(null);
   const blobRef = useRef<string | null>(null);
 
   useEffect(() => {
+    if (!anim) return;
+    let cancelled = false;
+
+    fetch(anim.htmlPath)
+      .then((r) => r.text())
+      .then((html) => {
+        if (cancelled) return;
+        const blob = new Blob([html], { type: "text/html" });
+        const url = URL.createObjectURL(blob);
+        blobRef.current = url;
+        setBlobUrl(url);
+      })
+      .catch(() => {
+        if (!cancelled) setBlobUrl(anim.htmlPath);
+      });
+
     return () => {
-      if (blobRef.current) URL.revokeObjectURL(blobRef.current);
+      cancelled = true;
+      if (blobRef.current) {
+        URL.revokeObjectURL(blobRef.current);
+        blobRef.current = null;
+      }
     };
-  }, []);
+  }, [anim?.htmlPath]);
 
   if (!anim) return null;
-
-  const loadPreview = async () => {
-    setLoading(true);
-    try {
-      const res = await fetch(anim.htmlPath);
-      const html = await res.text();
-      const blob = new Blob([html], { type: "text/html" });
-      const url = URL.createObjectURL(blob);
-      if (blobRef.current) URL.revokeObjectURL(blobRef.current);
-      blobRef.current = url;
-      setBlobUrl(url);
-    } catch {
-      setBlobUrl(anim.htmlPath);
-    }
-    setLoading(false);
-  };
 
   const copy = async (type: "prompt" | "code") => {
     try {
@@ -65,47 +68,35 @@ export default function AnimationCard({ id }: Props) {
           <span className={styles.title}>{anim.title}</span>
           <span className={styles.tech}>{anim.tech}</span>
         </div>
+        <button
+          className={styles.btnGhostInline}
+          onClick={openInTab}
+          title="Abrir em nova aba"
+        >
+          Abrir ↗
+        </button>
       </div>
-
-      <p className={styles.description}>{anim.description}</p>
 
       <div className={styles.preview} style={{ height: anim.previewHeight }}>
         {blobUrl ? (
-          <iframe
-            src={blobUrl}
-            className={styles.iframe}
-            title={anim.title}
-          />
+          <iframe src={blobUrl} className={styles.iframe} title={anim.title} />
         ) : (
-          <button
-            className={styles.loadBtn}
-            onClick={loadPreview}
-            disabled={loading}
-          >
-            <span className={styles.loadIcon}>{loading ? "…" : "▶"}</span>
-            <span>{loading ? "Carregando…" : "Carregar preview"}</span>
-          </button>
+          <div className={styles.skeleton} />
         )}
       </div>
 
       <div className={styles.actions}>
         <button
-          className={`${styles.btn} ${styles.btnPrimary}`}
+          className={`${styles.btn} ${styles.btnPrompt}`}
           onClick={() => copy("prompt")}
         >
-          {copied === "prompt" ? "✓ Copiado" : "Copiar Prompt"}
+          {copied === "prompt" ? "✓ Prompt copiado" : "Copiar Prompt"}
         </button>
         <button
-          className={`${styles.btn} ${styles.btnSecondary}`}
+          className={`${styles.btn} ${styles.btnCode}`}
           onClick={() => copy("code")}
         >
-          {copied === "code" ? "✓ Copiado" : "Copiar Código"}
-        </button>
-        <button
-          className={`${styles.btn} ${styles.btnGhost}`}
-          onClick={openInTab}
-        >
-          Abrir ↗
+          {copied === "code" ? "✓ Código copiado" : "Copiar Código"}
         </button>
       </div>
     </div>
