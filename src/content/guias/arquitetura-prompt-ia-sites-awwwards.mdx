@@ -1,0 +1,145 @@
+---
+title: "A Arquitetura de um Prompt que a IA Não Erra"
+description: "O sistema replicável de 5 camadas para dirigir a IA e criar sites com estética cinematográfica nível Awwwards. Estudo de caso real: o projeto Casa 77."
+date: "2026-06-01"
+tags: ["prompt engineering", "web design", "gsap", "awwwards", "design"]
+readTime: "8 min"
+category: "prompts"
+featured: true
+---
+
+Você senta no Claude ou no Cursor, empolgado, e digita: *"Crie um site de imobiliária de luxo premium e moderno"*. Trinta segundos depois vem a decepção: navbar genérica, texto centralizado, três blocos brancos lado a lado.
+
+Por quê? Modelos de linguagem são estatísticos — eles completam sua frase com a **média da internet**. E a média do design na internet é medíocre. Comando vago, a IA preenche a lacuna com o "padrão".
+
+A saída é parar de pedir favores e assumir a postura de **Diretor de Arte**: fornecer restrições tão específicas que tornem a mediocridade impossível. É isso que faço aqui, desconstruindo o **Sistema T.R.A.M.A.** — as 5 camadas que usamos no projeto **Casa 77** para transformar código bruto em experiência de cinema.
+
+<video autoPlay muted loop playsInline style={{width: "100%", borderRadius: "12px", margin: "2rem 0", border: "1px solid rgba(0,0,0,0.08)"}}>
+  <source src="/prints/casa-77-preview.mp4" type="video/mp4" />
+</video>
+
+Um bom prompt não pede o site inteiro de uma vez. Ele dita, camada por camada, cada aspecto sensorial da experiência.
+
+---
+
+## 1. Arquitetura — o grid editorial
+
+Esqueça o "container do Bootstrap". Sites premiados funcionam como revistas (Vogue, Kinfolk): grids assimétricos onde a tipografia é âncora gráfica e o espaço vazio é intencional.
+
+```
+Atue como front-end sênior especialista em grids editoriais.
+Crie uma Hero Section sem divs genéricas:
+1. Título (.giant-title) com white-space: nowrap e font-size: 18vw,
+   cortando a tela de borda a borda.
+2. Posicione o slogan com position: absolute em bottom: 12vh e
+   left: 6vw — nunca no centro.
+3. Distribua o eixo X com flex + space-between (assimetria intencional).
+```
+
+**Resultado:** o título esmaga as margens e gera impacto brutal; o texto de apoio se escora num canto inferior, criando tensão equilibrada.
+
+**Erro comum:** a IA centraliza tudo (`align-items: center`). **Correção:** *"Quebre a simetria. Remova o text-align: center, ancore o texto em 6vw à esquerda e use space-between."*
+
+---
+
+## 2. Movimento — motor e tempo
+
+Movimento sem inércia parece PowerPoint. Animação premium simula física: sofre com gravidade. Exija curvas drásticas e um motor de scroll que anule o comportamento nativo do navegador.
+
+```
+Injete GSAP + ScrollTrigger. Nada de fade-in linear.
+1. Easing OBRIGATÓRIO "expo.out": arranque explosivo, pouso lento e dramático.
+2. Duration mínima de 1.8s por tween.
+3. Stagger de 0.2s entre os textos.
+4. Instale Lenis (smooth scroll, duration 1.5) e atrele o GSAP Ticker
+   ao requestAnimationFrame do Lenis.
+```
+
+**Resultado:** a página emerge de baixo com peso, e o scroll perde o "tranco" seco — desliza como câmera num trilho de Hollywood.
+
+**Erro comum:** a IA usa `transition: all 0.3s ease`. **Correção:** *"Abandone o CSS nativo. Migre a entrada para GSAP com y inicial de 50vh e ease power4.out."*
+
+<SkillsCTABanner />
+
+---
+
+## 3. Superfície — textura e luz
+
+A diferença entre um site que parece software e um que parece arte está no material. O design precisa ter "toque": vidro que refrata luz, fundo sólido com imperfeições imperceptíveis.
+
+```
+Refine o material via CSS avançado:
+1. No botão "Explorar", glassmorphism real: backdrop-filter: blur(12px)
+   sobre background rgba(30,30,30,0.75).
+2. box-shadow: inset 1px 1px 1px rgba(255,255,255,0.1) (borda polida).
+3. Sobre o <body>, uma div pointer-events:none com SVG feTurbulence
+   (fractalNoise) a 8% de opacidade e mix-blend-mode: soft-light —
+   granulação de filme 35mm.
+```
+
+**Resultado:** o botão vira um bloco de acrílico lapidado; o fundo creme ganha ruído analógico que quebra a frieza do monitor.
+
+**Erro comum:** opacidade chapada (`#ffffff80`), sem desfoque. **Correção:** *"Aplique backdrop-filter: blur() e use mix-blend-mode para o ruído interagir com a cor real do fundo."*
+
+---
+
+## 4. Coreografia — animação atrelada ao scroll
+
+O scroll não serve só para descer a página: ele é a **linha do tempo do usuário**. Os elementos devem reagir à velocidade exata do dedo.
+
+```
+Crie a coreografia com ScrollTrigger usando scrub: 1.
+Enquanto a Seção 2 sobe sobre a Seção 1, a Seção 1 não some seco:
+reduza a opacidade a 0 e aplique blur progressivo (filter: blur),
+simulando uma mudança de foco de câmera (depth of field).
+```
+
+**Resultado:** ao puxar a página, a seção anterior derrete — fica transparente e embaçada no fundo — enquanto a nova emerge nítida.
+
+**Erro comum:** triggers engessados que disparam sozinhos. **Correção:** *"Adicione scrub: 1 para o blur e a opacidade avançarem colados na direção do mouse."*
+
+---
+
+## 5. Adaptação — respiro milimétrico
+
+Layout feito numa resolução fixa quebra em ultrawide. O espaço negativo é esculpido, não deixado ao acaso.
+
+```
+Corrija a responsividade para monitores 27"+:
+1. .hero-section com width: calc(100vw - 2rem) (não confie no 100% herdado).
+2. Destrave o clamp do subtítulo: font-size: clamp(1rem, 2.2vw, 4rem).
+3. Use flex: 0 0 auto para impedir esmagamento.
+```
+
+**Resultado:** o layout transborda até as bordas com uma margem perimetral elegante de 1rem, em qualquer densidade de tela. A fonte nunca parece presa numa proporção antiquada.
+
+**Erro comum:** `max-width: 1400px` criando faixas mortas nas laterais. **Correção:** *"Remova o max-width. Atrele as dimensões à viewport (vw/vh) e elimine margens laterais excessivas."*
+
+---
+
+## Comando vago vs. Diretor de Arte
+
+| Sua intenção | O iniciante pede | O Diretor de Arte pede |
+|---|---|---|
+| Botão premium | "Faz um botão com fundo meio transparente." | "Pílula com backdrop-filter: blur(12px), bg rgba(30,30,30,0.75) e inset shadow branco a 10%." |
+| Entrada dramática | "Põe um fade in quando abrir." | "Timeline GSAP, ease expo.out, duration 1.8s, stagger 0.2s, subindo de y: 50vh." |
+| Fundo com classe | "Quero um off-white luxuoso." | "Sólido #f5f2e6 + layer de noise SVG (feTurbulence) a 8% e mix-blend-mode soft-light." |
+| Transição de seções | "Quando rolar, a próxima sobe." | "Pin na div atual; a próxima sobe em absolute enquanto a pinada perde opacidade com scrub: 1." |
+| Fonte gigante | "Quero o título bem grande." | "'Clash Display', 18vw, white-space nowrap, letter-spacing -0.06em." |
+
+> Não ensine a máquina a programar. Ensine a máquina o que você quer **sentir** ao olhar para o monitor.
+
+---
+
+## Checklist de bolso: antes de dar Enter
+
+Se faltar um item, o resultado sai genérico:
+
+- **Qual o easing?** Defini `power2.out`, `expo.out` ou `linear` explicitamente?
+- **O movimento tem peso?** Durações longas o bastante (> 1.2s) para dar drama?
+- **Onde está a tensão visual?** Ordenei quebra de simetria com `position: absolute` em vez de aceitar centralização?
+- **Como a luz se comporta?** Especifiquei blurs, blends, reflexos internos?
+- **A fonte é fluida?** Troquei px fixos por `clamp()` e `vw`?
+- **Existe motor físico?** Atrelei a rolagem ao Lenis + scrub no GSAP?
+
+A IA é a construtora mais rápida do planeta — sobe um arranha-céu em 5 segundos. Mas é o arquiteto, **você**, quem entrega a planta inquebrável que garante que o prédio seja o Louvre, e não mais um galpão sem vida. O código é dela. A visão é inegociavelmente sua.
