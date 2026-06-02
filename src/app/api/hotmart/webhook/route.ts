@@ -24,16 +24,21 @@ export async function GET() {
 
 export async function POST(req: NextRequest) {
   const expected = process.env.HOTMART_HOTTOK;
-  if (!expected) {
-    return NextResponse.json({ error: "HOTMART_HOTTOK não configurado." }, { status: 500 });
-  }
 
   // O Hotmart envia o token no header (2.0) ou no corpo (1.0).
   let body: Record<string, unknown>;
   try {
     body = await req.json();
   } catch {
-    return NextResponse.json({ error: "Corpo inválido." }, { status: 400 });
+    // Teste de validação do Hotmart pode vir sem corpo JSON — confirma OK.
+    return NextResponse.json({ ok: true });
+  }
+
+  // Token ainda não configurado: aceita o teste de validação, mas não processa
+  // nenhuma compra (segurança volta assim que HOTMART_HOTTOK for definido).
+  if (!expected) {
+    console.warn("HOTMART_HOTTOK ainda não configurado — evento não processado.");
+    return NextResponse.json({ ok: true, pending_config: true });
   }
 
   const headerToken =
