@@ -8,6 +8,7 @@ type Me = { email: string | null; purchased: string[] };
 
 export default function ProjectsGallery({ projects }: { projects: Project[] }) {
   const [me, setMe] = useState<Me>({ email: null, purchased: [] });
+  const [group, setGroup] = useState<{ url: string | null; label?: string }>({ url: null });
   const [showLogin, setShowLogin] = useState(false);
   const [emailInput, setEmailInput] = useState("");
   const [sending, setSending] = useState(false);
@@ -18,6 +19,8 @@ export default function ProjectsGallery({ projects }: { projects: Project[] }) {
     try {
       const res = await fetch("/api/auth/me");
       if (res.ok) setMe(await res.json());
+      const g = await fetch("/api/group");
+      if (g.ok) setGroup(await g.json());
     } catch {
       /* silencioso */
     }
@@ -53,6 +56,7 @@ export default function ProjectsGallery({ projects }: { projects: Project[] }) {
   async function logout() {
     await fetch("/api/auth/logout", { method: "POST" });
     setMe({ email: null, purchased: [] });
+    setGroup({ url: null });
   }
 
   function isUnlocked(p: Project) {
@@ -80,6 +84,21 @@ export default function ProjectsGallery({ projects }: { projects: Project[] }) {
           </button>
         )}
       </div>
+
+      {group.url && (
+        <a
+          href={group.url}
+          target="_blank"
+          rel="noopener noreferrer"
+          className={styles.groupBanner}
+        >
+          <span className={styles.groupTag}>PREMIUM</span>
+          <span className={styles.groupText}>
+            Você tem acesso ao grupo exclusivo.
+          </span>
+          <span className={styles.groupCta}>{group.label ?? "Entrar no grupo →"}</span>
+        </a>
+      )}
 
       <div className={styles.grid}>
         {projects.map((project) => (

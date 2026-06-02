@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getSessionEmail } from "@/lib/session";
 import { hasAccess } from "@/lib/access";
+import { requiredProductId } from "@/lib/premium";
 import projectsData from "@/content/projects.json";
 import type { Project } from "@/components/ProjectCard";
 
@@ -25,14 +26,15 @@ export async function GET(
     return NextResponse.json({ error: "Faça login para acessar." }, { status: 401 });
   }
 
-  if (!project.hotmartProductId) {
+  const productId = requiredProductId(project);
+  if (!productId) {
     return NextResponse.json(
       { error: "Produto ainda não configurado." },
       { status: 403 }
     );
   }
 
-  const allowed = await hasAccess(email, project.hotmartProductId);
+  const allowed = await hasAccess(email, productId);
   if (!allowed) {
     return NextResponse.json({ error: "Você ainda não comprou este projeto." }, { status: 403 });
   }
