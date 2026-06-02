@@ -88,7 +88,7 @@ export default function ProjectCard({
         ) : (
           <span className={styles.badgePaid}>
             <Lock size={12} strokeWidth={2.2} />
-            {unlocked ? "Seu" : project.price}
+            {unlocked ? "Seu" : "Premium"}
           </span>
         )}
       </div>
@@ -133,7 +133,7 @@ export default function ProjectCard({
               rel="noopener noreferrer"
               className={styles.buyBtn}
             >
-              Desbloquear por {project.price} →
+              Desbloquear com Premium →
             </a>
             <button type="button" className={styles.alreadyBtn} onClick={onRequireLogin}>
               Já comprei
