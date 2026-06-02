@@ -133,13 +133,15 @@ Corrija a responsividade para monitores 27"+:
 
 ## Checklist de bolso: antes de dar Enter
 
-Se faltar um item, o resultado sai genérico:
+Se faltar um item, o resultado sai genérico. Marque conforme define cada um:
 
-- **Qual o easing?** Defini `power2.out`, `expo.out` ou `linear` explicitamente?
-- **O movimento tem peso?** Durações longas o bastante (> 1.2s) para dar drama?
-- **Onde está a tensão visual?** Ordenei quebra de simetria com `position: absolute` em vez de aceitar centralização?
-- **Como a luz se comporta?** Especifiquei blurs, blends, reflexos internos?
-- **A fonte é fluida?** Troquei px fixos por `clamp()` e `vw`?
-- **Existe motor físico?** Atrelei a rolagem ao Lenis + scrub no GSAP?
+<Checklist data='[
+  { "label": "Qual o easing?", "desc": "Defini power2.out, expo.out ou linear explicitamente?" },
+  { "label": "O movimento tem peso?", "desc": "Durações longas o bastante, acima de 1.2s, para dar drama?" },
+  { "label": "Onde está a tensão visual?", "desc": "Ordenei quebra de simetria com position absolute em vez de aceitar centralização?" },
+  { "label": "Como a luz se comporta?", "desc": "Especifiquei blurs, blends, reflexos internos?" },
+  { "label": "A fonte é fluida?", "desc": "Troquei px fixos por clamp e vw?" },
+  { "label": "Existe motor físico?", "desc": "Atrelei a rolagem ao Lenis com scrub no GSAP?" }
+]' />
 
 A IA é a construtora mais rápida do planeta — sobe um arranha-céu em 5 segundos. Mas é o arquiteto, **você**, quem entrega a planta inquebrável que garante que o prédio seja o Louvre, e não mais um galpão sem vida. O código é dela. A visão é inegociavelmente sua.

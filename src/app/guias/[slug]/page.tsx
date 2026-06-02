@@ -12,6 +12,7 @@ import SkillsCTABanner from "@/components/SkillsCTABanner";
 import VipGroupBanner from "@/components/VipGroupBanner";
 import AnimationCard from "@/components/AnimationCard";
 import AnimationPromo from "@/components/AnimationPromo";
+import Checklist from "@/components/Checklist";
 import styles from "./page.module.css";
 
 const BASE = "https://promptfly.com.br";
@@ -117,7 +118,7 @@ export default async function GuidePage({ params }: Props) {
           <div className={styles.divider} />
 
           <article className={styles.article}>
-            <MDXRemote source={content} components={{ TemplateCTAInline, GuideCarousel, SkillsCTABanner, VipGroupBanner, AnimationCard, AnimationPromo }} />
+            <MDXRemote source={content} components={{ TemplateCTAInline, GuideCarousel, SkillsCTABanner, VipGroupBanner, AnimationCard, AnimationPromo, Checklist }} />
           </article>
 
           {/* Share */}
