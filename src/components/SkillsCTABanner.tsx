@@ -37,10 +37,10 @@ export default function SkillsCTABanner() {
           <span className={styles.badgeNew}>{product.badge}</span>
         </div>
 
-        <h3 className={styles.title}>
+        <p className={styles.title}>
           5 comandos prontos.<br />
           <span className={styles.titleAccent}>Instala em 2 minutos.</span>
-        </h3>
+        </p>
 
         <p className={styles.subtitle}>
           Em vez de escrever esses prompts do zero em cada projeto, você instala
