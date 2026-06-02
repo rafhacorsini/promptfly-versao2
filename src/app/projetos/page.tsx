@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import ProjectsGallery from "@/components/ProjectsGallery";
 import { type Project } from "@/components/ProjectCard";
-import { requiredProductId } from "@/lib/premium";
+import { requiredProductId, premium } from "@/lib/premium";
 import projectsData from "@/content/projects.json";
 import styles from "./page.module.css";
 
@@ -18,7 +18,12 @@ export default function ProjetosPage() {
   // e remove o texto do prompt — ele só é liberado via API após a compra.
   const projects: Project[] = (projectsData as Project[]).map((p) => {
     if (p.isFree) return p;
-    return { ...p, hotmartProductId: requiredProductId(p), prompt: "" };
+    return {
+      ...p,
+      hotmartProductId: requiredProductId(p),
+      hotmartUrl: p.hotmartUrl?.trim() || premium.purchaseUrl,
+      prompt: "",
+    };
   });
 
   return (
