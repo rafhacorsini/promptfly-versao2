@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { randomUUID } from "crypto";
 import { Resend } from "resend";
 import { redis } from "@/lib/redis";
+import { getPurchasedProducts } from "@/lib/access";
 
 const TOKEN_TTL = 60 * 15; // 15 minutos
 
@@ -24,6 +25,19 @@ export async function POST(req: NextRequest) {
   }
 
   const normalized = email.trim().toLowerCase();
+
+  // Só envia o link para quem tem alguma compra registrada.
+  const purchased = await getPurchasedProducts(normalized);
+  if (purchased.length === 0) {
+    return NextResponse.json(
+      {
+        error:
+          "Não encontramos uma compra com esse e-mail. Confira se você usou o mesmo e-mail da compra.",
+      },
+      { status: 404 }
+    );
+  }
+
   const token = `${randomUUID()}${randomUUID()}`.replace(/-/g, "");
   await redis.set(`magic:${token}`, normalized, { ex: TOKEN_TTL });
 
