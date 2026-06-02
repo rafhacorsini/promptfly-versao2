@@ -155,3 +155,32 @@
 .buyBtn:active {
   transform: translateY(1px);
 }
+
+.copyBtn:disabled {
+  opacity: 0.6;
+  cursor: wait;
+}
+
+.alreadyBtn {
+  margin-top: 0.5rem;
+  background: none;
+  border: none;
+  color: var(--color-subtitle);
+  font-family: var(--font-primary);
+  font-size: 0.82rem;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  cursor: pointer;
+  align-self: center;
+  transition: color 0.15s ease;
+}
+
+.alreadyBtn:hover {
+  color: var(--color-title);
+}
+
+.error {
+  margin-top: 0.5rem;
+  font-size: 0.78rem;
+  color: var(--color-accent);
+}

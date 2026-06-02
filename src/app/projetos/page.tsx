@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import ProjectCard, { type Project } from "@/components/ProjectCard";
+import ProjectsGallery from "@/components/ProjectsGallery";
+import { type Project } from "@/components/ProjectCard";
 import projectsData from "@/content/projects.json";
 import styles from "./page.module.css";
 
@@ -34,11 +35,7 @@ export default function ProjetosPage() {
           </p>
         </header>
 
-        <div className={styles.grid}>
-          {projects.map((project) => (
-            <ProjectCard key={project.id} project={project} />
-          ))}
-        </div>
+        <ProjectsGallery projects={projects} />
       </div>
     </div>
   );

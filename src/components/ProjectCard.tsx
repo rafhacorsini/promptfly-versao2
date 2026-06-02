@@ -36,21 +36,46 @@ function Preview({ url, title }: { url: string; title: string }) {
       />
     );
   }
-  // gif, png, jpg, webp — qualquer imagem
   // eslint-disable-next-line @next/next/no-img-element
   return <img className={styles.preview} src={url} alt={`Prévia de ${title}`} />;
 }
 
-export default function ProjectCard({ project }: { project: Project }) {
+export default function ProjectCard({
+  project,
+  unlocked,
+  onRequireLogin,
+}: {
+  project: Project;
+  unlocked: boolean;
+  onRequireLogin: () => void;
+}) {
   const [copied, setCopied] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+
+  const canCopy = project.isFree || unlocked;
 
   async function copyPrompt() {
+    setError("");
     try {
-      await navigator.clipboard.writeText(project.prompt);
+      let text = project.prompt;
+      // Prompt pago não vem no HTML — busca protegido no servidor.
+      if (!project.isFree) {
+        setLoading(true);
+        const res = await fetch(`/api/projects/${project.id}/unlock`);
+        setLoading(false);
+        if (!res.ok) {
+          setError("Não foi possível liberar. Faça login novamente.");
+          return;
+        }
+        ({ prompt: text } = await res.json());
+      }
+      await navigator.clipboard.writeText(text);
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
     } catch {
-      // fallback silencioso
+      setLoading(false);
+      setError("Erro ao copiar.");
     }
   }
 
@@ -63,7 +88,7 @@ export default function ProjectCard({ project }: { project: Project }) {
         ) : (
           <span className={styles.badgePaid}>
             <Lock size={12} strokeWidth={2.2} />
-            {project.price}
+            {unlocked ? "Seu" : project.price}
           </span>
         )}
       </div>
@@ -80,14 +105,17 @@ export default function ProjectCard({ project }: { project: Project }) {
         <h3 className={styles.title}>{project.title}</h3>
         <p className={styles.description}>{project.description}</p>
 
-        {project.isFree ? (
+        {canCopy ? (
           <button
             type="button"
             className={styles.copyBtn}
             onClick={copyPrompt}
             data-copied={copied}
+            disabled={loading}
           >
-            {copied ? (
+            {loading ? (
+              "Liberando…"
+            ) : copied ? (
               <>
                 <Check size={16} strokeWidth={2.2} /> Prompt copiado!
               </>
@@ -98,15 +126,22 @@ export default function ProjectCard({ project }: { project: Project }) {
             )}
           </button>
         ) : (
-          <a
-            href={project.hotmartUrl || "#"}
-            target="_blank"
-            rel="noopener noreferrer"
-            className={styles.buyBtn}
-          >
-            Desbloquear por {project.price} →
-          </a>
+          <>
+            <a
+              href={project.hotmartUrl || "#"}
+              target="_blank"
+              rel="noopener noreferrer"
+              className={styles.buyBtn}
+            >
+              Desbloquear por {project.price} →
+            </a>
+            <button type="button" className={styles.alreadyBtn} onClick={onRequireLogin}>
+              Já comprei
+            </button>
+          </>
         )}
+
+        {error && <span className={styles.error}>{error}</span>}
       </div>
     </article>
   );
