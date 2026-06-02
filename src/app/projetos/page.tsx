@@ -37,7 +37,8 @@ export default function ProjetosPage() {
         <header className={styles.header}>
           <span className={styles.tag}>[ DESIGN · IA · PROMPTS ]</span>
           <h1 className={styles.title}>
-            Sites cinematográficos com prompts prontos.
+            Sites <span className={styles.accent}>cinematográficos</span> com prompts
+            prontos.
           </h1>
           <p className={styles.subtitle}>
             A biblioteca de prompts e projetos que transformam IA em design de verdade.

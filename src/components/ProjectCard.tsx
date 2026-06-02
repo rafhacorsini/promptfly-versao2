@@ -81,8 +81,10 @@ export default function ProjectCard({
 
   return (
     <article className={styles.card}>
-      <div className={styles.previewWrap}>
+      <div className={`${styles.previewWrap} ${!canCopy ? styles.locked : ""}`}>
         <Preview url={project.previewUrl} title={project.title} />
+        <div className={styles.previewShade} aria-hidden="true" />
+
         {project.isFree ? (
           <span className={styles.badgeFree}>Grátis</span>
         ) : (
@@ -90,6 +92,15 @@ export default function ProjectCard({
             <Lock size={12} strokeWidth={2.2} />
             {unlocked ? "Seu" : "Premium"}
           </span>
+        )}
+
+        {!canCopy && (
+          <div className={styles.lockedOverlay}>
+            <span className={styles.lockedIcon}>
+              <Lock size={20} strokeWidth={2} />
+            </span>
+            <span className={styles.lockedLabel}>Conteúdo Premium</span>
+          </div>
         )}
       </div>
 
