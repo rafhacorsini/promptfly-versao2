@@ -81,7 +81,7 @@ export default function ProjectCard({
 
   return (
     <article className={styles.card}>
-      <div className={`${styles.previewWrap} ${!canCopy ? styles.locked : ""}`}>
+      <div className={styles.previewWrap}>
         <Preview url={project.previewUrl} title={project.title} />
         <div className={styles.previewShade} aria-hidden="true" />
 
@@ -92,15 +92,6 @@ export default function ProjectCard({
             <Lock size={12} strokeWidth={2.2} />
             {unlocked ? "Seu" : "Premium"}
           </span>
-        )}
-
-        {!canCopy && (
-          <div className={styles.lockedOverlay}>
-            <span className={styles.lockedIcon}>
-              <Lock size={20} strokeWidth={2} />
-            </span>
-            <span className={styles.lockedLabel}>Conteúdo Premium</span>
-          </div>
         )}
       </div>
 
@@ -144,7 +135,7 @@ export default function ProjectCard({
               rel="noopener noreferrer"
               className={styles.buyBtn}
             >
-              Desbloquear com Premium →
+              <Lock size={15} strokeWidth={2.2} /> Desbloquear
             </a>
             <button type="button" className={styles.alreadyBtn} onClick={onRequireLogin}>
               Já comprei
