@@ -1,0 +1,157 @@
+.card {
+  display: flex;
+  flex-direction: column;
+  background: #fff;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+}
+
+.card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 18px 50px rgba(0, 0, 0, 0.1);
+  border-color: rgba(0, 0, 0, 0.14);
+}
+
+.previewWrap {
+  position: relative;
+  aspect-ratio: 16 / 10;
+  overflow: hidden;
+  background: var(--color-surface);
+}
+
+.preview {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.previewFallback {
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, #ececec, #f6f6f6);
+}
+
+.badgeFree,
+.badgePaid {
+  position: absolute;
+  top: 0.8rem;
+  left: 0.8rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 0.74rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  padding: 0.32rem 0.65rem;
+  border-radius: 999px;
+  backdrop-filter: blur(8px);
+}
+
+.badgeFree {
+  background: rgba(26, 26, 26, 0.85);
+  color: #fff;
+}
+
+.badgePaid {
+  background: rgba(255, 76, 0, 0.92);
+  color: #fff;
+}
+
+.body {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  padding: var(--spacing-md);
+  flex: 1;
+}
+
+.tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+
+.tag {
+  font-size: 0.7rem;
+  font-weight: 500;
+  color: var(--color-subtitle);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  padding: 0.2rem 0.55rem;
+  border-radius: 6px;
+}
+
+.title {
+  font-size: clamp(1.05rem, 1rem + 0.4vw, 1.2rem);
+  font-weight: 600;
+  color: var(--color-title);
+  line-height: 1.25;
+  margin: 0.1rem 0 0;
+  text-wrap: balance;
+}
+
+.description {
+  font-size: 0.88rem;
+  line-height: 1.55;
+  color: var(--color-text);
+  margin: 0;
+  text-wrap: pretty;
+  flex: 1;
+}
+
+.copyBtn,
+.buyBtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.45rem;
+  width: 100%;
+  margin-top: 0.4rem;
+  padding: 0.7rem 1rem;
+  border-radius: 10px;
+  font-family: var(--font-primary);
+  font-size: 0.88rem;
+  font-weight: 500;
+  cursor: pointer;
+  text-decoration: none;
+  transition: transform 0.15s ease, background 0.2s ease, opacity 0.2s ease;
+}
+
+.copyBtn {
+  background: var(--color-title);
+  color: #fff;
+  border: 1px solid var(--color-title);
+}
+
+.copyBtn:hover {
+  transform: translateY(-1px);
+}
+
+.copyBtn:active {
+  transform: translateY(1px);
+}
+
+.copyBtn[data-copied="true"] {
+  background: #1f7a3d;
+  border-color: #1f7a3d;
+}
+
+.buyBtn {
+  background: #fff;
+  color: var(--color-title);
+  border: 2px solid transparent;
+  background-image: linear-gradient(#fff, #fff), var(--gradient-border);
+  background-origin: border-box;
+  background-clip: padding-box, border-box;
+}
+
+.buyBtn:hover {
+  transform: translateY(-1px);
+}
+
+.buyBtn:active {
+  transform: translateY(1px);
+}

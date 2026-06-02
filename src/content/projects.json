@@ -1,0 +1,26 @@
+[
+  {
+    "id": "site-cinematografico-hero",
+    "title": "Hero Cinematográfico 3D",
+    "description": "Prompt que gera uma seção hero com vídeo 3D, parallax de mouse e tipografia animada palavra a palavra.",
+    "previewUrl": "/Doll_spinning_360_202603201655.mp4",
+    "tags": ["Hero", "Animação", "Next.js"],
+    "isFree": true,
+    "price": "",
+    "hotmartUrl": "",
+    "hotmartProductId": "",
+    "prompt": "Crie uma seção hero cinematográfica em Next.js + React com: vídeo 3D em loop ao fundo, parallax de mouse em múltiplas camadas com física de mola, e um título que anima palavra por palavra sincronizado com o scroll. Use CSS Modules, tipografia fluida com clamp() e estética editorial premium estilo Apple."
+  },
+  {
+    "id": "landing-advogado-ia",
+    "title": "Landing de Advogado com IA",
+    "description": "Prompt completo para uma landing page premium de escritório de advocacia, com seções de autoridade, prova social e CTA.",
+    "previewUrl": "/Doll_spinning_360_202603201655.mp4",
+    "tags": ["Landing Page", "Conversão"],
+    "isFree": false,
+    "price": "R$ 47",
+    "hotmartUrl": "https://pay.hotmart.com/D105815506X",
+    "hotmartProductId": "",
+    "prompt": ""
+  }
+]

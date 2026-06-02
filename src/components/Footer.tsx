@@ -1,3 +1,4 @@
+import Link from "next/link";
 import styles from "./Footer.module.css";
 
 const navigation = [
@@ -74,6 +75,23 @@ export default function Footer() {
                   </a>
                 </li>
               ))}
+            </ul>
+          </div>
+
+          {/* Legal */}
+          <div className={styles.column}>
+            <span className={styles.columnTag}>LEGAL</span>
+            <ul className={styles.list}>
+              <li className={styles.listItem}>
+                <Link href="/privacidade" className={styles.link}>
+                  Privacidade
+                </Link>
+              </li>
+              <li className={styles.listItem}>
+                <Link href="/termos" className={styles.link}>
+                  Termos de Uso
+                </Link>
+              </li>
             </ul>
           </div>
         </div>

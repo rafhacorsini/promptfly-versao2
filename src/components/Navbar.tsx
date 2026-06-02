@@ -26,7 +26,7 @@ export default function Navbar() {
         <div className={styles.navLinks}>
           <Link href="/guias" className={styles.navLink}>Guias</Link>
           <Link href="#" className={styles.navLink}>Modelos</Link>
-          <Link href="#" className={styles.navLink}>Prompts</Link>
+          <Link href="/projetos" className={styles.navLink}>Prompts</Link>
         </div>
 
         {/* CTA — Desktop */}
@@ -53,7 +53,7 @@ export default function Navbar() {
         <div className={styles.mobileLinks}>
           <Link href="/guias" className={styles.mobileNavLink} onClick={() => setIsMobileMenuOpen(false)}>GUIAS</Link>
           <Link href="#" className={styles.mobileNavLink} onClick={() => setIsMobileMenuOpen(false)}>MODELOS</Link>
-          <Link href="#" className={styles.mobileNavLink} onClick={() => setIsMobileMenuOpen(false)}>PROMPTS</Link>
+          <Link href="/projetos" className={styles.mobileNavLink} onClick={() => setIsMobileMenuOpen(false)}>PROMPTS</Link>
         </div>
 
         <div className={styles.mobileFooter}>

@@ -1,0 +1,113 @@
+"use client";
+
+import { useState } from "react";
+import { Copy, Check, Lock } from "lucide-react";
+import styles from "./ProjectCard.module.css";
+
+export type Project = {
+  id: string;
+  title: string;
+  description: string;
+  previewUrl: string;
+  tags: string[];
+  isFree: boolean;
+  price: string;
+  hotmartUrl: string;
+  hotmartProductId?: string;
+  prompt: string;
+};
+
+const VIDEO_EXT = /\.(mp4|webm|mov|m4v)$/i;
+
+function Preview({ url, title }: { url: string; title: string }) {
+  if (!url) {
+    return <div className={styles.previewFallback} aria-hidden="true" />;
+  }
+  if (VIDEO_EXT.test(url)) {
+    return (
+      <video
+        className={styles.preview}
+        src={url}
+        autoPlay
+        muted
+        loop
+        playsInline
+        aria-label={`Prévia de ${title}`}
+      />
+    );
+  }
+  // gif, png, jpg, webp — qualquer imagem
+  // eslint-disable-next-line @next/next/no-img-element
+  return <img className={styles.preview} src={url} alt={`Prévia de ${title}`} />;
+}
+
+export default function ProjectCard({ project }: { project: Project }) {
+  const [copied, setCopied] = useState(false);
+
+  async function copyPrompt() {
+    try {
+      await navigator.clipboard.writeText(project.prompt);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    } catch {
+      // fallback silencioso
+    }
+  }
+
+  return (
+    <article className={styles.card}>
+      <div className={styles.previewWrap}>
+        <Preview url={project.previewUrl} title={project.title} />
+        {project.isFree ? (
+          <span className={styles.badgeFree}>Grátis</span>
+        ) : (
+          <span className={styles.badgePaid}>
+            <Lock size={12} strokeWidth={2.2} />
+            {project.price}
+          </span>
+        )}
+      </div>
+
+      <div className={styles.body}>
+        <div className={styles.tags}>
+          {project.tags.map((t) => (
+            <span key={t} className={styles.tag}>
+              {t}
+            </span>
+          ))}
+        </div>
+
+        <h3 className={styles.title}>{project.title}</h3>
+        <p className={styles.description}>{project.description}</p>
+
+        {project.isFree ? (
+          <button
+            type="button"
+            className={styles.copyBtn}
+            onClick={copyPrompt}
+            data-copied={copied}
+          >
+            {copied ? (
+              <>
+                <Check size={16} strokeWidth={2.2} /> Prompt copiado!
+              </>
+            ) : (
+              <>
+                <Copy size={16} strokeWidth={2.2} /> Copiar prompt
+              </>
+            )}
+          </button>
+        ) : (
+          <a
+            href={project.hotmartUrl || "#"}
+            target="_blank"
+            rel="noopener noreferrer"
+            className={styles.buyBtn}
+          >
+            Desbloquear por {project.price} →
+          </a>
+        )}
+      </div>
+    </article>
+  );
+}
