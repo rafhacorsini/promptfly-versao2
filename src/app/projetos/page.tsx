@@ -7,9 +7,9 @@ import projectsData from "@/content/projects.json";
 import styles from "./page.module.css";
 
 export const metadata: Metadata = {
-  title: "Projetos & Prompts — Promptfly",
+  title: "Sites Cinematográficos com IA — Prompts Prontos | Promptfly",
   description:
-    "Galeria de prompts e projetos prontos para clonar. Alguns gratuitos, outros premium. Copie e use em segundos.",
+    "Biblioteca de prompts e projetos para criar sites cinematográficos com IA. Copie os gratuitos em um clique ou desbloqueie o Premium com acesso vitalício.",
   alternates: { canonical: "https://promptfly.com.br/projetos" },
 };
 
@@ -35,11 +35,13 @@ export default function ProjetosPage() {
         </Link>
 
         <header className={styles.header}>
-          <span className={styles.tag}>[ BIBLIOTECA ]</span>
-          <h1 className={styles.title}>Projetos &amp; Prompts</h1>
+          <span className={styles.tag}>[ DESIGN · IA · PROMPTS ]</span>
+          <h1 className={styles.title}>
+            Sites cinematográficos com prompts prontos.
+          </h1>
           <p className={styles.subtitle}>
-            Prompts e projetos prontos para clonar. Copie os gratuitos em um clique —
-            desbloqueie os premium e tenha acesso vitalício.
+            A biblioteca de prompts e projetos que transformam IA em design de verdade.
+            Copie os gratuitos em um clique — desbloqueie o Premium e tenha tudo, para sempre.
           </p>
         </header>
 
