@@ -21,7 +21,8 @@ export default function ProjetosPage() {
     return {
       ...p,
       hotmartProductId: requiredProductId(p),
-      hotmartUrl: p.hotmartUrl?.trim() || premium.purchaseUrl,
+      // Modelo "só Premium": todo projeto pago leva ao checkout do Premium.
+      hotmartUrl: premium.purchaseUrl,
       prompt: "",
     };
   });
