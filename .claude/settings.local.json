@@ -1,0 +1,34 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm run *)",
+      "Bash(git add *)",
+      "Bash(git commit -m ' *)",
+      "Bash(git push *)",
+      "Bash(ffmpeg -i \"Gravação de Tela 2026-05-25 110017.gif\" -vf \"fps=12,scale=600:-1:flags=lanczos,split[s0][s1];[s0]palettegen=max_colors=128[p];[s1][p]paletteuse=dither=bayer\" -loop 0 landing-advogado-preview.gif -y)",
+      "Bash(git commit -m 'fix: corrige todas as menções de Gemini 2.5 Pro para 3.5 Flash High *)",
+      "Bash(git commit *)",
+      "Bash(ffmpeg -y -i \"public/prints/Gravação de Tela 2026-06-01 151428.mp4\" -vf \"scale=1280:-2\" -c:v libx264 -crf 28 -preset slow -an -movflags +faststart public/prints/casa-77-preview.mp4)",
+      "Bash(gh auth *)",
+      "Read(//mnt/c/Users/Rafhael/.gemini/antigravity/scratch/**)",
+      "Bash(git rm *)",
+      "Bash(grep -oE '\"\\\\$L[0-9a-f]+\",null,\\\\{\"slides\"' .next/server/app/guias/sites-cinematograficos-com-ia.html)",
+      "Bash(npm install *)",
+      "Bash(node *)",
+      "Bash(openssl rand *)",
+      "Read(//dev/**)",
+      "Bash(mkdir -p \"/mnt/c/Users/Rafhael/.secrets\")",
+      "Bash(mv \"/mnt/c/Users/Rafhael/Downloads/recovery-codes.txt\" \"/mnt/c/Users/Rafhael/.secrets/vercel-recovery-codes.txt\")",
+      "Bash(chmod 600 \"/mnt/c/Users/Rafhael/.secrets/vercel-recovery-codes.txt\")",
+      "Read(//mnt/c/Users/Rafhael/**)",
+      "Bash(curl -s https://www.promptfly.com.br/api/auth/me)",
+      "Bash(curl -s https://www.promptfly.com.br/api/group)",
+      "Bash(curl -s https://www.promptfly.com.br/api/hotmart/webhook)",
+      "Bash(wc -l index.html main.js style.css)",
+      "Bash(ls -la public/ dist/*.mp4)",
+      "Bash(rm -f casa77.gif)",
+      "Bash(ffmpeg -y -i template1.mp4 -vf \"scale=720:-2\" -c:v libx264 -crf 30 -preset veryfast -an -movflags +faststart casa77.mp4 -loglevel error)",
+      "Bash(python3 -)"
+    ]
+  }
+}
