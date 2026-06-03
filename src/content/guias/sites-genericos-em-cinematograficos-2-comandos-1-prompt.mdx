@@ -1,0 +1,94 @@
+---
+title: "De site genérico a cinematográfico: 2 comandos e 1 prompt"
+description: "O que deixa um site com cara de template não é a cor — é a falta de movimento e direção. Aqui está o passo a passo exato pra resolver isso: instalar o movimento, instalar a direção e aplicar o prompt cinematográfico."
+date: "2026-06-03"
+tags: ["cinematográfico", "claude code", "motion", "prompts"]
+readTime: "8 min"
+category: "tecnicas"
+featured: true
+---
+
+## Por que meus sites feitos com IA sempre ficam com cara de template?
+
+Essa é a pergunta que mais chega aqui. E a resposta honesta é esta: **não é a cor.**
+
+Todo mundo acha que o problema é a paleta. Troca o roxo por azul, o azul por verde, e o site continua com a mesma cara. Porque o que entrega um template não é a tinta — é a **falta de movimento e de direção**.
+
+Um site genérico é fácil de reconhecer: estático, simétrico, tudo empilhado no centro e quase sempre com aquele degradê roxo-pra-azul de SaaS. Cada seção é uma caixa em cima da outra. Nada se move, nada guia o olho, nada parece ter sido **decidido** por alguém. Parece montado. Não parece dirigido.
+
+A diferença entre um site comum e um site cinematográfico é a mesma entre uma foto e um filme: **direção** (composição, hierarquia, intenção) e **movimento** (scroll, parallax, profundidade).
+
+<video autoPlay muted loop playsInline style={{width: "100%", borderRadius: "12px", margin: "2rem 0", border: "1px solid rgba(0,0,0,0.08)"}}>
+  <source src="/prints/casa-77-preview.mp4" type="video/mp4" />
+</video>
+
+*Acima, o template CASA 77. Repare que nada está parado e nada está centralizado por acaso. Isso é direção + movimento.*
+
+Neste guia você sai com três coisas na mão:
+
+- **O passo a passo completo** pra tirar a cara de template de qualquer site.
+- **Os comandos exatos** pra instalar movimento e direção (copiar e colar).
+- **O prompt cinematográfico pronto** pra mandar a IA fazer o trabalho pesado.
+
+Vamos aos 3 passos.
+
+## 01 — Instale o movimento
+
+Site cinematográfico tem vida. O conteúdo aparece, desliza, ganha profundidade conforme você rola a página. Isso é movimento — e movimento não se improvisa, se instala.
+
+O **Motion AI Kit** (em cima da lib Motion / Framer Motion) entrega scroll suave, parallax entre camadas e easing natural já configurados. Você não fica catando curva de animação na mão.
+
+**Ferramenta:** Motion AI Kit, baseado em Motion (Framer Motion).
+
+```bash
+npx motion-ai
+```
+
+O que tira a cara de template não é animar tudo — é animar com **propósito**. Um site estático grita "modelo pronto". Um site onde os elementos respiram, entram no tempo certo e têm profundidade grita "alguém pensou nisso". Movimento é a primeira camada de intenção, e é a mais barata de instalar. Menos é mais: scroll suave e um parallax bem dosado já mudam tudo.
+
+## 02 — Instale a direção
+
+Movimento sem direção é só coisa se mexendo. A **direção** é o gosto: quais fontes, qual paleta, qual ritmo, qual textura. É a parte que a IA normalmente erra — porque ela tenta agradar todo mundo e cai na média genérica.
+
+A skill `/direction` tira essa decisão da mão da IA. Em vez de pedir "melhore o design" e rezar, você entrega o gosto pronto: tipografia, paleta autoral, ritmo de seções e textura de filme. A IA para de adivinhar.
+
+**Ferramenta:** plugin `direction` do marketplace `cinematic-skills`, dentro do Claude Code.
+
+```bash
+/plugin marketplace add rafhacorsini/cinematic-skills
+/plugin install direction@cinematic-skills
+/direction
+```
+
+Template é a média. Direção é a escolha. Quando você fixa a direção antes de pedir qualquer coisa pra IA, ela deixa de criar "um site bonitinho" e passa a executar **a sua visão**. O gosto deixa de ser sorte e vira regra. É isso que separa um portfólio de um filme.
+
+<SkillsCTABanner />
+
+## 03 — Aplique o prompt cinematográfico
+
+Com movimento e direção instalados, falta a ordem certa. O erro mais comum é pedir "deixa mais bonito" — e a IA recomeça o site do zero, troca seu texto, inventa conteúdo.
+
+Não é isso. O prompt cinematográfico manda a IA **manter o conteúdo intacto** e mudar só a direção e o movimento. Cole exatamente isto:
+
+```text
+Transforme este site genérico em uma experiência CINEMATOGRÁFICA.
+Mantenha exatamente o mesmo texto e conteúdo. Mude a DIREÇÃO e o MOVIMENTO.
+O problema do site atual: é estático, simétrico, empilhado e sem profundidade.
+Cara de template. Cinematográfico não é uma cor — é movimento e composição.
+DIREÇÃO: quebre a simetria, use espaço negativo e camadas sobrepostas; coloque
+texto atrás/sobre os elementos; hierarquia forte com títulos enormes e
+letter-spacing negativo; cor LIVRE com paleta autoral (off-white, bege, preto,
+terrosa) e 1 acento dessaturado — PROIBIDO degradê roxo/azul saturado de SaaS;
+texturas de filme sutis (grain, vinheta, light leak).
+MOVIMENTO: seções com scroll travado e animações no scroll; parallax entre
+camadas; reveal de texto linha a linha com easing suave; vídeo/frames no hero;
+cursor custom. REGRA DE OURO: cada elemento deve parecer DIRIGIDO, não montado.
+```
+
+A filosofia desse passo está na última linha: **dirigido, não montado.** Você não está pedindo enfeite, está dando uma direção de arte. Ao travar o conteúdo e liberar só forma e movimento, a IA para de inventar e começa a compor. O resultado deixa de ser "mais um site bonito" e passa a ter ponto de vista. É a diferença entre decorar e dirigir.
+
+## Como eu uso os 3 juntos
+
+Na prática o fluxo é sempre o mesmo: **movimento → direção → prompt.** Primeiro rodo `npx motion-ai` pra o site ganhar vida e profundidade. Depois rodo `/direction` pra fixar o gosto — fonte, paleta, ritmo, textura de filme — tirando a decisão das mãos da IA. Por último, colo o prompt cinematográfico, que mantém o conteúdo e reescreve só a forma. Sozinho, cada passo melhora um pouco. Juntos, transformam um site empilhado e estático em algo como o CASA 77: parece ter saído de um estúdio, não de um gerador. Movimento dá vida, direção dá gosto, o prompt amarra os dois numa visão só. **Menos é mais — mas tudo precisa ser intencional.**
+
+<SkillsCTABanner />

@@ -12,6 +12,11 @@ const features = [
   "/responsive-fix — converte px fixos para clamp() e adiciona breakpoints",
 ];
 
+const bonuses = [
+  "Template cinematográfico de arquitetura (o padrão do CASA 77) pronto pra usar",
+  "Prompts de brinde para deixar qualquer site cinematográfico na hora",
+];
+
 export default function SkillsCTABanner() {
   const cardRef = useRef<HTMLDivElement>(null);
   const [visible, setVisible] = useState(false);
@@ -60,6 +65,18 @@ export default function SkillsCTABanner() {
             </li>
           ))}
         </ul>
+
+        <div className={styles.bonusBlock}>
+          <span className={styles.bonusLabel}>🎁 Bônus inclusos</span>
+          <ul className={styles.bonusList}>
+            {bonuses.map((b, i) => (
+              <li key={i} className={styles.bonusItem}>
+                <span className={styles.bonusCheck}>+</span>
+                <span>{b}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
 
         <div className={styles.footer}>
           <div className={styles.priceBlock}>
