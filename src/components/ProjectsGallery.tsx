@@ -14,6 +14,9 @@ export default function ProjectsGallery({ projects }: { projects: Project[] }) {
   const [sending, setSending] = useState(false);
   const [sent, setSent] = useState(false);
   const [loginError, setLoginError] = useState("");
+  const [codeInput, setCodeInput] = useState("");
+  const [verifying, setVerifying] = useState(false);
+  const [codeError, setCodeError] = useState("");
 
   const loadMe = useCallback(async () => {
     try {
@@ -50,6 +53,32 @@ export default function ProjectsGallery({ projects }: { projects: Project[] }) {
       setLoginError("Erro de conexão.");
     } finally {
       setSending(false);
+    }
+  }
+
+  async function verifyCode(e: React.FormEvent) {
+    e.preventDefault();
+    setCodeError("");
+    setVerifying(true);
+    try {
+      const res = await fetch("/api/auth/verify-code", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email: emailInput, code: codeInput }),
+      });
+      if (!res.ok) {
+        const j = await res.json().catch(() => ({}));
+        setCodeError(j.error ?? "Código incorreto.");
+      } else {
+        await loadMe();
+        setShowLogin(false);
+        setSent(false);
+        setCodeInput("");
+      }
+    } catch {
+      setCodeError("Erro de conexão.");
+    } finally {
+      setVerifying(false);
     }
   }
 
@@ -124,13 +153,33 @@ export default function ProjectsGallery({ projects }: { projects: Project[] }) {
               <>
                 <h3 className={styles.modalTitle}>Verifique seu e-mail</h3>
                 <p className={styles.modalText}>
-                  Enviamos um link de acesso para <strong>{emailInput}</strong>. Abra o
-                  e-mail e clique no botão para desbloquear seus projetos. O link vale por
+                  Enviamos um acesso para <strong>{emailInput}</strong>. Clique no link do
+                  e-mail <strong>ou</strong> digite o código de 6 dígitos abaixo. Vale por
                   15 minutos.
                 </p>
+                <form onSubmit={verifyCode} className={styles.form}>
+                  <input
+                    type="text"
+                    inputMode="numeric"
+                    pattern="\d{6}"
+                    maxLength={6}
+                    required
+                    placeholder="000000"
+                    className={styles.codeInput}
+                    value={codeInput}
+                    onChange={(e) =>
+                      setCodeInput(e.target.value.replace(/\D/g, "").slice(0, 6))
+                    }
+                  />
+                  <button type="submit" className={styles.submitBtn} disabled={verifying}>
+                    {verifying ? "Verificando…" : "Desbloquear com o código"}
+                  </button>
+                </form>
+                {codeError && <span className={styles.modalError}>{codeError}</span>}
                 <button
                   type="button"
-                  className={styles.closeBtn}
+                  className={styles.linkBtn}
+                  style={{ marginTop: "1rem" }}
                   onClick={() => {
                     setShowLogin(false);
                     setSent(false);
