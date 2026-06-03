@@ -70,28 +70,40 @@ Template é a média. Direção é a escolha. Quando você fixa a direção ante
 
 Com a documentação certa e a direção instaladas, falta a ordem certa. O erro mais comum é pedir "deixa mais bonito", e a IA recomeça o site do zero, troca seu texto, inventa conteúdo.
 
-Não é isso. O prompt cinematográfico não precisa ser uma receita milimétrica. Ele é uma **direção de início**: você manda a IA manter o conteúdo intacto, define o que é proibido e dá o tom geral, mas deixa espaço pra ela compor. Cole isto como ponto de partida e ajuste ao seu gosto:
+Não é isso. Em vez de jogar uma receita gigante de uma vez e torcer, o melhor prompt **conduz você por um checklist**: a IA propõe opções em cada etapa (movimento, tipografia, paleta, textura), você escolhe, e só então ela aplica. Você vira o diretor; a IA, a equipe. Cole isto como ponto de partida:
 
 ```text
-Transforme este site genérico em uma experiência CINEMATOGRÁFICA.
-Mantenha exatamente o mesmo texto e conteúdo, mude só a DIREÇÃO e o MOVIMENTO.
+Você é meu diretor de arte. Quero dar ao meu site uma DIREÇÃO
+CINEMATOGRÁFICA, e vamos fazer isso JUNTOS, em etapas.
 
-PROIBIDO: degradê genérico roxo/azul saturado de SaaS, layout simétrico e
-empilhado, tudo centralizado, cara de template.
+REGRAS GERAIS:
+- Mantenha exatamente o mesmo texto e conteúdo. Mude só direção e movimento.
+- PROIBIDO: degradê genérico roxo/azul de SaaS, layout simétrico e empilhado,
+  tudo centralizado, cara de template.
+- Use "use context7" pra puxar a API atualizada das libs antes de codar.
+- REGRA DE OURO: cada elemento deve parecer DIRIGIDO, não montado.
 
-MOVIMENTO: as seções devem ter transições de animação entre si, scroll suave
-e amanteigado, entrada de textos animados (reveal linha a linha com easing
-natural). Use uma boa biblioteca de animação e "use context7" pra implementar
-com a API atualizada.
+COMO QUERO TRABALHAR:
+Siga o checklist abaixo UMA ETAPA POR VEZ. Em cada etapa, me apresente 2 ou 3
+opções com nome e uma descrição curta, espere eu escolher, e SÓ DEPOIS avance
+pra próxima etapa. Não implemente nada antes de eu fechar todas as escolhas.
 
-TIPOGRAFIA: me dê opções de fontes e combinações de fontes do Fontshare,
-fugindo do genérico (sem Inter/Poppins padrão de SaaS). Sugira 2 ou 3
-combinações com personalidade e me deixe escolher.
+CHECKLIST:
+[ ] 1. TIPOGRAFIA — sugira 2 ou 3 combinações de fontes do Fontshare com
+       personalidade (sem Inter/Poppins padrão de SaaS). Diga onde usar cada
+       uma (título x corpo).
+[ ] 2. PALETA — proponha 2 ou 3 paletas autorais (ex: off-white/bege/preto +
+       1 acento dessaturado). Nada saturado de SaaS.
+[ ] 3. MOVIMENTO — proponha o estilo de animação: transições entre seções,
+       scroll suave e amanteigado, entrada de textos animados (reveal linha a
+       linha), parallax. Me diga 2 ou 3 "personalidades" de movimento.
+[ ] 4. TEXTURA & COMPOSIÇÃO — proponha como quebrar a simetria, usar espaço
+       negativo e camadas, e que textura de filme aplicar (grain, vinheta).
 
-REGRA DE OURO: cada elemento deve parecer DIRIGIDO, não montado.
+Comece agora pela etapa 1 e espere minha resposta.
 ```
 
-A filosofia desse passo está na última linha: **dirigido, não montado.** Você não está pedindo enfeite, está dando uma direção de arte. Ao travar o conteúdo, listar o que é proibido e liberar a forma, a IA para de inventar e começa a compor. O resultado deixa de ser "mais um site bonito" e passa a ter ponto de vista. É a diferença entre decorar e dirigir.
+A filosofia desse passo está na regra de ouro: **dirigido, não montado.** Você não está pedindo enfeite, está dando uma direção de arte e tomando as decisões. Ao travar o conteúdo, listar o que é proibido e escolher etapa por etapa, a IA para de inventar e começa a executar a *sua* visão. O resultado deixa de ser "mais um site bonito" e passa a ter ponto de vista. É a diferença entre decorar e dirigir.
 
 ## Como eu uso os 3 juntos
 
