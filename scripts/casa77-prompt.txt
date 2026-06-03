@@ -1,0 +1,114 @@
+Construa uma landing page cinematográfica de imobiliária de luxo chamada "CASA 77 — Private Real Estate", com HTML, CSS e JavaScript puro (Vanilla JS), usando GSAP + ScrollTrigger para as animações de scroll e Lenis (@studio-freight/lenis) para o scroll suave "amanteigado". Estética editorial premium, tom creme/sépia luxuoso, fotografia de arquitetura de alto padrão.
+
+STACK E DEPENDÊNCIAS
+- Vanilla HTML/CSS/JS (Vite como bundler).
+- gsap ^3.12 e gsap/ScrollTrigger.
+- @studio-freight/lenis ^1.0 para smooth scroll.
+- Fontes: Clash Display e Satoshi via Fontshare (https://api.fontshare.com/v2/css?f[]=clash-display@400,500&f[]=satoshi@400,500,600&display=swap) e Instrument Serif via Google Fonts (ital 0;1).
+
+TOKENS DE DESIGN (CSS :root)
+- --font-heading: 'Clash Display', sans-serif (títulos display)
+- --font-body: 'Satoshi', sans-serif (corpo)
+- Serif premium para citações/títulos editoriais: 'Instrument Serif', serif
+- Fundo geral do site: #f7f4e9 (creme luxuoso). Seções escuras: #14100E (marrom café). Creme das seções: #f5f2e6.
+- Marrom café ultra escuro de texto: #2c231d. Marrom médio: #5e4a3d. Dourado/cobre de destaque: #cda87c.
+- Color grade cinematográfico aplicado em TODAS as fotos: filter: sepia(0.18) saturate(0.82) contrast(1.06) brightness(0.97). Guarde em --cinematic-grade.
+
+GLOBAL
+- Reset: * { margin:0; padding:0; box-sizing:border-box }. body overflow-x: hidden.
+- FILM GRAIN: um <div> fixo cobrindo a tela (z-index 9999, pointer-events none, opacity 0.03, mix-blend-mode overlay) com textura de ruído via SVG fractalNoise (baseFrequency 0.85, numOctaves 3) em background-image data-URI, animado com @keyframes deslocando translate em passos (steps(1)) a cada 0.5s para granulado de cinema.
+- CURSOR PERSONALIZADO: um <div> circular de 16px branco, position fixed, mix-blend-mode difference, que segue o mouse com gsap.to(cursor,{x,y,duration:0.1,ease:'power2.out'}). Ao passar sobre a, button e .promo-card ele cresce para 60px, fundo transparente, borda branca de 1px (classe .hover). Esconder o cursor nativo só em (hover:hover) and (pointer:fine); em touch, manter cursor nativo. Respeitar prefers-reduced-motion desativando animações.
+
+ESTRUTURA DE SEÇÕES (nesta ordem)
+1) HERO (CASA 77)  2) MANIFESTO + CARROSSEL INFINITO  3) SPLIT-SCREEN (vídeo no topo + carrossel editorial horizontal embaixo)  4) EXPERIÊNCIA (storytelling em capítulos com troca de imagem fatiada)  5) FAQ (accordion)  6) PRIVATE SELECTION (bege, CTA)  7) FOOTER MONUMENTAL (marca gigante + hover de fotos).
+
+================ 1. HERO ================
+Wrapper que centraliza um cartão de hero. A .hero-section começa como um cartão arredondado: width calc(100vw - 2rem), height calc(100vh - 2rem), border-radius 1.5rem, overflow hidden, fundo #000. Wrapper de fundo creme #f7f5ee.
+Camadas (de trás pra frente):
+- Camada 1 (imagem de fundo cinematográfica): uma <img> estática cobrindo 100% (object-fit cover, object-position center), com filter: brightness(0.75) contrast(1.15) saturate(1.1). URL: https://www.promptfly.com.br/casa77/hero-frame.png (este é o frame/still cinematográfico da mansão; trate-o como a foto de fundo do hero). Sobre ela: um .noise-overlay (ruído SVG fractalNoise, opacity 0.08, mix-blend-mode soft-light, animado) e um .light-leak (radial-gradient quente no topo, mix-blend-mode screen, animação lightPulse 8s alternando escala/opacidade).
+- Vignette cinematográfica via .hero-section::after: radial-gradient(125% 115% at 50% 38%, transparent 52%, rgba(0,0,0,0.5) 100%) + linear-gradient(to top, rgba(0,0,0,0.45), transparent 32%). z-index 4.
+- Camada 2 (texto atrás da mansão): h1.giant-title com o texto "CASA77", fonte Clash Display 400, font-size 18vw (22vw no mobile), letter-spacing -0.06em, cor branca, white-space nowrap, centralizado. Começa invisível (opacity 0) e levemente para baixo.
+- Camada 3 (mansão transparente na frente): uma <img> PNG recortada (fundo transparente) cobrindo 100% (object-fit cover), filter brightness(0.75) saturate(1.1), começa opacity 0. URL: https://www.promptfly.com.br/casa77/mansao.png . Ela fica NA FRENTE do título, criando o efeito do texto surgindo por trás da casa.
+- Slogan tipográfico (canto inferior esquerdo, bottom 12vh / left 6vw, branco, uppercase, Satoshi, font-size clamp(1rem,2.2vw,4rem), line-height 1.05): linha 1 com "@2026" (menor, opacity 0.8) à esquerda e "ONDE"; linha 2 "A TRANQUILIDADE ENCONTRA"; linha 3 "VIDA MODERNA". Começa opacity 0.
+- Botão EXPLORAR (.explore-btn): pílula creme #f5f2e6, texto marrom #14100E, uppercase, letter-spacing 0.15em, border-radius 3rem, padding generoso, sombra difusa. Contém o texto "EXPLORAR" + um ícone SVG de seta para a direita. Posição absolute bottom 4rem left 6vw. Hover: scale(0.97), fundo #ffffff, sombra maior. Começa opacity 0.
+- Card promocional (.promo-card, canto inferior direito, bottom 4rem right 2rem, width 460px): cartão creme #f5f2e6 arredondado (1.5rem) com foto à esquerda (110px de largura, object-fit cover) e texto à direita. Foto URL: https://www.promptfly.com.br/casa77/card-private.png . Título "Private Collection" em Instrument Serif 1.6rem; parágrafo em Satoshi 0.88rem letter-spacing 0.04em: "Assessoria imobiliária de alto padrão para propriedades exclusivas e off-market." Hover: translateY(-6px). Começa opacity 0.
+- Header de luxo (.luxury-header, topo, absolute, padding 2.5rem 4rem, border-bottom 1px rgba(255,255,255,0.15)): logo "CASA 77" (Clash Display 500, letter-spacing 0.22em) com kicker "Private Real Estate" embaixo (Satoshi, 0.6rem, letter-spacing 0.32em, cor branca 55%). Nav à direita com links "Portfólio", "A Agência", "Contato" (Satoshi 0.75rem uppercase, cor branca 55%, com underline animado scaleX no hover indo a branco 100%). Começa opacity 0 e y -20.
+
+ANIMAÇÃO DE ABERTURA DO HERO (timeline GSAP automática, ao carregar — TRAVAR o scroll com lenis.stop() até terminar):
+- Fade-in da imagem de fundo cinematográfica (1.1s, power2.inOut).
+- A mansão transparente assume opacity 1 quase instantânea; SÓ DEPOIS o giant-title fica visível (set opacity 1) para nunca vazar pela transparência.
+- O título "CASA77" sobe majestosamente: fromTo y 35vh, scale 0.96 -> y -10vh, scale 1, ease "expo.out", duração 1.8s.
+- Slogan, botão Explorar e card promocional entram com opacity 0->1, stagger 0.2, power2.out.
+- Header desce de y -20 / opacity 0 -> y 0 / opacity 1.
+- Ao terminar a timeline (onComplete): lenis.start() e inicializa as animações de scroll.
+
+ANIMAÇÕES DE SCROLL DO HERO (ScrollTrigger, trigger no body, scrub):
+- "Unboxing" cinematográfico: a .hero-section anima width 100%, height 100vh, border-radius 0 ao longo da primeira tela (end "+= window.innerHeight"), abrindo o cartão em tela cheia.
+- Parallax do título: .giant-title anima y para 35vh no mesmo trecho.
+
+================ 2. MANIFESTO + CARROSSEL ================
+Container de scroll com 150vh de altura para dar tempo das animações. Dentro, uma .section-2 sticky (top 0, height 100vh), fundo creme #f5f2e6 com TEXTURA de blueprint: repeating-linear-gradient vertical de linhas marrom ultra finas (rgba(44,35,29,0.045), a cada 9vw).
+- Subtítulo (Satoshi 0.85rem, marrom #5e4a3d): "Desenvolvedores, construtores e gestores imobiliários".
+- Citação grande (.s2-quote, Instrument Serif, clamp(3rem,6vw,6.5rem), marrom #2c231d, line-height 1.05), em 3 linhas, com palavras em itálico <em>: "Fazer o que é <em>certo</em> para aqueles que confiam em nós não é uma estratégia — é a <em>única</em> maneira que conhecemos de trabalhar." Cada linha é um .text-line com EFEITO TEXT-REVEAL "karaokê": background linear-gradient(to right, #2c231d 50%, #978b80 50%), background-size 200% 100%, -webkit-background-clip text, text-fill-color transparent, começando em background-position 100% 0 (cinza) e animando para 0% 0 (preenchido) conforme o scroll (ScrollTrigger scrub, stagger 0.5 entre linhas).
+- CARROSSEL INFINITO (.s2-carousel): faixa horizontal de fotos em loop CSS infinito (@keyframes translateX 0 -> -50%, 60s linear infinite, pausa no hover). Cada imagem: height 28vh, aspect-ratio 4/3, border-radius 1rem, filter cinematic-grade + saturate(0.4) (dessaturada, virando textura), e no hover ganha cor plena + scale(1.03). Acima do carrossel, uma linha de info (Satoshi 0.75rem marrom): "São Paulo, SP 14:32" | "CASA 77 © Desde 2026" | "Rio de Janeiro, RJ 15:32".
+  Use estas 5 fotos (duplicadas para o loop):
+  https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?q=80&w=800&auto=format&fit=crop
+  https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?q=80&w=800&auto=format&fit=crop
+  https://images.unsplash.com/photo-1600585154340-be6161a56a0c?q=80&w=800&auto=format&fit=crop
+  https://images.unsplash.com/photo-1512917774080-9991f1c4c750?q=80&w=800&auto=format&fit=crop
+  https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?q=80&w=800&auto=format&fit=crop
+- Entrada animada (ScrollTrigger start "top 60%"): subtítulo, citação e carrossel surgem com opacity 0->1, y 30->0, stagger 0.25, power2.out.
+- Transição para a próxima seção: ao a Split-Screen brotar de baixo, a .section-2 anima scale 0.9 + opacity 0 (efeito abismo).
+
+================ 3. SPLIT-SCREEN (vídeo + editorial horizontal) ================
+Seção .split-screen-pin de 100vh, dividida verticalmente. É PINADA (ScrollTrigger pin) enquanto um carrossel editorial rola na horizontal.
+- TOPO (40vh): banner de vídeo (.split-top-video). Mesmo <video> de fundo (https://www.promptfly.com.br/casa77/video.mp4) com filter cinematic-grade + um overlay escuro rgba(0,0,0,0.4). Conteúdo: título "THE COLLECTION" (Instrument Serif, clamp(4rem,10vw,8rem), branco, canto inferior esquerdo) e subtítulo "Descubra o estado da arte em moradia" (uppercase, letter-spacing 0.3em). No canto superior direito, dois rótulos: "PROJETO 07" e "SÃO PAULO, BRASIL".
+- BASE (60vh): esteira horizontal (.s4-scroll-track, width max-content) com 3 slides de largura 100vw cada. ScrollTrigger anima x do track de 0 até -(scrollWidth - innerWidth), com pin:true e scrub, criando rolagem horizontal travada. invalidateOnRefresh true.
+  Cada slide: layout de 2 colunas com divisor vertical fino (1px rgba(44,35,29,0.15)) no meio.
+  - Coluna esquerda: imagem em wrapper arredondado (12px, height 40vh, object-fit cover, cinematic-grade, scale 1.02; hover scale 1.08 + saturação plena).
+  - Coluna direita: título serif em 2 linhas com palavra em itálico marrom-claro #5e4a3d (.s4-title em), descrição (Satoshi), divisor horizontal, e uma lista de 3 "features" (rótulo uppercase Satoshi pequeno à esquerda + valor em Instrument Serif 1.5rem à direita).
+  Dados dos slides:
+  SLIDE 1 — img https://images.unsplash.com/photo-1600585154340-be6161a56a0c?q=80&w=1200&auto=format&fit=crop | Título "Elegância <em>Minimalista</em>" | Desc "Projetada com rigor geométrico e acabamentos de curadoria global, esta propriedade redefine o luxo." | Features: ÁREA TOTAL = 850m²; SUÍTES = 5 Master; MATERIAIS = Mármore e Nogueira.
+  SLIDE 2 — img https://images.unsplash.com/photo-1512917774080-9991f1c4c750?q=80&w=1200&auto=format&fit=crop | Título "Oásis <em>Particular</em>" | Desc "Espelhos d'água e uma piscina infinita de borda flutuante criando um microclima perfeito." | Features: PISCINA = Borda Infinita; DECK = Madeira Cumaru; LAZER = Spa Completo.
+  SLIDE 3 — img https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?q=80&w=1200&auto=format&fit=crop | Título "Design <em>Funcional</em>" | Desc "Área gourmet sutilmente escondida atrás de painéis ripados deslizantes com tecnologia alemã." | Features: COZINHA = Armani Dada; ELETROS = Gaggenau; BANCADA = Dekton.
+- Entrada controlada por scroll (scrub, start "top 75%" até "top top"): textos do vídeo sobem (y 50, opacity 0, stagger), depois a foto do slide 1 (y 80, opacity 0) e os elementos do bloco de texto (y 40, stagger). Parallax reverso leve (x 4vw) nas fotos dos slides 2 e 3. Ao final, a seção inteira faz fade-out + blur(5px) quando a próxima seção (Experiência) sobe.
+
+================ 4. EXPERIÊNCIA (storytelling fatiado) ================
+Seção .exp-section pinada (ScrollTrigger pin, scrub), fundo marrom #14100E, border-radius 2rem no topo, margin-top -8vh (invade a seção anterior). Card em 2 colunas (100vh):
+- Esquerda (40%): uma barra vertical fina de progresso + texto dos capítulos sobrepostos (grid, só 1 visível por vez). 3 capítulos (título em Instrument Serif uppercase clamp(3rem,5vw,4.5rem) creme + subtítulo Satoshi creme 80%):
+  CAP 1 — "AMENITIES FOCADAS NO BEM-ESTAR" / "De estúdios de fitness privativos a sessões guiadas de meditação, nossas comodidades são projetadas para elevar o seu bem-estar e promover a harmonia."
+  CAP 2 — "ESPAÇOS SOCIAIS CURADOS" / "Áreas de convivência projetadas de forma inteligente que unem o santuário privado à vida vibrante em comunidade."
+  CAP 3 — "ARQUITETURA E LIVING CONSCIENTE" / "Integrando perfeitamente o concreto bruto, a luz natural e texturas orgânicas para criar um ambiente que respira junto com você."
+- Direita: composição de uma imagem grande de fundo (arredondada, top/bottom 12vh, left 20%) + uma imagem menor sobreposta no centro-esquerda (com sombra forte). Ambas com cinematic-grade.
+  Imagens grandes por capítulo:
+   1) https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?q=80&w=1400&auto=format&fit=crop
+   2) https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?q=80&w=1400&auto=format&fit=crop
+   3) https://images.unsplash.com/photo-1613490493576-7fde63acd811?q=80&w=1400&auto=format&fit=crop
+  Imagens pequenas por capítulo:
+   1) https://images.unsplash.com/photo-1534438327276-14e5300c3a48?q=80&w=600&auto=format&fit=crop
+   2) https://images.unsplash.com/photo-1512917774080-9991f1c4c750?q=80&w=600&auto=format&fit=crop
+   3) https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?q=80&w=600&auto=format&fit=crop
+- EFEITO FATIADO (a estrela): cada imagem grande é dividida em 4 "fatias" verticais. Na troca de capítulo (timeline scrub), as fatias da nova imagem sobem de yPercent 100 -> 0 com stagger 0.08 e ease power3.out, enquanto o texto/foto pequena anterior faz fade-out e os novos fazem fade-in (y 30 -> 0). A barra de progresso preenche a altura ao longo de toda a seção.
+
+================ 5. FAQ ================
+Seção fundo marrom #14100E, border-radius na base (0 0 2rem 2rem). Accordion de 3 itens (max-width 900px), divisores 1px creme 10%. Pergunta em Instrument Serif clamp(1.8rem,3vw,2.5rem) creme; ícone "+" dourado #cda87c que gira 45° (vira ×) quando ativo; resposta com transição de max-height 0 -> 500px. Só um item aberto por vez (fecha os outros ao abrir). Perguntas/respostas:
+  1) "Como funciona o agendamento de visitas privativas?" — "O processo é conduzido com absoluta discrição. Um especialista de nosso concierge agendará um momento exclusivo, adaptando-se à sua rotina, para apresentar o imóvel sem interrupções."
+  2) "Os imóveis do portfólio aceitam personalização estrutural?" — "Sim. Muitos de nossos projetos contam com plantas inteligentes (plantas livres) e equipe própria de arquitetura pronta para adaptar acabamentos e paredes não-estruturais ao seu estilo de vida."
+  3) "Qual o escopo do serviço de concierge pós-venda?" — "Nossa assessoria contínua vai desde a indicação e coordenação de designers de interiores renomados até a estruturação de serviços domésticos AAA para a sua nova residência."
+
+================ 6. PRIVATE SELECTION ================
+Seção bege #f5f2e6, texto marrom #14100E, centralizada (padding 15vw 5vw). Título "The Private Selection" (Instrument Serif clamp(3rem,6vw,5rem)); texto: "Nosso portfólio restrito conta com propriedades confidenciais que nunca chegam ao mercado aberto. Agende uma consultoria privativa com nossa diretoria para ter acesso ao cofre." Botão outline pílula "Agendar Consultoria VIP" (borda marrom, hover preenche marrom com texto creme).
+
+================ 7. FOOTER MONUMENTAL ================
+Footer marrom #14100E ocupando 100vh. Marca d'água gigante "CASA 77" centralizada (Clash Display 22vw, opacity 0.03). Lista central de locais em Instrument Serif clamp(2rem,5vw,4.5rem), opacity 0.5: "São Paulo", "Rio de Janeiro", "Miami", "Lisboa". HOVER MÁGICO: ao passar o mouse num local, a marca d'água gigante some (opacity 0) e aparece atrás uma foto correspondente (40vw x 60vh, object-fit cover, opacity 0.4, fade suave). Fotos:
+  São Paulo: https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?q=80&w=1200&auto=format&fit=crop
+  Rio de Janeiro: https://images.unsplash.com/photo-1613490493576-7fde63acd811?q=80&w=1200&auto=format&fit=crop
+  Miami: https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?q=80&w=1200&auto=format&fit=crop
+  Lisboa: https://images.unsplash.com/photo-1512917774080-9991f1c4c750?q=80&w=1200&auto=format&fit=crop
+Rodapé base (absolute bottom): "CASA 77 © 2026" à esquerda; links "Instagram" e "Privacidade" à direita (Satoshi 0.75rem uppercase, opacity 0.5, hover 1).
+
+DETALHES FINAIS
+- Lenis: duration 1.5, easing exponencial suave, smooth true, smoothTouch false. Integrar com gsap.ticker (lenis.raf no ticker) e ScrollTrigger.update no evento scroll. history.scrollRestoration = 'manual' e window.scrollTo(0,0) no unload para sempre começar no topo.
+- Responsivo: em telas pequenas (max-width 900px) as colunas viram coluna única, a citação reduz, os divisores verticais viram horizontais, e o cursor custom é desativado.
+- Performance: will-change: transform nos elementos animados; passar invalidateOnRefresh nos ScrollTriggers com cálculo de largura; usar prefers-reduced-motion para desligar grão/light-leak/carrossel.
+Objetivo: um site de imobiliária de luxo com sensação de filme — scroll amanteigado, grão sutil, color grade sépia coeso, tipografia editorial (Clash Display + Instrument Serif) e micro-interações premium em cada seção.
