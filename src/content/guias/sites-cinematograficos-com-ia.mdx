@@ -1,6 +1,6 @@
 ---
 title: "Como criar sites cinematográficos com IA"
-description: "Construí ao vivo no Instagram um template de site cinematográfico em Next.js + Framer Motion. Aqui está o passo a passo para clonar, rodar e adaptar — com explicação de cada arquivo, cada animação e a filosofia por trás."
+description: "Construí ao vivo no Instagram um template de site cinematográfico em Next.js + Framer Motion. Aqui está o passo a passo pra clonar, rodar e adaptar, com a explicação de cada arquivo, cada animação e a filosofia por trás de tudo."
 date: "2026-05-10"
 tags: ["sites cinematográficos", "framer motion", "next.js", "template"]
 readTime: "8 min"
@@ -8,21 +8,23 @@ category: "prompts"
 featured: true
 ---
 
-Esse projeto nasceu de uma pergunta simples: **o que acontece quando você trata um website como se fosse um set de filmagem?**
+Esse projeto nasceu de uma pergunta simples: o que acontece quando você trata um website como se fosse um set de filmagem?
 
-A resposta virou um template de sete seções, construído ao vivo no Instagram, e que agora está disponível no GitHub para qualquer pessoa clonar, estudar e adaptar.
+A resposta virou um template de sete seções, construído ao vivo no Instagram, e que agora está no GitHub pra qualquer pessoa clonar, estudar e adaptar. A ideia aqui não é só te dar o código. É te mostrar como ele pensa, pra você conseguir fazer o seu.
 
 > **Repositório:** [github.com/rafhacorsini/cinematic-website-template](https://github.com/rafhacorsini/cinematic-website-template)
 
 ## A filosofia em três princípios
 
-A interface inteira é construída sobre três ideias:
+Antes de qualquer linha de código, vale entender as três ideias que sustentam a interface inteira. Tudo no projeto serve a uma delas.
 
-- **Scroll como narrativa** — o usuário não rola para ver mais, ele rola para avançar a história
-- **Luz como hierarquia** — o que importa é iluminado, o resto fica em sombra
-- **Tipografia como coreografia** — palavras entram em tempos diferentes, como atores numa cena
+| Princípio | O que significa na prática |
+|---|---|
+| **Scroll como narrativa** | O usuário não rola pra ver mais. Ele rola pra avançar a história. |
+| **Luz como hierarquia** | O que importa é iluminado. O resto fica na sombra. |
+| **Tipografia como coreografia** | As palavras entram em tempos diferentes, como atores numa cena. |
 
-Cada seção é uma cena. Cada animação serve ao ritmo, não ao ego.
+Cada seção é uma cena. Cada animação serve ao ritmo, nunca ao ego.
 
 ## Como clonar e rodar
 
@@ -33,25 +35,25 @@ npm install
 npm run dev
 ```
 
-Abre em `http://localhost:3000`.
+Abre em `http://localhost:3000` e pronto.
 
 **Stack:** Next.js 15 (App Router), React 19, Framer Motion 11, Tailwind CSS 3, TypeScript 5.
 
-Sobre fontes: o projeto usa Neue Haas Grot Display na versão trial. Se você não tiver os arquivos `.otf`, o sistema cai para Helvetica Neue como fallback e o layout aguenta bem.
+Sobre as fontes: o projeto usa a Neue Haas Grot Display na versão trial. Se você não tiver os arquivos `.otf`, ele cai pra Helvetica Neue como fallback e o layout aguenta bem. Nada quebra.
 
-## O que tem no repositório
+## O que tem dentro do repositório
 
-O repo vem com três documentos antes de qualquer linha de código. Eles são o mapa do projeto:
+O repo vem com três documentos antes de qualquer componente. Eles são o mapa do projeto, e valem mais a leitura do que parece:
 
-**`README.md`** — a introdução. A filosofia, a tabela de stack, os comandos para rodar e a paleta intencionalmente restrita: preto quase absoluto (`#030303`), branco sujo (`#f0f0f0`), e o verde neon da seleção de texto.
+**`README.md`** é a introdução. Traz a filosofia, a tabela de stack, os comandos pra rodar e a paleta de propósito restrita: preto quase absoluto (`#030303`), branco sujo (`#f0f0f0`) e o verde neon que aparece na seleção de texto.
 
-**`STRUCTURE.md`** — o mapa. Árvore completa com uma linha por arquivo, mostrando onde fica cada coisa, como as camadas de z-index se empilham, e a decisão arquitetural principal: nenhuma seção sabe da existência da outra. Cada uma gerencia seu próprio scroll. Isso torna qualquer seção substituível sem quebrar o resto.
+**`STRUCTURE.md`** é o mapa de verdade. Uma árvore completa com uma linha por arquivo, mostrando onde fica cada coisa, como as camadas de z-index se empilham e a decisão principal de arquitetura: nenhuma seção sabe da existência da outra. Cada uma cuida do próprio scroll. É isso que torna qualquer seção substituível sem quebrar o resto.
 
-**`SNIPPETS.md`** — os trechos importantes. Sete blocos de código comentados cobrindo todas as técnicas. É o arquivo que você vai mais consultar quando for adaptar.
+**`SNIPPETS.md`** são os trechos que importam. Sete blocos de código comentados cobrindo todas as técnicas. É o arquivo que você mais vai consultar na hora de adaptar.
 
 ## As sete seções do site
 
-Cada uma com sua própria linguagem de movimento. Em ordem:
+Cada uma tem a própria linguagem de movimento. Em ordem:
 
 | # | Seção | Técnica principal |
 |---|---|---|
@@ -61,58 +63,68 @@ Cada uma com sua própria linguagem de movimento. Em ordem:
 | 4 | **SilhouettePresence** | Mosaico com profundidade simulada via blur e brightness por camada |
 | 5 | **ManifestoPhilosophy** | Tipografia palavra a palavra sincronizada com scroll (rAF puro, zero Framer Motion) |
 | 6 | **CinematicFooter** | Grid arquitetural com scanline animada |
-| 7 | **GlobalAtmosphere** | Camada fixa de fundo: grain, grids, luz difusa — tudo sutil |
+| 7 | **GlobalAtmosphere** | Camada fixa de fundo: grain, grids e luz difusa, tudo bem sutil |
 
 <GuideCarousel slides={[
-  { src: "/prints/secao-hero.png.png", alt: "Seção Hero — parallax de mouse e rotação de palavras" },
-  { src: "/prints/secao-cine.png", alt: "CinematicReveal — imagem emergindo no scroll" },
-  { src: "/prints/ses-galera.png", alt: "MaterialsStudy — layout editorial com 3 vídeos" },
-  { src: "/prints/ses-manifesto.png", alt: "ManifestoPhilosophy — tipografia palavra a palavra" },
+  { src: "/prints/secao-hero.png.png", alt: "Seção Hero: parallax de mouse e rotação de palavras" },
+  { src: "/prints/secao-cine.png", alt: "CinematicReveal: imagem emergindo no scroll" },
+  { src: "/prints/ses-galera.png", alt: "MaterialsStudy: layout editorial com 3 vídeos" },
+  { src: "/prints/ses-manifesto.png", alt: "ManifestoPhilosophy: tipografia palavra a palavra" },
 ]} />
 
 ## As técnicas que mais valem entender
 
-**A easing que dá identidade ao projeto**
+Você não precisa decorar tudo. Mas se entender estes quatro pontos, consegue reconstruir o sentimento do site em qualquer projeto seu.
 
-A cubic-bezier `[0.16, 1, 0.3, 1]` aparece em quase tudo. Peso no início, soltura no final — o oposto do `ease-out` padrão. É essa curva que faz o movimento parecer "filmado" em vez de "animado".
+**A easing que dá identidade ao projeto.** A cubic-bezier `[0.16, 1, 0.3, 1]` aparece em quase tudo. Peso no começo, soltura no final, o oposto do `ease-out` padrão. É essa curva que faz o movimento parecer filmado em vez de animado.
 
-**Parallax de mouse com física de mola**
+**Parallax de mouse com física de mola.** São sete camadas com profundidades diferentes. A mola (`useSpring` com `stiffness: 6, damping: 60, mass: 3`) elimina o movimento mecânico, então tudo flutua como se tivesse inércia. As camadas mais distantes recebem amplitude maior, e o texto se move ao contrário do fundo pra reforçar a profundidade.
 
-Sete camadas com profundidades diferentes. A mola (`useSpring` com `stiffness: 6, damping: 60, mass: 3`) elimina o movimento mecânico — tudo flutua como se tivesse inércia. Camadas mais distantes recebem amplitude maior; o texto se move em direção contrária ao fundo, reforçando a profundidade.
+**Scroll-linked com `useScroll` + `useTransform`.** Sem duration, sem delay. O valor visual é uma função matemática direta da posição do scroll: opacidade, escala, blur e posição Y, tudo amarrado ao `scrollY`. É o que dá a sensação de câmera em vez de transição.
 
-**Scroll-linked com `useScroll` + `useTransform`**
+**Tipografia palavra a palavra, a parte mais sofisticada.** O componente `ManifestoPhilosophy` não usa Framer Motion. Ele usa `requestAnimationFrame` puro pra ler o `scrollY` e calcular a opacidade de cada palavra individualmente, com easing quartic. O track de scroll tem 500svh de altura, mas o conteúdo fica `sticky` em 100svh, criando o efeito de câmera lenta sem nenhuma `transition` de CSS. A função `computeWordOpacity` divide cada frase em três fases: revela em 20% do segmento, sustenta por 60% e dissolve nos últimos 20%. Cada palavra dentro da frase tem o próprio stagger.
 
-Sem duration, sem delay. O valor visual é uma função matemática direta da posição do scroll: opacidade, escala, blur, posição Y — tudo amarrado ao `scrollY`. É o que dá a sensação de "câmera" em vez de "transição".
+**Sistema de partículas estável.** São 30 partículas com posição, duração e atraso aleatórios, calculados uma única vez na montagem com `useMemo`. Sem isso, cada re-render geraria valores novos e a animação reiniciaria do zero.
 
-**Tipografia palavra a palavra (a parte mais sofisticada)**
+## Quer o atalho? As skills fazem isso por você
 
-O componente `ManifestoPhilosophy` não usa Framer Motion. Usa `requestAnimationFrame` puro para ler `scrollY` e calcular a opacidade de cada palavra individualmente com easing quartic. O "track" de scroll tem 500svh de altura, mas o conteúdo fica `sticky` em 100svh — efeito de câmera lenta sem `transition` CSS.
+Entender a técnica é uma coisa. Reescrever ela do zero em cada projeto é outra, e cansa. Foi por isso que empacotei tudo o que está aqui em skills prontas pro Claude Code: você digita um comando e o efeito sai do jeito certo, com cleanup, easing e responsividade já resolvidos.
 
-A função `computeWordOpacity` divide cada frase em três fases: revela em 20% do segmento, sustenta por 60%, dissolve nos últimos 20%. Cada palavra dentro da frase tem stagger próprio.
+<SkillsCTABanner />
 
-**Sistema de partículas estável**
+## Como adaptar pro seu projeto
 
-30 partículas com posição, duração e atraso aleatórios — calculados uma vez na montagem com `useMemo`. Sem isso, cada re-render geraria valores novos e a animação reiniciaria.
+A arquitetura foi pensada exatamente pra isso. Como cada seção é independente, dá pra mexer numa sem medo de derrubar as outras:
 
-## Como adaptar para o seu projeto
+1. **Pra trocar uma seção:** apague o componente em `src/components/sections/`, remova o import em `src/app/page.tsx` e coloque o novo no lugar.
+2. **Pra mudar a paleta:** edite as variáveis CSS em `src/app/globals.css`. São só três cores.
+3. **Pra reusar uma animação fora do projeto:** copie o bloco correspondente do `SNIPPETS.md`. Todos são autocontidos.
+4. **Pra mudar o ritmo geral:** ajuste o `staggerChildren` em `src/utils/motion.ts` e troque a easing `[0.16, 1, 0.3, 1]` por uma curva diferente.
 
-A arquitetura foi pensada para isso. Como cada seção é independente:
+## Checklist: antes de dizer que ficou bom
 
-1. **Para trocar uma seção:** delete o componente em `src/components/sections/`, remova o import em `src/app/page.tsx`, coloque o novo no lugar
-2. **Para mudar a paleta:** edite as variáveis CSS em `src/app/globals.css` (são só três cores)
-3. **Para reusar uma animação fora do projeto:** copie o bloco correspondente do `SNIPPETS.md`, todos são autocontidos
-4. **Para mudar o ritmo geral:** ajuste o `staggerChildren` em `src/utils/motion.ts` e a easing `[0.16, 1, 0.3, 1]` para algo com curva diferente
+O detalhe que separa um site cinematográfico de um template genérico mora nesses itens. Marque conforme conferir cada um:
 
-## A regra implícita que atravessa o projeto
+<Checklist data='[
+  { "label": "Clonou e rodou local?", "desc": "npm install + npm run dev rodando em localhost:3000 sem erro." },
+  { "label": "Leu os três docs?", "desc": "README, STRUCTURE e SNIPPETS antes de tocar no código." },
+  { "label": "A easing está definida?", "desc": "Usou a cubic-bezier [0.16, 1, 0.3, 1] em vez do ease-out padrão." },
+  { "label": "O movimento tem peso?", "desc": "Físca de mola no parallax e durações longas o bastante pra dar inércia." },
+  { "label": "O scroll conta história?", "desc": "Valores visuais amarrados ao scrollY, não a transitions de CSS." },
+  { "label": "A paleta está restrita?", "desc": "Três cores no máximo, editadas direto no globals.css." },
+  { "label": "Nenhuma animação grita?", "desc": "Se você notou o efeito antes do conteúdo, ele está exagerado." }
+]' />
+
+## A regra implícita que atravessa tudo
 
 > **Movimento que o usuário nota é movimento que falhou.**
 
-O parallax de mouse deve parecer que o site sempre foi assim. O scroll-linked deve parecer que o conteúdo tem peso. A poeira deve ser encontrada, não notada.
+O parallax de mouse tem que parecer que o site sempre foi assim. O scroll-linked tem que parecer que o conteúdo tem peso de verdade. A poeira do fundo tem que ser encontrada, nunca notada.
 
-Se você olhar para uma animação e pensar "que animação legal" — ela está errada. Animação cinematográfica não é decoração. É hierarquia visual aplicada ao tempo.
+Se você olha pra uma animação e pensa "que animação legal", ela está errada. Animação cinematográfica não é decoração. É hierarquia visual aplicada ao tempo.
 
 ## Próximo passo
 
-Clona, roda, mexe. O projeto inteiro são 7 seções e uns 10 arquivos relevantes. Em uma tarde você entende tudo.
+Clona, roda, mexe. O projeto inteiro são 7 seções e uns 10 arquivos que importam. Numa tarde você entende tudo.
 
-Se construir algo em cima, marca [@rafha.gpt](https://instagram.com/rafha.gpt) — quero ver.
+E se construir algo em cima, marca o [@rafha.gpt](https://instagram.com/rafha.gpt). Quero muito ver o que você vai fazer.
