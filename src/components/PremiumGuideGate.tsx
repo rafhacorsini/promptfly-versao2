@@ -5,11 +5,16 @@ import styles from "./PremiumGuideGate.module.css";
 
 interface Props {
   purchaseUrl: string;
-  groupUrl?: string | null;
-  groupLabel?: string;
 }
 
-export default function PremiumGuideGate({ purchaseUrl, groupUrl, groupLabel }: Props) {
+const perks = [
+  "Acesso ao grupo exclusivo com quem já está prospectando",
+  "Templates de DM prontos para copiar e adaptar",
+  "Estrutura de oferta: isca, projeto pago e recorrência",
+  "Passo a passo completo do projeto isca",
+];
+
+export default function PremiumGuideGate({ purchaseUrl }: Props) {
   const [showLogin, setShowLogin] = useState(false);
   const [emailInput, setEmailInput] = useState("");
   const [sending, setSending] = useState(false);
@@ -69,28 +74,28 @@ export default function PremiumGuideGate({ purchaseUrl, groupUrl, groupLabel }: 
     <div className={styles.wrapper}>
       <div className={styles.overlayGate}>
         <span className={styles.badge}>Conteúdo de membros</span>
-        <h2 className={styles.title}>O resto deste guia é exclusivo pra membros Premium.</h2>
+        <h2 className={styles.title}>Quer continuar lendo?</h2>
         <p className={styles.text}>
-          Templates de DM prontos, estrutura de oferta (preço de isca, preço cheio e
-          recorrência) e o passo a passo do projeto isca — tudo o que falta pra você
-          começar a prospectar hoje.
+          Entre no grupo exclusivo e tenha acesso a:
         </p>
+
+        <ul className={styles.perks}>
+          {perks.map((perk) => (
+            <li key={perk} className={styles.perk}>
+              <span className={styles.check}>✓</span>
+              <span>{perk}</span>
+            </li>
+          ))}
+        </ul>
 
         <div className={styles.actions}>
           <a href={purchaseUrl} target="_blank" rel="noopener noreferrer" className={styles.buyBtn}>
-            Continuar com a assinatura Premium →
+            Entrar no grupo exclusivo →
           </a>
           <button type="button" className={styles.loginBtn} onClick={() => setShowLogin(true)}>
-            Já sou Premium, entrar
+            Já sou membro, entrar
           </button>
         </div>
-
-        {groupUrl && (
-          <a href={groupUrl} target="_blank" rel="noopener noreferrer" className={styles.groupCta}>
-            <span className={styles.groupTag}>Quer ter acesso?</span>
-            <span>{groupLabel ?? "Entrar no grupo exclusivo →"}</span>
-          </a>
-        )}
       </div>
 
       {showLogin && (

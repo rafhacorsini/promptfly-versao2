@@ -9,16 +9,17 @@
 
 .overlayGate {
   background: var(--color-title);
+  border: 1px solid rgba(255, 255, 255, 0.08);
   border-radius: var(--radius-lg);
-  padding: clamp(1.5rem, 4vw, 2.5rem);
+  padding: clamp(1.5rem, 4vw, 2.25rem);
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
-  gap: 0.85rem;
-  text-align: left;
+  align-items: center;
+  gap: 0.75rem;
+  text-align: center;
   width: 100%;
-  max-width: 540px;
-  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.25);
+  max-width: 460px;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.3);
   pointer-events: auto;
 }
 
@@ -30,13 +31,13 @@
   text-transform: uppercase;
   color: var(--color-accent);
   background: rgba(255, 76, 0, 0.12);
-  padding: 0.25rem 0.6rem;
+  padding: 0.3rem 0.7rem;
   border-radius: 999px;
 }
 
 .title {
   font-family: var(--font-primary);
-  font-size: clamp(1.25rem, 3vw, 1.7rem);
+  font-size: clamp(1.25rem, 3vw, 1.6rem);
   font-weight: 800;
   color: #fff;
   margin: 0;
@@ -46,40 +47,63 @@
 
 .text {
   font-family: var(--font-primary);
-  font-size: 0.92rem;
-  line-height: 1.65;
-  color: rgba(255, 255, 255, 0.65);
+  font-size: 0.9rem;
+  line-height: 1.6;
+  color: rgba(255, 255, 255, 0.6);
   margin: 0;
   text-wrap: pretty;
+}
+
+.perks {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  width: 100%;
+  margin: 0.25rem 0 0.5rem;
+  padding: 0;
+}
+
+.perk {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.55rem;
+  font-family: var(--font-primary);
+  font-size: 0.85rem;
+  line-height: 1.5;
+  color: #f2f2f2;
+  text-align: left;
+}
+
+.check {
+  color: var(--color-accent);
+  font-weight: 700;
+  flex-shrink: 0;
+  margin-top: 0.05rem;
 }
 
 .actions {
   display: flex;
   flex-direction: column;
+  align-items: center;
   gap: 0.6rem;
   width: 100%;
   margin-top: 0.5rem;
 }
 
-@media (min-width: 480px) {
-  .actions {
-    flex-direction: row;
-    align-items: center;
-  }
-}
-
 .buyBtn {
-  display: inline-flex;
+  display: flex;
   align-items: center;
   justify-content: center;
   font-family: var(--font-primary);
-  font-size: 0.9rem;
+  font-size: 0.95rem;
   font-weight: 700;
   color: #fff;
   background: var(--color-accent);
   text-decoration: none;
-  padding: 0.85rem 1.5rem;
+  padding: 0.9rem 1.5rem;
   border-radius: 10px;
+  width: 100%;
   transition: opacity 0.18s ease;
 }
 
@@ -89,48 +113,19 @@
 
 .loginBtn {
   font-family: var(--font-primary);
-  font-size: 0.85rem;
+  font-size: 0.82rem;
   font-weight: 500;
-  color: rgba(255, 255, 255, 0.6);
+  color: rgba(255, 255, 255, 0.5);
   background: none;
   border: none;
   cursor: pointer;
   text-decoration: underline;
   text-underline-offset: 2px;
-  padding: 0.5rem 0;
+  padding: 0.25rem 0;
 }
 
 .loginBtn:hover {
   color: #fff;
-}
-
-.groupCta {
-  display: flex;
-  align-items: center;
-  gap: 0.6rem;
-  flex-wrap: wrap;
-  width: 100%;
-  margin-top: 0.5rem;
-  padding-top: 0.85rem;
-  border-top: 1px solid rgba(255, 255, 255, 0.1);
-  font-family: var(--font-primary);
-  font-size: 0.85rem;
-  font-weight: 600;
-  color: var(--color-accent);
-  text-decoration: none;
-  transition: opacity 0.18s ease;
-}
-
-.groupCta:hover {
-  opacity: 0.85;
-}
-
-.groupTag {
-  font-size: 0.68rem;
-  font-weight: 700;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  color: rgba(255, 255, 255, 0.5);
 }
 
 /* ── Modal de login ── */

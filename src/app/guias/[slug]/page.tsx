@@ -147,7 +147,7 @@ export default async function GuidePage({ params }: Props) {
                   <MDXRemote source={lockedContent} components={{ TemplateCTAInline, GuideCarousel, SkillsCTABanner, VipGroupBanner, AnimationCard, AnimationPromo, Checklist }} />
                 </article>
               </div>
-              <PremiumGuideGate purchaseUrl={premium.purchaseUrl} groupUrl={premium.groupUrl} groupLabel={premium.groupLabel} />
+              <PremiumGuideGate purchaseUrl={premium.purchaseUrl} />
             </div>
           )}
 
