@@ -40,6 +40,11 @@ export const CATEGORIES: Record<string, Category> = {
     description: "Claude Code, Codex CLI, Cursor e stack de IA",
     icon: "⌧",
   },
+  negocios: {
+    label: "Negócios",
+    description: "Como transformar sites com IA em clientes pagantes",
+    icon: "◆",
+  },
 };
 
 export function getCategoryMeta(slug: string): Category | null {

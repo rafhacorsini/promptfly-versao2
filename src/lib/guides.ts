@@ -12,6 +12,7 @@ export interface GuideFrontmatter {
   readTime: string;
   category: string;
   featured?: boolean;
+  premium?: boolean;
 }
 
 export interface Guide extends GuideFrontmatter {
@@ -37,6 +38,7 @@ export function getAllGuides(): Guide[] {
       readTime: data.readTime ?? "5 min",
       category: data.category ?? "fundamentos",
       featured: data.featured ?? false,
+      premium: data.premium ?? false,
     } as Guide;
   });
 

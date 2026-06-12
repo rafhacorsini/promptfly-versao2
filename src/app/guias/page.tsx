@@ -46,6 +46,9 @@ export default function GuiasPage() {
                   {String(i + 1).padStart(2, "0")}
                 </span>
                 <div className={styles.tags}>
+                  {guide.premium && (
+                    <span className={styles.premiumBadge}>Membros</span>
+                  )}
                   {guide.tags.slice(0, 2).map((tag) => (
                     <span key={tag} className={styles.tagBadge}>{tag}</span>
                   ))}

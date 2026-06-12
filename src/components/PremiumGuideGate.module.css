@@ -1,0 +1,234 @@
+.wrapper {
+  position: relative;
+  margin: 2rem 0;
+}
+
+.fade {
+  position: absolute;
+  top: -120px;
+  left: 0;
+  right: 0;
+  height: 120px;
+  background: linear-gradient(to bottom, transparent, var(--color-bg));
+  pointer-events: none;
+}
+
+.card {
+  background: var(--color-title);
+  border-radius: var(--radius-lg);
+  padding: clamp(1.5rem, 4vw, 2.5rem);
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.85rem;
+  text-align: left;
+}
+
+.badge {
+  font-family: var(--font-primary);
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-accent);
+  background: rgba(255, 76, 0, 0.12);
+  padding: 0.25rem 0.6rem;
+  border-radius: 999px;
+}
+
+.title {
+  font-family: var(--font-primary);
+  font-size: clamp(1.25rem, 3vw, 1.7rem);
+  font-weight: 800;
+  color: #fff;
+  margin: 0;
+  line-height: 1.25;
+  text-wrap: balance;
+}
+
+.text {
+  font-family: var(--font-primary);
+  font-size: 0.92rem;
+  line-height: 1.65;
+  color: rgba(255, 255, 255, 0.65);
+  margin: 0;
+  text-wrap: pretty;
+}
+
+.actions {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  width: 100%;
+  margin-top: 0.5rem;
+}
+
+@media (min-width: 480px) {
+  .actions {
+    flex-direction: row;
+    align-items: center;
+  }
+}
+
+.buyBtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-primary);
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: #fff;
+  background: var(--color-accent);
+  text-decoration: none;
+  padding: 0.85rem 1.5rem;
+  border-radius: 10px;
+  transition: opacity 0.18s ease;
+}
+
+.buyBtn:hover {
+  opacity: 0.88;
+}
+
+.loginBtn {
+  font-family: var(--font-primary);
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.6);
+  background: none;
+  border: none;
+  cursor: pointer;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  padding: 0.5rem 0;
+}
+
+.loginBtn:hover {
+  color: #fff;
+}
+
+/* ── Modal de login ── */
+.overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1100;
+  background: rgba(0, 0, 0, 0.45);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--spacing-md);
+  animation: fade 0.2s ease;
+}
+
+@keyframes fade {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.modal {
+  width: 100%;
+  max-width: 420px;
+  background: #fff;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-lg);
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.2);
+}
+
+.modalTitle {
+  font-size: 1.3rem;
+  font-weight: 600;
+  color: var(--color-title);
+  margin: 0 0 0.5rem;
+}
+
+.modalText {
+  font-size: 0.9rem;
+  line-height: 1.55;
+  color: var(--color-text);
+  margin: 0 0 var(--spacing-md);
+  text-wrap: pretty;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.input {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  border: 1px solid var(--color-border);
+  border-radius: 10px;
+  font-family: var(--font-primary);
+  font-size: 0.95rem;
+  color: var(--color-title);
+  background: var(--color-surface);
+}
+
+.input:focus {
+  border-color: var(--color-subtitle);
+}
+
+.codeInput {
+  width: 100%;
+  padding: 0.85rem 1rem;
+  border: 1px solid var(--color-border);
+  border-radius: 10px;
+  font-family: var(--font-primary);
+  font-size: 1.6rem;
+  font-weight: 600;
+  letter-spacing: 0.5em;
+  text-align: center;
+  color: var(--color-title);
+  background: var(--color-surface);
+}
+
+.codeInput:focus {
+  border-color: var(--color-subtitle);
+}
+
+.codeInput::placeholder {
+  color: var(--color-subtitle);
+  letter-spacing: 0.5em;
+}
+
+.submitBtn,
+.closeBtn {
+  padding: 0.75rem 1rem;
+  border-radius: 10px;
+  font-family: var(--font-primary);
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+  background: var(--color-title);
+  color: #fff;
+  border: 1px solid var(--color-title);
+  transition: transform 0.15s ease, opacity 0.2s ease;
+}
+
+.submitBtn:hover,
+.closeBtn:hover {
+  transform: translateY(-1px);
+}
+
+.submitBtn:disabled {
+  opacity: 0.6;
+  cursor: wait;
+}
+
+.closeBtn {
+  margin-top: var(--spacing-md);
+  width: 100%;
+  background: none;
+  color: var(--color-subtitle);
+  border-color: var(--color-border);
+}
+
+.modalError {
+  display: block;
+  margin-top: 0.6rem;
+  font-size: 0.82rem;
+  color: var(--color-accent);
+}

@@ -4,6 +4,10 @@ import { MDXRemote } from "next-mdx-remote/rsc";
 import matter from "gray-matter";
 import Link from "next/link";
 import { getAllGuides, getGuideSource } from "@/lib/guides";
+import { getSessionEmail } from "@/lib/session";
+import { hasAccess } from "@/lib/access";
+import { premium } from "@/lib/premium";
+import PremiumGuideGate from "@/components/PremiumGuideGate";
 import ReadingProgress from "@/components/ReadingProgress";
 import ShareButtons from "@/components/ShareButtons";
 import TemplateCTAInline from "@/components/TemplateCTAInline";
@@ -60,6 +64,18 @@ export default async function GuidePage({ params }: Props) {
   if (!source) notFound();
 
   const { data, content } = matter(source);
+
+  let renderedContent = content;
+  let locked = false;
+  if (data.premium) {
+    const email = await getSessionEmail();
+    const unlocked = email ? await hasAccess(email, premium.productId) : false;
+    if (!unlocked) {
+      locked = true;
+      renderedContent = content.split("{/* PREMIUM_CUT */}")[0];
+    }
+  }
+
   const allGuides = getAllGuides();
   const currentIndex = allGuides.findIndex((g) => g.slug === slug);
   const prevGuide = currentIndex < allGuides.length - 1 ? allGuides[currentIndex + 1] : null;
@@ -118,8 +134,10 @@ export default async function GuidePage({ params }: Props) {
           <div className={styles.divider} />
 
           <article className={styles.article}>
-            <MDXRemote source={content} components={{ TemplateCTAInline, GuideCarousel, SkillsCTABanner, VipGroupBanner, AnimationCard, AnimationPromo, Checklist }} />
+            <MDXRemote source={renderedContent} components={{ TemplateCTAInline, GuideCarousel, SkillsCTABanner, VipGroupBanner, AnimationCard, AnimationPromo, Checklist }} />
           </article>
+
+          {locked && <PremiumGuideGate purchaseUrl={premium.purchaseUrl} />}
 
           {/* Share */}
           <div className={styles.divider} />
