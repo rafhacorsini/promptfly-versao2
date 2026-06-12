@@ -18,6 +18,41 @@ export default function AdminPage() {
   const [status, setStatus] = useState<"idle" | "saving" | "ok" | "error">("idle");
   const [errorMsg, setErrorMsg] = useState("");
 
+  const [emailsText, setEmailsText] = useState("");
+  const [grantStatus, setGrantStatus] = useState<"idle" | "saving" | "ok" | "error">("idle");
+  const [grantMsg, setGrantMsg] = useState("");
+
+  async function handleGrantAccess(e: React.FormEvent) {
+    e.preventDefault();
+    setGrantStatus("saving");
+    setGrantMsg("");
+
+    const emails = emailsText
+      .split(/[\n,;]+/)
+      .map((s) => s.trim())
+      .filter(Boolean);
+
+    try {
+      const res = await fetch("/api/admin/grant-access", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ password, emails }),
+      });
+      const json = await res.json();
+      if (!res.ok) {
+        setGrantMsg(json.error ?? "Erro desconhecido.");
+        setGrantStatus("error");
+      } else {
+        setGrantMsg(`Acesso liberado para ${json.granted.length} e-mail(s).`);
+        setGrantStatus("ok");
+        setEmailsText("");
+      }
+    } catch {
+      setGrantMsg("Erro de conexão.");
+      setGrantStatus("error");
+    }
+  }
+
   function handleAuth(e: React.FormEvent) {
     e.preventDefault();
     if (!password.trim()) return;
@@ -88,6 +123,36 @@ export default function AdminPage() {
             Ao salvar, o arquivo é commitado no GitHub e a Vercel faz o deploy automático em ~1 minuto.
           </p>
         </div>
+
+        <form onSubmit={handleGrantAccess} className={styles.form}>
+          <div className={styles.pageHeader}>
+            <p className={styles.pageLabel}>[ ACESSO PREMIUM ]</p>
+            <h1 className={styles.pageTitle}>Liberar acesso de membros</h1>
+            <p className={styles.pageHint}>
+              Cole um e-mail por linha (ou separados por vírgula). Cada e-mail recebe acesso
+              Premium completo — assim o membro pode logar nos guias exclusivos com esse e-mail.
+            </p>
+          </div>
+
+          <Field label="E-mails para liberar">
+            <textarea
+              className={styles.textarea}
+              value={emailsText}
+              onChange={(e) => setEmailsText(e.target.value)}
+              rows={6}
+              placeholder={"fulano@gmail.com\nciclana@gmail.com"}
+            />
+          </Field>
+
+          <div className={styles.formFooter}>
+            <button type="submit" className={styles.saveBtn} disabled={grantStatus === "saving"}>
+              {grantStatus === "saving" ? "Liberando..." : "Liberar acesso →"}
+            </button>
+
+            {grantStatus === "ok" && <p className={styles.success}>✓ {grantMsg}</p>}
+            {grantStatus === "error" && <p className={styles.error}>{grantMsg}</p>}
+          </div>
+        </form>
 
         <form onSubmit={handleSave} className={styles.form}>
           <Field label="Título">
