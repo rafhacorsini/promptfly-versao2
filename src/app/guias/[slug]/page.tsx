@@ -65,14 +65,17 @@ export default async function GuidePage({ params }: Props) {
 
   const { data, content } = matter(source);
 
-  let renderedContent = content;
+  let previewContent = content;
+  let lockedContent = "";
   let locked = false;
   if (data.premium) {
     const email = await getSessionEmail();
     const unlocked = email ? await hasAccess(email, premium.productId) : false;
     if (!unlocked) {
       locked = true;
-      renderedContent = content.split("{/* PREMIUM_CUT */}")[0];
+      const [before, after] = content.split("{/* PREMIUM_CUT */}");
+      previewContent = before;
+      lockedContent = after ?? "";
     }
   }
 
@@ -134,10 +137,19 @@ export default async function GuidePage({ params }: Props) {
           <div className={styles.divider} />
 
           <article className={styles.article}>
-            <MDXRemote source={renderedContent} components={{ TemplateCTAInline, GuideCarousel, SkillsCTABanner, VipGroupBanner, AnimationCard, AnimationPromo, Checklist }} />
+            <MDXRemote source={previewContent} components={{ TemplateCTAInline, GuideCarousel, SkillsCTABanner, VipGroupBanner, AnimationCard, AnimationPromo, Checklist }} />
           </article>
 
-          {locked && <PremiumGuideGate purchaseUrl={premium.purchaseUrl} />}
+          {locked && (
+            <div className={styles.lockedWrapper}>
+              <div className={styles.lockedContent}>
+                <article className={styles.article}>
+                  <MDXRemote source={lockedContent} components={{ TemplateCTAInline, GuideCarousel, SkillsCTABanner, VipGroupBanner, AnimationCard, AnimationPromo, Checklist }} />
+                </article>
+              </div>
+              <PremiumGuideGate purchaseUrl={premium.purchaseUrl} groupUrl={premium.groupUrl} groupLabel={premium.groupLabel} />
+            </div>
+          )}
 
           {/* Share */}
           <div className={styles.divider} />

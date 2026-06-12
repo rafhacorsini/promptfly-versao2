@@ -3,7 +3,13 @@
 import { useState } from "react";
 import styles from "./PremiumGuideGate.module.css";
 
-export default function PremiumGuideGate({ purchaseUrl }: { purchaseUrl: string }) {
+interface Props {
+  purchaseUrl: string;
+  groupUrl?: string | null;
+  groupLabel?: string;
+}
+
+export default function PremiumGuideGate({ purchaseUrl, groupUrl, groupLabel }: Props) {
   const [showLogin, setShowLogin] = useState(false);
   const [emailInput, setEmailInput] = useState("");
   const [sending, setSending] = useState(false);
@@ -61,9 +67,7 @@ export default function PremiumGuideGate({ purchaseUrl }: { purchaseUrl: string 
 
   return (
     <div className={styles.wrapper}>
-      <div className={styles.fade} />
-
-      <div className={styles.card}>
+      <div className={styles.overlayGate}>
         <span className={styles.badge}>Conteúdo de membros</span>
         <h2 className={styles.title}>O resto deste guia é exclusivo pra membros Premium.</h2>
         <p className={styles.text}>
@@ -74,12 +78,19 @@ export default function PremiumGuideGate({ purchaseUrl }: { purchaseUrl: string 
 
         <div className={styles.actions}>
           <a href={purchaseUrl} target="_blank" rel="noopener noreferrer" className={styles.buyBtn}>
-            Quero ser Premium →
+            Continuar com a assinatura Premium →
           </a>
           <button type="button" className={styles.loginBtn} onClick={() => setShowLogin(true)}>
             Já sou Premium, entrar
           </button>
         </div>
+
+        {groupUrl && (
+          <a href={groupUrl} target="_blank" rel="noopener noreferrer" className={styles.groupCta}>
+            <span className={styles.groupTag}>Quer ter acesso?</span>
+            <span>{groupLabel ?? "Entrar no grupo exclusivo →"}</span>
+          </a>
+        )}
       </div>
 
       {showLogin && (

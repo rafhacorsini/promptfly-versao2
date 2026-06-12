@@ -171,6 +171,22 @@
   font-size: 0.875em;
 }
 
+/* ── Conteúdo bloqueado (premium) ── */
+.lockedWrapper {
+  position: relative;
+  margin-top: -0.5rem;
+}
+
+.lockedContent {
+  max-height: 480px;
+  overflow: hidden;
+  filter: blur(6px);
+  -webkit-mask-image: linear-gradient(to bottom, black 0%, transparent 90%);
+  mask-image: linear-gradient(to bottom, black 0%, transparent 90%);
+  pointer-events: none;
+  user-select: none;
+}
+
 /* ── Newsletter CTA ── */
 .cta {
   background: #1a1a1a;
