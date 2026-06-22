@@ -1,0 +1,181 @@
+---
+title: "Como clonar uma seção cinematográfica com a extensão do Claude"
+description: "Achou um site cinematográfico e quer replicar uma seção? Não refaça do zero. Use a extensão do Claude no Chrome para fazer engenharia reversa do movimento — com dados medidos, não chutados — e o Claude Code para reconstruir com fidelidade. Os dois prompts completos estão aqui."
+date: "2026-06-22"
+tags: ["claude code", "extensão chrome", "engenharia reversa", "sites cinematográficos", "gsap"]
+readTime: "12 min"
+category: "tecnicas"
+featured: true
+---
+
+Você achou um site cinematográfico, daqueles que parecem ter saído de um estúdio, e bateu aquela vontade: *queria essa seção no meu projeto.* O instinto errado é abrir o editor e tentar refazer no olho. Você passa horas, chega perto, mas nunca igual — porque o que faz aquela seção funcionar não é o que você vê, é o que você **não** mede: o easing exato, a força do parallax, o lerp do cursor, a fórmula do scroll.
+
+A boa notícia: você não precisa refazer no olho. Você deixa o Claude fazer o trabalho sujo de **medir** o site de referência, e depois manda o Claude Code reconstruir com base nesses números. Foi exatamente assim que cloneei a seção do [darknode.army](https://www.darknode.army/en) — sem copiar uma linha de código na mão.
+
+O fluxo tem duas ferramentas e dois prompts:
+
+- **Extensão do Claude no Chrome** → faz a engenharia reversa e devolve um briefing medido.
+- **Claude Code** → recebe o briefing e reconstrói a seção.
+
+Vamos do começo.
+
+## Antes de começar: instale a extensão
+
+A peça-chave desse fluxo é a **extensão do Claude para Chrome** (Claude in Chrome). É ela que dá ao modelo acesso à aba do navegador — ele consegue abrir o site, mover o cursor, ler o DOM e tirar screenshots por conta própria. Sem ela, o Claude está cego; com ela, ele vira um inspetor que mede em vez de adivinhar.
+
+Instale, faça login com a sua conta e fixe na barra do Chrome. Feito isso, abra o site de referência numa aba e deixe ela ativa — é nessa aba que o Claude vai trabalhar.
+
+## Passo 1 — Inspecione a seção que você quer copiar
+
+Abra o site de referência, aperte **F12** e inspecione o elemento da seção que você quer replicar. Você não precisa entender o código ainda — só precisa saber **qual** seção é e como ela se chama no DOM (um seletor, um id, uma classe, ou só "a seção do herói com o texto gigante").
+
+Isso vale ouro no próximo passo: quanto mais preciso você for ao apontar a seção, menos o Claude se perde medindo a página errada.
+
+## Passo 2 — Mande o Claude medir (não opinar)
+
+Abra a extensão do Claude no Chrome, com a aba do site de referência ativa, e cole o prompt abaixo. Ele é desenhado para uma coisa só: **arrancar dados medidos do site**, não impressões. Substitua `[URL]` e `[SEÇÃO]`.
+
+```text
+Você tem acesso a uma aba de navegador. Quero engenharia reversa do movimento de
+uma seção. Devolva DADOS MEDIDOS, não impressões.
+
+SITE: [URL]
+SEÇÃO: [seletor ou descrição, ex: a seção "Our Values"]
+
+PASSO 1 — REPOUSO
+Carregue a página, cursor parado fora da viewport. Screenshot do estado inicial.
+
+PASSO 2 — VARREDURA (se houver mecânica de cursor)
+Mova o cursor a 5 posições (4 cantos + centro). Screenshot e anote qualquer
+readout/valor exibido em cada posição.
+
+PASSO 3 — MEDIÇÃO NO DOM (o mais importante)
+Para cada elemento que se move:
+- identifique o seletor;
+- leia o `transform` computado (getComputedStyle e/ou _gsap.x/_gsap.y) em cada
+  posição/estado;
+- monte tabela [input em px/percent] -> [transform em px] -> [scale];
+- calcule o "strength" (px de deslocamento por unidade normalizada do input).
+
+PASSO 4 — IMPLEMENTAÇÃO
+- A página usa GSAP? Lenis? Quais plugins? (cheque window.gsap)
+- Localize os handlers (mousemove / scroll) e o loop (requestAnimationFrame /
+  gsap.ticker).
+- Extraia a suavização REAL: lerp factor OU duration+ease do GSAP. Copie o trecho.
+- Liste as URLs dos JS carregados.
+
+PASSO 5 — SCROLL (se houver)
+Role a seção devagar, 3 screenshots dos estados. Confirme se é pinada
+(sticky/fixed), por quantos px/vh dura, e a fórmula que calcula o progresso.
+
+FORMATO DA RESPOSTA: preencha com valores medidos. Se algum passo falhar (CSP,
+código minificado, etc), diga exatamente o que falhou EM VEZ de estimar.
+```
+
+O último parágrafo é o mais importante e é proposital. Sem ele, quando o código estiver minificado ou houver bloqueio de segurança, a IA **inventa** um número plausível pra não te decepcionar — e você reconstrói em cima de uma mentira. Com ele, o agente é forçado a admitir o que não conseguiu medir. Prefira um "não consegui ler isso" honesto a um número bonito e falso.
+
+## Passo 3 — Extraia os assets e os design tokens
+
+Movimento é metade. A outra metade é a **identidade visual**: fonte, cor, imagem, Lottie. Esses valores precisam ser os reais, não aproximações. Ainda na extensão (ou no DevTools, se preferir mão na massa), peça ao Claude para extrair:
+
+**Fontes** — o jeito definitivo de saber quantas fontes existem é a aba **Network → filtro "Font" → recarregar**: ela lista todos os `.woff2`. Para cada papel de texto:
+
+```js
+const h = document.querySelector('[SELETOR_TITULO]');
+const b = document.querySelector('[SELETOR_CORPO]');
+console.log('TITULO:', getComputedStyle(h).fontFamily, getComputedStyle(h).fontWeight);
+console.log('CORPO:', getComputedStyle(b).fontFamily, getComputedStyle(b).fontSize);
+```
+
+> **Sinal de alerta:** se o título parece condensado mas só carregou uma fonte mono, ele provavelmente usa `transform: scaleX()` + `letter-spacing` negativo pra **fingir** condensado. Confirme antes de sair caçando uma fonte que não existe.
+
+**Cores** — `getComputedStyle(el).color` / `backgroundColor`, ou o color picker do DevTools. Lembre: o fundo pode vir de uma **imagem**, não de uma cor sólida. Naquele caso, o "vermelho" não é um hex — é a foto.
+
+**Imagens / Lottie / vídeo** — aba **Network → filtro "Img" / "Media"** → copie as URLs do CDN. Para Lottie, ache o `data-src` do `.json` no HTML.
+
+**Camadas e efeitos (o detalhe que engana)** — cheque `backdrop-filter`, `mix-blend-mode`, `filter`, opacidade. Exemplo real: um painel que parece "outra imagem borrada" costuma ser a **mesma** imagem full-bleed com `backdrop-filter: blur()` num painel de vidro por cima. Pra isso funcionar, o painel precisa de fundo transparente — é o tipo de detalhe que separa um clone fiel de um "parecido".
+
+## Passo 4 — Monte o briefing de build
+
+Agora junte tudo num spec sem buracos. A regra é simples: **tudo que você mediu vira instrução; tudo que você inferiu vai pro bloco de LACUNAS, marcado.** Esse é o esqueleto que a extensão vai preencher:
+
+```text
+Reconstrua uma seção IDÊNTICA a [REFERÊNCIA]. Stack: [Next.js + TS + Tailwind +
+GSAP + Lenis]. Um único componente client.
+
+OBJETIVO: [resumo da mecânica em 2 linhas]
+
+ESTRUTURA (hierarquia exata + camadas/z-index):
+[árvore + ordem de empilhamento]
+
+ASSETS (URLs exatas):
+[imagens, Lottie, SVGs]
+
+TEXTOS (exatos):
+[conteúdo literal]
+
+TIPOGRAFIA:
+--font-display: [nome confirmado]
+--font-mono: [nome confirmado]
+[pesos, uppercase, letter-spacing, tamanhos por estado]
+
+CORES:
+--text: [hex]   |   fundo: [imagem ou hex]   |   --accent: [hex]
+
+MECÂNICA (replicar exatamente):
+[fórmula de progresso / handler de cursor / lerp factor OU duration+ease REAIS
+medidos no Passo 2. NÃO adicionar suavização que o original não tem.]
+
+EFEITOS DE CAMADA:
+[backdrop-filter, blend modes, blur, com os valores exatos]
+
+RESPONSIVO: [desktop foco / fallback mobile]
+
+CRITÉRIOS DE ACEITE:
+[lista verificável: "em 0% só X grande", "fundo troca pra Y em Z%", etc]
+
+⚠️ LACUNAS / SUPOSIÇÕES (não medido, confirmar depois):
+[liste tudo que você inferiu em vez de medir]
+```
+
+O bloco de **LACUNAS** no fim é o que separa um clone fiel de um chute disfarçado. Tudo que não foi medido entra ali, à vista, nunca silenciosamente embutido no código como se fosse fato.
+
+<SkillsCTABanner />
+
+## Passo 5 — Cole no Claude Code e reconstrua
+
+Com o briefing na mão, abra o **Claude Code** no seu projeto e cole o briefing junto com este segundo prompt:
+
+```text
+Com base neste briefing, recrie esta seção em Next.js + Tailwind com animações
+GSAP. Mantenha a identidade visual e o ritmo cinematográfico.
+```
+
+Pronto. O Claude Code não está adivinhando mais nada — ele tem a estrutura, os assets, as cores, a tipografia e, principalmente, os números do movimento. Ele constrói em cima de medições, não de impressões.
+
+Fica muito mais fácil você explicar para a IA um efeito, ou descrever como quer uma seção da sua página, **tendo o código de referência nas mãos**. Resultado: seção recriada com fidelidade — sem ficar copiando código na mão.
+
+## Por que isso funciona (e o que mais quase ninguém faz)
+
+A maioria das pessoas pede pra IA "fazer parecido com aquele site". A IA olha um screenshot, gosta da vibe e gera algo *na média* — bonito, mas sem alma, porque ela nunca soube qual era o easing real nem a força do parallax. O pulo do gato aqui é inverter a ordem: primeiro **medir**, depois **construir**. Você transforma uma impressão subjetiva ("queria esse efeito") em um spec objetivo ("translateY de 40px com `power3.out` em 0.9s, scrub atrelado ao Lenis").
+
+Antes de declarar vitória, rode este checklist mental sobre o que você entregou para o Claude Code:
+
+<Checklist data='[
+  { "label": "Medi o easing e a duração reais?", "desc": "Lerp factor OU duration+ease copiados do original, não chutados?" },
+  { "label": "A força do movimento está em número?", "desc": "Px de deslocamento por unidade de input, não \"mais ou menos forte\"?" },
+  { "label": "Os assets são as URLs reais?", "desc": "Imagens, Lottie e fontes do CDN do site, não substitutos parecidos?" },
+  { "label": "Confirmei a tipografia na aba Network?", "desc": "Sei quantas fontes existem e se o título é condensado de verdade ou fake?" },
+  { "label": "Mapeei os efeitos de camada?", "desc": "backdrop-filter, blend modes e blur com valores exatos?" },
+  { "label": "Listei tudo que NÃO medi nas LACUNAS?", "desc": "O que foi inferido está marcado, não embutido como fato?" }
+]' />
+
+Se faltar um desses, o resultado escorrega pro genérico. Se todos estiverem marcados, você não clonou a aparência — clonou a **decisão** por trás dela.
+
+## Acelere os passos repetitivos com as skills
+
+Esse fluxo funciona, mas tem partes que você vai repetir em **todo** projeto: criar o componente GSAP com cleanup correto, montar a hero com parallax, mapear a paleta, auditar a performance dos vídeos. Reescrever esses prompts do zero toda vez é trabalho braçal.
+
+Foi por isso que empacotei os comandos que mais uso em **skills prontas para o Claude Code**. Em vez de escrever o prompt inteiro de novo, você instala uma vez e chama com `/nome-da-skill` — o agente executa, você dirige. Combinadas com o fluxo de engenharia reversa deste guia, elas tiram quase todo o atrito de transformar uma referência cinematográfica num código seu.
+
+<SkillsCTABanner />
