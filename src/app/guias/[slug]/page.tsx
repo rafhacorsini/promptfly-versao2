@@ -3,7 +3,7 @@ import { notFound } from "next/navigation";
 import { MDXRemote } from "next-mdx-remote/rsc";
 import matter from "gray-matter";
 import Link from "next/link";
-import { getAllGuides, getGuideSource } from "@/lib/guides";
+import { getAllGuides, getPublicGuides, getGuideSource } from "@/lib/guides";
 import { getSessionEmail } from "@/lib/session";
 import { hasAccess } from "@/lib/access";
 import { premium } from "@/lib/premium";
@@ -40,6 +40,9 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     title: data.title,
     description: data.description,
     alternates: { canonical: `${BASE}/guias/${slug}` },
+    ...(data.membersOnly
+      ? { robots: { index: false, follow: false } }
+      : {}),
     openGraph: {
       title: data.title,
       description: data.description,
@@ -66,21 +69,28 @@ export default async function GuidePage({ params }: Props) {
 
   const { data, content } = matter(source);
 
+  const fullBlock = Boolean(data.membersOnly);
   let previewContent = content;
   let lockedContent = "";
   let locked = false;
-  if (data.premium) {
+  if (data.premium || data.membersOnly) {
     const email = await getSessionEmail();
     const unlocked = email ? await hasAccess(email, premium.productId) : false;
     if (!unlocked) {
       locked = true;
-      const [before, after] = content.split("{/* PREMIUM_CUT */}");
-      previewContent = before;
-      lockedContent = after ?? "";
+      if (fullBlock) {
+        // Exclusivo de membros: nada de prévia. Página fica fechada por completo.
+        previewContent = "";
+        lockedContent = "";
+      } else {
+        const [before, after] = content.split("{/* PREMIUM_CUT */}");
+        previewContent = before;
+        lockedContent = after ?? "";
+      }
     }
   }
 
-  const allGuides = getAllGuides();
+  const allGuides = getPublicGuides();
   const currentIndex = allGuides.findIndex((g) => g.slug === slug);
   const prevGuide = currentIndex < allGuides.length - 1 ? allGuides[currentIndex + 1] : null;
   const nextGuide = currentIndex > 0 ? allGuides[currentIndex - 1] : null;

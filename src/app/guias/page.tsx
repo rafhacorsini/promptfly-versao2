@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { getAllGuides } from "@/lib/guides";
+import { getPublicGuides } from "@/lib/guides";
 import CategoryNav from "@/components/CategoryNav";
 import styles from "./page.module.css";
 
@@ -12,7 +12,7 @@ export const metadata: Metadata = {
 };
 
 export default function GuiasPage() {
-  const guides = getAllGuides();
+  const guides = getPublicGuides();
 
   return (
     <div className={styles.page}>

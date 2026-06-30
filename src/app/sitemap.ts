@@ -1,11 +1,11 @@
 import { MetadataRoute } from "next";
-import { getAllGuides } from "@/lib/guides";
+import { getPublicGuides } from "@/lib/guides";
 import { CATEGORIES } from "@/lib/categories";
 
 const BASE = "https://promptfly.com.br";
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const guides = getAllGuides().map((guide) => ({
+  const guides = getPublicGuides().map((guide) => ({
     url: `${BASE}/guias/${guide.slug}`,
     lastModified: new Date(guide.date),
     changeFrequency: "monthly" as const,

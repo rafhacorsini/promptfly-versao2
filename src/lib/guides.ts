@@ -13,6 +13,8 @@ export interface GuideFrontmatter {
   category: string;
   featured?: boolean;
   premium?: boolean;
+  /** Conteúdo exclusivo de membros: some das listagens/sitemap e fica bloqueado por completo (sem prévia) pra quem não tem acesso. */
+  membersOnly?: boolean;
 }
 
 export interface Guide extends GuideFrontmatter {
@@ -39,6 +41,7 @@ export function getAllGuides(): Guide[] {
       category: data.category ?? "fundamentos",
       featured: data.featured ?? false,
       premium: data.premium ?? false,
+      membersOnly: data.membersOnly ?? false,
     } as Guide;
   });
 
@@ -47,8 +50,13 @@ export function getAllGuides(): Guide[] {
   );
 }
 
+/** Guias visíveis ao público (exclui os exclusivos de membros). Use em listagens e sitemap. */
+export function getPublicGuides(): Guide[] {
+  return getAllGuides().filter((g) => !g.membersOnly);
+}
+
 export function getGuidesByCategory(category: string): Guide[] {
-  return getAllGuides().filter((g) => g.category === category);
+  return getPublicGuides().filter((g) => g.category === category);
 }
 
 export function getGuideSource(slug: string): string | null {
