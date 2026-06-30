@@ -1,6 +1,6 @@
 ---
 title: "3 prompts para deixar qualquer site feito com IA cinematográfico"
-description: "Animação de texto, transição entre seções e entrada de seção. Os 3 prompts completos que transformam um site genérico em algo com cara de estúdio — especificando cada easing, duração e movimento. Cole no Claude Code e veja a diferença."
+description: "Animação de texto, transição entre seções e entrada de seção — mais um bônus: o efeito de hover que revela uma imagem como lanterna de cinema. Prompts completos, com cada easing, duração e movimento especificado. Cole no Claude Code e veja a diferença."
 date: "2026-06-30"
 tags: ["claude code", "gsap", "animações", "sites cinematográficos"]
 readTime: "9 min"
@@ -20,8 +20,9 @@ São esses 3 prompts. Cada um cobre uma camada do acabamento cinematográfico:
 - **Animação de texto** → o título não aparece, ele entra com peso.
 - **Transição entre seções** → o scroll vira uma cena, não uma lista de blocos.
 - **Entrada de seção** → cada seção chega na viewport com foco e profundidade.
+- **Texto que revela imagem** → o hover vira uma lanterna de cinema sobre a foto escondida.
 
-Abaixo, os 3 prompts **completos** — com cada parâmetro especificado pra você só copiar, colar no Claude Code e ver funcionando.
+Abaixo, os prompts **completos** — com cada parâmetro especificado pra você só copiar, colar no Claude Code e ver funcionando.
 
 {/* PREMIUM_CUT */}
 
@@ -127,13 +128,41 @@ profundidade. Ao sair de tela pra cima, reverte suavemente.
 
 > Por que funciona: animar **só** `transform`, `opacity` e `filter` mantém tudo na GPU — 60fps garantidos. O blur saindo de 8px pra 0 é o detalhe que vende o "foco de câmera". E o parallax por `data-depth` te dá camadas sem reescrever a mecânica em cada seção.
 
-## Como combinar os três
+## Bônus — Texto que revela imagem no hover (lanterna de cinema)
+
+Aquele efeito de impacto: um texto sobre um fundo escuro e, quando o mouse passa, uma "lanterna" revela a imagem que estava escondida por baixo — bem suave, com falloff longo. É o detalhe que faz a pessoa parar de rolar. Passe o mouse no preview abaixo:
+
+<AnimationCard id="mouse-reveal" />
+
+```text
+Crie um efeito de mouse reveal em HTML/CSS/JS puro (adaptável pra [Next.js + TS],
+componente client):
+— Dois layers sobrepostos: um escuro com texto na frente e uma imagem de fundo atrás.
+— A imagem é revelada por uma mask-image: radial-gradient() que segue o mouse.
+— Use CSS custom properties --mx e --my atualizadas no evento mousemove.
+— Gradiente com falloff longo e suave: 0px(0.9) → 80px(0.75) → 200px(0.45) →
+  340px(0.15) → 480px(0) — efeito de lanterna de cinema.
+— Cursor customizado: anel fino de 28px com opacity 0.35, aparece só dentro do elemento.
+— Imagem: use picsum.photos para teste. Opacity da imagem: 0.55.
+
+DETALHES:
+— Suavização: faça a lanterna seguir o cursor com lerp (interpolação) de ~0.12 por
+  frame num requestAnimationFrame, em vez de colar no mouse — é o que dá o "arrasto"
+  cinematográfico, não o movimento seco.
+— prefers-reduced-motion: mostrar a imagem estática a 0.55 de opacity, sem máscara.
+— Mobile (sem hover): revelar a imagem por scroll/toque, ou deixar visível por padrão.
+```
+
+> Por que funciona: o segredo está nos dois detalhes que quase ninguém especifica — o **falloff longo** (a luz não tem borda dura, ela desbota em 480px) e o **lerp** no requestAnimationFrame. Sem o lerp, a lanterna gruda no cursor e parece um holofote barato; com ele, ela "persegue" o mouse com um arrasto suave que lê como cinema.
+
+## Como combinar tudo
 
 A ordem importa. Aplique de fora pra dentro:
 
 1. **Entrada de seção** (Prompt 3) primeiro — é o wrapper de toda seção.
 2. **Animação de texto** (Prompt 1) dentro das seções com títulos de destaque.
 3. **Transição** (Prompt 2) apenas entre 1 ou 2 pares de seções-chave — usar em todas deixa pesado e previsível.
+4. **Texto que revela imagem** (bônus) numa única seção de impacto — hero ou um bloco "sobre" — para criar um momento memorável sem cansar.
 
 Menos é mais: um site cinematográfico tem **momentos** de impacto, não impacto constante. Se tudo se move o tempo todo, nada se destaca.
 

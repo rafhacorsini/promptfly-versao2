@@ -8,7 +8,7 @@ interface Slide {
   title: string;
   tech: string;
   summary: string;
-  demo: "text" | "transition" | "entrance";
+  demo: "text" | "transition" | "entrance" | "reveal";
 }
 
 const slides: Slide[] = [
@@ -35,6 +35,14 @@ const slides: Slide[] = [
     summary:
       "A seção \"chega\" na viewport: sobe, ganha foco e profundidade com parallax — timing controlado, nada travado.",
     demo: "entrance",
+  },
+  {
+    number: "04",
+    title: "Texto que revela imagem",
+    tech: "CSS mask-image · radial-gradient · cursor",
+    summary:
+      "Texto sobre fundo escuro; ao passar o mouse, uma lanterna revela a imagem por baixo — efeito de cinema, falloff longo e suave.",
+    demo: "reveal",
   },
 ];
 
@@ -64,12 +72,22 @@ function Demo({ kind }: { kind: Slide["demo"] }) {
       </div>
     );
   }
-  return (
-    <div className={`${styles.stage} ${styles.stageEntrance}`}>
-      <div className={styles.enterCard}>
-        <span className={styles.enterBar} />
-        <span className={styles.enterBarSm} />
+  if (kind === "entrance") {
+    return (
+      <div className={`${styles.stage} ${styles.stageEntrance}`}>
+        <div className={styles.enterCard}>
+          <span className={styles.enterBar} />
+          <span className={styles.enterBarSm} />
+        </div>
       </div>
+    );
+  }
+  return (
+    <div className={`${styles.stage} ${styles.stageReveal}`}>
+      <div className={styles.revealImg} />
+      <div className={styles.revealMask} />
+      <span className={styles.revealText}>CINEMA</span>
+      <span className={styles.revealRing} />
     </div>
   );
 }
