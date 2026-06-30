@@ -1,0 +1,138 @@
+---
+title: "O Sistema de Entrada: o padrão de animação que mantém todo site coerente"
+description: "Como o conteúdo entra na tela é o que dá ritmo a um site cinematográfico. Aqui está o padrão fechado que você aplica em todo projeto — duração, easing, distância e ordem definidos de uma vez — pra nunca mais animar no chute. Conceito, valores prontos, prompt-padrão e checklist."
+date: "2026-07-01"
+tags: ["claude code", "gsap", "animações", "sistema de design", "vip"]
+readTime: "13 min"
+category: "tecnicas"
+featured: true
+premium: true
+---
+
+A maioria das pessoas anima cada seção de um jeito. Uma sobe 20px, outra sobe 80px, uma demora 0.4s, outra 1.2s, uma usa um easing, a vizinha usa outro. O resultado parece "animado", mas não parece **cinema** — porque cinema tem ritmo, e ritmo é repetição com intenção.
+
+A virada de chave do profissional é simples: ele não decide a animação de cada elemento na hora. Ele tem um **sistema de entrada** definido uma única vez e aplica igual em tudo. Igual a um diretor que escolhe uma linguagem de câmera e mantém o filme inteiro nela.
+
+Esse guia é esse sistema. No fim você vai ter um padrão fechado — com valores prontos — pra colar em qualquer projeto e nunca mais animar no chute.
+
+{/* PREMIUM_CUT */}
+
+## Primeiro o conceito: o que é "entrada" de verdade
+
+Entrada é o momento em que um elemento sai de invisível e assume o seu lugar na tela. Parece bobo, mas é onde 90% dos sites tropeçam. Existem três jeitos de um conteúdo entrar, e a diferença entre eles é tudo:
+
+1. **Aparecer.** O elemento simplesmente liga (opacity 0 pra 1). É o mais barato e o mais comum. Não tem direção, não tem peso, não conta história.
+2. **Entrar.** O elemento vem de algum lugar (de baixo, de trás, do desfoque) e assenta. Tem direção e tem peso. É aqui que mora o cinematográfico.
+3. **Ser revelado.** O elemento já está lá, mas algo o descobre (uma cortina, uma máscara, uma lanterna). Tem mistério.
+
+O Sistema de Entrada trabalha o tipo 2 como padrão e usa o tipo 3 em momentos pontuais de impacto. O tipo 1 a gente aposenta.
+
+## As 4 leis de uma boa entrada
+
+Antes dos números, as regras que valem pra qualquer ferramenta — Framer, Webflow ou código na unha:
+
+**Lei 1 — Tudo entra na mesma direção.** Se o conteúdo sobe, ele sempre sobe. Misturar coisas vindo de cima, da esquerda e da direita na mesma página deixa tudo nervoso. Escolha uma direção principal (subir é a mais segura) e seja fiel a ela.
+
+**Lei 2 — Desacelerar no fim, nunca no começo.** O movimento começa rápido e freia ao chegar. É assim que as coisas se movem no mundo real. O contrário (começar devagar e acelerar) parece um elevador com defeito.
+
+**Lei 3 — Em cascata, não em bloco.** Quando vários elementos entram juntos, eles não chegam todos no mesmo instante. Eles vêm em sequência, com um pequeno atraso entre um e outro. Isso é o que cria a sensação de fluxo.
+
+**Lei 4 — Uma vez só, e no tempo certo.** A entrada acontece quando o elemento chega na área visível, e não se repete a cada rolagem. Animação que fica piscando toda hora cansa e perde o impacto.
+
+## O padrão fechado (os valores prontos)
+
+Aqui está o coração do sistema. São os valores que você fixa e reutiliza. Pense neles como os "tokens" da sua animação — do mesmo jeito que você tem cores e fontes definidas, você passa a ter movimento definido.
+
+| Token | Valor padrão | Pra que serve |
+|---|---|---|
+| **Distância** | 40px (subir) | Quão longe o elemento começa do lugar final |
+| **Duração** | 0.9s | Quanto tempo leva pra assentar |
+| **Easing** | `power3.out` | A curva: rápido no início, freia no fim |
+| **Cascata (stagger)** | 0.12s | Atraso entre um elemento e o próximo |
+| **Desfoque inicial** | 8px → 0 | O "foco de câmera" ao entrar (opcional) |
+| **Escala inicial** | 0.97 → 1 | Leve crescimento, dá profundidade (opcional) |
+| **Gatilho** | quando 78% da tela é cruzado | Quando dispara |
+
+Esses sete valores resolvem 95% das entradas de um site. A graça é que, uma vez definidos, **toda** seção usa os mesmos — e é exatamente essa repetição que o olho lê como qualidade.
+
+> Quer um site mais calmo e elegante? Aumente a duração pra 1.1s e diminua a distância pra 28px. Quer mais energia e impacto? Duração 0.7s, distância 56px. Mas mude **uma vez, pro site inteiro** — nunca caso a caso.
+
+## Como o padrão se aplica a cada tipo de conteúdo
+
+O mesmo sistema, vestido pra cada situação. Repare que os valores não mudam — só o que se move muda:
+
+**Título / texto de destaque.** Em vez do bloco inteiro, cada palavra entra com a cascata de 0.12s. Veja o efeito funcionando:
+
+<AnimationCard id="text-reveal" />
+
+**Parágrafos e blocos de texto.** O bloco todo sobe como uma unidade. Não vale quebrar parágrafo corrido em palavras — fica ilegível e exagerado.
+
+**Cards e grids.** Cada card entra em cascata, na ordem de leitura (esquerda pra direita, cima pra baixo). O stagger de 0.12s entre eles é o que faz a grade "se montar" na frente do usuário.
+
+**Imagens e mídia.** Sobem com a escala inicial de 0.97 e o desfoque de 8px — esse é o tipo de elemento onde o "foco de câmera" mais brilha.
+
+**Seção inteira (o wrapper).** A seção sobe como conjunto e, dentro dela, os filhos ganham um leve parallax por profundidade. É a entrada de tipo 3 combinada com o padrão.
+
+## O prompt-padrão (cole em todo projeto)
+
+Esse é o entregável que você reutiliza. Ele encapsula o sistema inteiro num único prompt pro Claude Code. Cole, ajuste o `[SELETOR]` e pronto — toda animação do projeto sai no mesmo padrão:
+
+```text
+Crie um sistema de entrada reutilizável com GSAP ScrollTrigger em [Next.js + TS].
+Componente client <Reveal> que envolve qualquer conteúdo e o anima ao entrar na
+viewport. Cleanup com gsap.context() + revert() no useEffect.
+
+PADRÃO FIXO (use estes valores como default, expostos como props com fallback):
+— distância: translateY(40px)
+— duração: 0.9s
+— easing: "power3.out"
+— stagger entre filhos diretos: 0.12s
+— escala inicial: 0.97 (prop opcional "depth")
+— blur inicial: 8px -> 0 (prop opcional "focus")
+— gatilho: ScrollTrigger start "top 78%", toggleActions "play none none reverse"
+
+VARIANTES (prop "as"):
+— "text": quebra o texto em palavras e aplica o stagger por palavra (overflow:hidden
+  no wrapper de cada palavra pra criar o clip de cinema)
+— "block": anima o elemento inteiro como unidade (parágrafos)
+— "stack": aplica stagger nos filhos diretos, na ordem do DOM (cards/grids)
+— "media": ativa depth + focus por padrão (imagens/vídeo)
+— "section": anima o wrapper + parallax leve nos filhos com data-depth de 0.1 a 0.4
+
+REGRAS:
+— Animar SOMENTE transform, opacity e filter (nunca width/height/margin) — 60fps.
+— prefers-reduced-motion: tudo visível, sem transform, sem blur.
+— Sem layout shift: reservar o espaço final desde o início.
+— Direção única: tudo sobe. Não adicionar entradas laterais a menos que eu peça.
+
+ACEITE: posso envolver qualquer bloco com <Reveal as="..."> e ele entra no padrão
+consistente, uma vez, ao cruzar 78% da tela, freando suave no fim.
+```
+
+O pulo do gato aqui é que você gera o componente **uma vez** e usa `<Reveal as="text">`, `<Reveal as="stack">` no projeto inteiro. A consistência deixa de depender da sua memória e passa a ser garantida pelo código.
+
+<SkillsCTABanner />
+
+## O atalho: a skill já entrega esse padrão pronto
+
+Montar o componente `<Reveal>` na mão toda vez, com o cleanup certo e os ScrollTriggers configurados, dá trabalho. Por isso o padrão deste guia já está empacotado em skill pro Claude Code: você instala uma vez e chama com `/gsap-component` (a base do `<Reveal>`) e `/section-hero` (a entrada da hero já no sistema). O agente gera no padrão, você só dirige.
+
+É a diferença entre reescrever a convenção em cada projeto e ter ela pronta pra colar em segundos.
+
+## Checklist do Sistema de Entrada
+
+Antes de fechar qualquer projeto, passe o olho:
+
+<Checklist items={[
+  { label: "Tudo entra na mesma direção", desc: "escolhi subir (ou outra) e fui fiel — nada de lateral aleatório no meio" },
+  { label: "Easing freia no fim, sempre o mesmo", desc: "power3.out em tudo, nunca linear nem acelerando no fim" },
+  { label: "Os valores são os mesmos no site inteiro", desc: "duração, distância e stagger fixos — não decidi caso a caso" },
+  { label: "Grids e cards entram em cascata", desc: "stagger de 0.12s na ordem de leitura, não todos de uma vez" },
+  { label: "A entrada acontece uma vez", desc: "dispara ao cruzar 78% da tela e não fica repetindo a cada scroll" },
+  { label: "Só animei transform, opacity e filter", desc: "nada de largura/altura/margem animados — segura os 60fps" },
+  { label: "Respeitei quem prefere menos movimento", desc: "prefers-reduced-motion mostra tudo estático" },
+]} />
+
+Quando todos estiverem marcados, seu site não vai só "ter animação". Ele vai ter uma **linguagem** — e é isso que faz o cliente sentir que pagou por algo de estúdio, mesmo sem saber explicar o porquê.
+
+<AnimationPromo />
