@@ -17,6 +17,7 @@ import VipGroupBanner from "@/components/VipGroupBanner";
 import AnimationCard from "@/components/AnimationCard";
 import AnimationPromo from "@/components/AnimationPromo";
 import Checklist from "@/components/Checklist";
+import PromptCarousel from "@/components/PromptCarousel";
 import styles from "./page.module.css";
 
 const BASE = "https://promptfly.com.br";
@@ -137,14 +138,14 @@ export default async function GuidePage({ params }: Props) {
           <div className={styles.divider} />
 
           <article className={styles.article}>
-            <MDXRemote source={previewContent} components={{ TemplateCTAInline, GuideCarousel, SkillsCTABanner, VipGroupBanner, AnimationCard, AnimationPromo, Checklist }} />
+            <MDXRemote source={previewContent} components={{ TemplateCTAInline, GuideCarousel, SkillsCTABanner, VipGroupBanner, AnimationCard, AnimationPromo, Checklist, PromptCarousel }} />
           </article>
 
           {locked && (
             <div className={styles.lockedWrapper}>
               <div className={styles.lockedContent}>
                 <article className={styles.article}>
-                  <MDXRemote source={lockedContent} components={{ TemplateCTAInline, GuideCarousel, SkillsCTABanner, VipGroupBanner, AnimationCard, AnimationPromo, Checklist }} />
+                  <MDXRemote source={lockedContent} components={{ TemplateCTAInline, GuideCarousel, SkillsCTABanner, VipGroupBanner, AnimationCard, AnimationPromo, Checklist, PromptCarousel }} />
                 </article>
               </div>
               <PremiumGuideGate purchaseUrl={premium.purchaseUrl} />

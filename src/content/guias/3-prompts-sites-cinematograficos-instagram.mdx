@@ -1,0 +1,168 @@
+---
+title: "3 prompts para deixar qualquer site feito com IA cinematográfico"
+description: "Animação de texto, transição entre seções e entrada de seção. Os 3 prompts completos que transformam um site genérico em algo com cara de estúdio — especificando cada easing, duração e movimento. Cole no Claude Code e veja a diferença."
+date: "2026-06-30"
+tags: ["claude code", "gsap", "animações", "sites cinematográficos"]
+readTime: "9 min"
+category: "tecnicas"
+featured: true
+premium: true
+---
+
+A diferença entre um site "feito com IA" e um site cinematográfico não está no design — está no **movimento**. Layout bonito todo mundo já consegue gerar. O que separa o genérico do profissional é como o conteúdo *entra*, como uma seção *dá lugar* à próxima, como o texto *chega* na tela.
+
+E quase ninguém faz isso direito porque pede pra IA "deixar mais animado" — e recebe um `fade-in` genérico de volta. O segredo é especificar o movimento como um diretor especifica uma cena: easing exato, duração, profundidade, ritmo.
+
+São esses 3 prompts. Cada um cobre uma camada do acabamento cinematográfico:
+
+<PromptCarousel />
+
+- **Animação de texto** → o título não aparece, ele entra com peso.
+- **Transição entre seções** → o scroll vira uma cena, não uma lista de blocos.
+- **Entrada de seção** → cada seção chega na viewport com foco e profundidade.
+
+Abaixo, os 3 prompts **completos** — com cada parâmetro especificado pra você só copiar, colar no Claude Code e ver funcionando.
+
+{/* PREMIUM_CUT */}
+
+## Prompt 1 — Animação de texto (entrada por palavra)
+
+Use este quando o título da hero (ou de qualquer seção) precisa de impacto. Em vez de surgir de uma vez, cada palavra sobe de baixo com um recorte (clip) e um pequeno atraso em cascata (stagger). É o efeito de abertura de filme.
+
+```text
+Crie uma animação de entrada de texto cinematográfica com GSAP em [Next.js + TS].
+Componente client único, com cleanup no useEffect (gsap.context + revert).
+
+ALVO: o título principal da seção [SELETOR/COMPONENTE].
+
+MECÂNICA:
+— Quebre o texto em palavras (SplitText, ou split manual por espaço envolvendo
+  cada palavra num <span> com overflow:hidden no wrapper).
+— Cada palavra começa em translateY(110%) e opacity 0, escondida pelo clip do
+  wrapper (overflow:hidden).
+— Animar para translateY(0), opacity 1.
+— stagger: 0.08s entre palavras.
+— duration: 0.9s por palavra.
+— ease: "power3.out".
+— Dispare quando a seção entra na viewport (ScrollTrigger start "top 80%",
+  toggleActions "play none none none" — anima uma vez).
+
+DETALHES:
+— Sem layout shift: reserve a altura final do texto desde o início.
+— prefers-reduced-motion: pular a animação, mostrar texto estático.
+— Não adicionar blur nem scale a menos que eu peça — manter limpo.
+
+ACEITE: ao carregar/scrollar até a seção, as palavras sobem em cascata da
+esquerda para a direita, terminam alinhadas e legíveis em ~1.2s no total.
+```
+
+> Por que funciona: o `power3.out` desacelera no fim, dando a sensação de "assentar" — diferente do `linear`, que parece mecânico. O `overflow:hidden` no wrapper é o que cria o recorte de cinema: a palavra não some, ela é *revelada*.
+
+## Prompt 2 — Transição entre seções (cortina por scroll)
+
+Este é o que faz o site parar de parecer uma pilha de blocos. Quando o usuário rola de uma seção para a próxima, uma cortina varre a tela (clip-path), amarrada ao progresso do scroll. A seção seguinte não "aparece embaixo" — ela cobre a anterior.
+
+```text
+Crie uma transição cinematográfica entre duas seções com GSAP ScrollTrigger
+em [Next.js + TS]. Componente client, cleanup com gsap.context().
+
+ESTRUTURA:
+— Seção A (saindo) e Seção B (entrando), B posicionada por cima com z-index maior.
+— B começa com clip-path: inset(0 0 0 100%) (escondida à direita).
+
+MECÂNICA:
+— ScrollTrigger com scrub: 1 (movimento atrelado ao scroll, não autônomo).
+— trigger: o container das duas seções.
+— start: "top top", end: "+=100%" (a transição dura uma rolagem de tela).
+— pin: true no container, para a cena travar enquanto a cortina varre.
+— Animar B de clip-path inset(0 0 0 100%) -> inset(0 0 0 0%).
+— ease: "none" (o scrub já controla o ritmo; ease aqui deixaria estranho).
+
+CAMADAS:
+— Enquanto B entra, aplicar um leve parallax na A: translateY -8% e scale 1.04,
+  para dar profundidade (a de trás recua).
+— Opcional: overlay escuro 0 -> 0.25 de opacity na A durante a transição.
+
+DETALHES:
+— Use Lenis para o scroll suave, se já estiver no projeto; senão, scroll nativo.
+— prefers-reduced-motion: desativar pin e scrub, empilhar as seções normalmente.
+
+ACEITE: ao rolar, a tela trava, a Seção B varre da direita cobrindo a A, e ao
+completar 100% do scroll a transição termina e a página segue normalmente.
+```
+
+> Por que funciona: `scrub: 1` amarra a animação ao dedo do usuário — ele controla a cena. O `pin` é o que transforma scroll em narrativa: a câmera para, a transição acontece, depois libera. Sem o pin, vira só um efeito que passa rápido demais pra ser notado.
+
+## Prompt 3 — Entrada de seção (reveal com parallax)
+
+O acabamento que você aplica em *toda* seção da página. Ao entrar na viewport, a seção sobe, ganha nitidez (sai de um blur sutil) e seus elementos internos surgem com profundidade via parallax. É o que dá ritmo ao scroll inteiro.
+
+```text
+Crie um efeito de entrada de seção cinematográfico, reutilizável, com GSAP
+ScrollTrigger em [Next.js + TS]. Componente client wrapper <RevealSection> que
+anima seus children. Cleanup com gsap.context().
+
+MECÂNICA (no elemento da seção):
+— Estado inicial: opacity 0, translateY(48px), scale 0.97, filter blur(8px).
+— Estado final: opacity 1, translateY(0), scale 1, filter blur(0).
+— duration: 1s, ease: "power3.out".
+— ScrollTrigger start "top 78%", toggleActions "play none none reverse".
+
+PARALLAX INTERNO (profundidade):
+— Elementos filhos marcados com data-depth="0.1" até "0.4".
+— Atrelar ao scroll (scrub: 1): cada filho desloca translateY de
+  (depth * 80px) conforme a seção cruza a viewport.
+— Quanto maior o depth, mais o elemento "flutua" — cria camadas.
+
+DETALHES:
+— stagger de 0.12s se houver múltiplos blocos diretos na seção.
+— Não animar layout (width/height/margin) — só transform e opacity/filter,
+  para manter 60fps.
+— prefers-reduced-motion: tudo visível, sem transform nem blur.
+
+ACEITE: cada seção, ao entrar, sobe suavemente saindo de um leve desfoque, e os
+elementos internos se movem em velocidades diferentes (parallax), dando
+profundidade. Ao sair de tela pra cima, reverte suavemente.
+```
+
+> Por que funciona: animar **só** `transform`, `opacity` e `filter` mantém tudo na GPU — 60fps garantidos. O blur saindo de 8px pra 0 é o detalhe que vende o "foco de câmera". E o parallax por `data-depth` te dá camadas sem reescrever a mecânica em cada seção.
+
+## Como combinar os três
+
+A ordem importa. Aplique de fora pra dentro:
+
+1. **Entrada de seção** (Prompt 3) primeiro — é o wrapper de toda seção.
+2. **Animação de texto** (Prompt 1) dentro das seções com títulos de destaque.
+3. **Transição** (Prompt 2) apenas entre 1 ou 2 pares de seções-chave — usar em todas deixa pesado e previsível.
+
+Menos é mais: um site cinematográfico tem **momentos** de impacto, não impacto constante. Se tudo se move o tempo todo, nada se destaca.
+
+## Checklist antes de publicar
+
+<Checklist items={[
+  { label: "Cada animação usa ease nomeado, não linear", desc: "power3.out / power2.inOut — linear parece mecânico e barato" },
+  { label: "Só animei transform, opacity e filter", desc: "nada de width/height/margin animados — mata o framerate" },
+  { label: "ScrollTriggers têm start/end definidos", desc: "não deixei no default — controle quando cada coisa dispara" },
+  { label: "Tem cleanup no useEffect", desc: "gsap.context() + revert(), senão acumula listeners a cada render" },
+  { label: "Respeitei prefers-reduced-motion", desc: "quem tem sensibilidade a movimento vê a versão estática" },
+  { label: "As transições são poucas e pontuais", desc: "impacto em momentos-chave, não a página inteira se mexendo" },
+  { label: "Testei em mobile", desc: "pin e scrub se comportam diferente no touch — confirmei o ritmo" },
+]} />
+
+## O atalho: as skills já têm tudo isso pronto
+
+Esses 3 prompts funcionam — mas tem uma parte que você vai repetir em **todo** projeto: montar o componente GSAP com o cleanup certo, configurar o ScrollTrigger, converter px pra `clamp()`, auditar performance dos vídeos. Reescrever isso do zero toda vez é trabalho braçal.
+
+Foi por isso que empacotei os comandos que mais uso em **skills prontas para o Claude Code**. Você instala uma vez e chama com `/nome-da-skill` — o agente executa, você dirige:
+
+- `/gsap-component` — componente GSAP + ScrollTrigger com cleanup correto (a base dos 3 prompts deste guia)
+- `/section-hero` — hero cinematográfica com preloader, parallax e scroll indicator
+- `/palette` — mapeia a paleta e gera 3 variações pra você escolher
+- `/perf-audit` — auditoria de vídeos, imagens e animações com correção interativa
+- `/responsive-fix` — converte px fixos pra `clamp()` e adiciona breakpoints
+
+Em vez de colar prompt por prompt, você chama a skill e ela já gera o efeito com as boas práticas embutidas. É a forma mais rápida de transformar uma referência cinematográfica em código seu.
+
+<SkillsCTABanner />
+
+<AnimationPromo />
