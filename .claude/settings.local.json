@@ -28,7 +28,8 @@
       "Bash(ls -la public/ dist/*.mp4)",
       "Bash(rm -f casa77.gif)",
       "Bash(ffmpeg -y -i template1.mp4 -vf \"scale=720:-2\" -c:v libx264 -crf 30 -preset veryfast -an -movflags +faststart casa77.mp4 -loglevel error)",
-      "Bash(python3 -)"
+      "Bash(python3 -)",
+      "PowerShell(npm run build)"
     ]
   }
 }
