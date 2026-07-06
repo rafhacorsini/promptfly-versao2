@@ -16,8 +16,8 @@ export default function ValueProposition() {
       </p>
 
       <div className={styles.buttonGroup}>
-        <GradientButton variant="dark" href="#newsletter">
-          Assinar newsletter grátis →
+        <GradientButton variant="dark" href="/premium">
+          Assinar Premium →
         </GradientButton>
         <GradientButton variant="light" href="#newsletter">
           Explorar os guias

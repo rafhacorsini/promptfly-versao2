@@ -30,8 +30,8 @@ export default function Navbar() {
         </div>
 
         {/* CTA — Desktop */}
-        <Link href="/#newsletter" className={styles.ctaButton}>
-          Assinar grátis →
+        <Link href="/premium" className={styles.ctaButton}>
+          Assinar Premium →
         </Link>
 
         {/* Mobile: dois tracinhos */}
@@ -58,11 +58,11 @@ export default function Navbar() {
 
         <div className={styles.mobileFooter}>
           <Link
-            href="/#newsletter"
+            href="/premium"
             className={styles.mobileCtaButton}
             onClick={() => setIsMobileMenuOpen(false)}
           >
-            ASSINAR GRÁTIS
+            ASSINAR PREMIUM
           </Link>
         </div>
       </div>

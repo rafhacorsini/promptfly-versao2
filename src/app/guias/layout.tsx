@@ -12,14 +12,9 @@ export default function GuiasLayout({ children }: { children: React.ReactNode })
         </Link>
         <nav className={styles.nav}>
           <Link href="/guias" className={styles.navLink}>Guias</Link>
-          <a
-            href="https://promptfly.beehiiv.com/subscribe"
-            target="_blank"
-            rel="noopener noreferrer"
-            className={styles.cta}
-          >
-            Assinar grátis →
-          </a>
+          <Link href="/premium" className={styles.cta}>
+            Assinar Premium →
+          </Link>
         </nav>
       </header>
       <main className={styles.main}>{children}</main>

@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useState } from "react";
 import Link from "next/link";
-import { LogIn, LogOut, Sparkles, User, X } from "lucide-react";
+import { Crown, LogIn, LogOut, User, X } from "lucide-react";
 import ProjectCard, { type Project } from "./ProjectCard";
 import styles from "./ProjectsGallery.module.css";
 
@@ -99,7 +99,7 @@ export default function ProjectsGallery({ projects }: { projects: Project[] }) {
     <>
       <div className={styles.account}>
         <Link href="/premium" className={styles.premiumBtn}>
-          <Sparkles size={14} strokeWidth={2.2} />
+          <Crown size={14} strokeWidth={2.2} fill="currentColor" />
           Assinar Promptfly Premium
         </Link>
 

@@ -197,13 +197,13 @@ export default async function GuidePage({ params }: Props) {
           {/* Newsletter CTA */}
           <div className={styles.cta}>
             <div className={styles.ctaInner}>
-              <p className={styles.ctaLabel}>[ NEWSLETTER ]</p>
-              <h2 className={styles.ctaTitle}>Gostou? Receba um guia assim toda semana.</h2>
+              <p className={styles.ctaLabel}>[ PREMIUM ]</p>
+              <h2 className={styles.ctaTitle}>Gostou? Tenha acesso a tudo no Promptfly Premium.</h2>
               <p className={styles.ctaText}>
-                Engenharia de prompt na prática — direto no seu e-mail. Grátis.
+                Grupo exclusivo e todos os templates e prompts, para sempre.
               </p>
-              <Link href="/#newsletter" className={styles.ctaBtn}>
-                Assinar newsletter grátis →
+              <Link href="/premium" className={styles.ctaBtn}>
+                Assinar Premium →
               </Link>
             </div>
           </div>
