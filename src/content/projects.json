@@ -51,7 +51,7 @@
     "id": "hero-spotlight-reveal",
     "title": "Hero Spotlight Reveal — Splash + Cursor Reveal",
     "description": "Hero com splash de entrada em grade, uma segunda imagem revelada só dentro de um círculo que segue o mouse, headline com reveal palavra a palavra e menu lateral com blur.",
-    "previewUrl": "/templates/hero-spotlight-reveal/personagem-base.png",
+    "previewUrl": "https://res.cloudinary.com/dwmrunhxa/video/upload/v1783368471/Grava%C3%A7%C3%A3o_de_Tela_2026-07-06_153519_fyvjof.mp4",
     "tags": [
       "Hero",
       "Spotlight",
@@ -67,7 +67,7 @@
     "id": "shade-oculos-hero",
     "title": "SHADE — Hero Carrossel de Óculos 3D",
     "description": "Hero em tela cheia com carrossel de 4 personagens 3D estilo voxel usando óculos escuros; ao trocar de personagem, o fundo da página transiciona pra cor da roupa dele.",
-    "previewUrl": "/templates/shade-oculos-hero/1.png",
+    "previewUrl": "https://res.cloudinary.com/dwmrunhxa/video/upload/v1783368481/Grava%C3%A7%C3%A3o_de_Tela_2026-07-06_161425_at6ueh.mp4",
     "tags": [
       "Hero",
       "Carrossel",
@@ -83,7 +83,7 @@
     "id": "cosmo-estudio-criativo-landing",
     "title": "COSMO — Landing Cinematográfica de Estúdio Criativo",
     "description": "Landing dark de estúdio criativo com hero em vídeo e título gigante animado, seção sobre com revelação de texto letra a letra no scroll, e lista editorial de features com números fantasma.",
-    "previewUrl": "https://res.cloudinary.com/dwmrunhxa/video/upload/v1783365329/C%C3%A9u_movendo_nuvens_gal%C3%A1xia_1080p_202607061554_xcquqw.mp4",
+    "previewUrl": "https://res.cloudinary.com/dwmrunhxa/video/upload/v1783368563/Grava%C3%A7%C3%A3o_de_Tela_2026-07-06_165157_gtx7cc.mp4",
     "tags": [
       "Landing Page",
       "React",
