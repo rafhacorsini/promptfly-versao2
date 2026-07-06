@@ -99,7 +99,7 @@
     "id": "good-burguer-landing",
     "title": "GOOD Burguer — Landing Cinematográfica de Hambúrgueria",
     "description": "Landing brutalist/cinematográfica de hambúrguer artesanal: hero em vídeo com hover-slideshow, carrossel infinito, spinner com anéis de texto girando, cardápio deslizante e texto 3D em cilindro.",
-    "previewUrl": "/templates/goodburguer/genz_eating_burger.png",
+    "previewUrl": "https://res.cloudinary.com/dwmrunhxa/video/upload/v1783369566/Grava%C3%A7%C3%A3o_de_Tela_2026-07-06_172529_c5r4ti.mp4",
     "tags": [
       "Landing Page",
       "GSAP",
