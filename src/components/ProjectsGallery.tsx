@@ -1,6 +1,8 @@
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
+import Link from "next/link";
+import { LogIn, LogOut, Sparkles, User, X } from "lucide-react";
 import ProjectCard, { type Project } from "./ProjectCard";
 import styles from "./ProjectsGallery.module.css";
 
@@ -96,20 +98,33 @@ export default function ProjectsGallery({ projects }: { projects: Project[] }) {
   return (
     <>
       <div className={styles.account}>
+        <Link href="/premium" className={styles.premiumBtn}>
+          <Sparkles size={14} strokeWidth={2.2} />
+          Assinar Promptfly Premium
+        </Link>
+
         {me.email ? (
-          <span className={styles.loggedIn}>
-            Conectado como <strong>{me.email}</strong>
-            <button type="button" className={styles.linkBtn} onClick={logout}>
-              sair
+          <span className={styles.accountPill}>
+            <User size={14} strokeWidth={2.2} />
+            <span className={styles.accountEmail}>{me.email}</span>
+            <button
+              type="button"
+              className={styles.logoutBtn}
+              onClick={logout}
+              title="Sair"
+              aria-label="Sair"
+            >
+              <LogOut size={14} strokeWidth={2.2} />
             </button>
           </span>
         ) : (
           <button
             type="button"
-            className={styles.linkBtn}
+            className={styles.accountPill}
             onClick={() => setShowLogin(true)}
           >
-            Já comprou? Entrar para desbloquear →
+            <LogIn size={14} strokeWidth={2.2} />
+            Já tenho acesso
           </button>
         )}
       </div>
@@ -149,6 +164,17 @@ export default function ProjectsGallery({ projects }: { projects: Project[] }) {
           }}
         >
           <div className={styles.modal} onClick={(e) => e.stopPropagation()}>
+            <button
+              type="button"
+              className={styles.modalClose}
+              onClick={() => {
+                setShowLogin(false);
+                setSent(false);
+              }}
+              aria-label="Fechar"
+            >
+              <X size={18} strokeWidth={2.2} />
+            </button>
             {sent ? (
               <>
                 <h3 className={styles.modalTitle}>Verifique seu e-mail</h3>
@@ -176,17 +202,6 @@ export default function ProjectsGallery({ projects }: { projects: Project[] }) {
                   </button>
                 </form>
                 {codeError && <span className={styles.modalError}>{codeError}</span>}
-                <button
-                  type="button"
-                  className={styles.linkBtn}
-                  style={{ marginTop: "1rem" }}
-                  onClick={() => {
-                    setShowLogin(false);
-                    setSent(false);
-                  }}
-                >
-                  Fechar
-                </button>
               </>
             ) : (
               <>
