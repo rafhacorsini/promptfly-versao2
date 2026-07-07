@@ -23,7 +23,10 @@ const VIDEO_EXT = /\.(mp4|webm|mov|m4v)$/i;
 // isso evita baixar o arquivo original (às vezes vários MB) em conexões móveis.
 function optimizeUrl(url: string): string {
   if (!url.includes("res.cloudinary.com") || !url.includes("/upload/")) return url;
-  return url.replace("/upload/", "/upload/f_auto,q_auto,w_800/");
+  // Assets "image/upload" convertidos de GIF animado para vídeo estouram o limite
+  // de megapixels do Cloudinary (soma de todos os frames) se redimensionados com "w_".
+  const transform = url.includes("/image/upload/") ? "f_auto,q_auto/" : "f_auto,q_auto,w_800/";
+  return url.replace("/upload/", `/upload/${transform}`);
 }
 
 function useInView<T extends HTMLElement>(rootMargin = "400px") {
