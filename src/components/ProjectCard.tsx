@@ -105,27 +105,45 @@ export default function ProjectCard({
 
   const canCopy = project.isFree || unlocked;
 
+  async function resolveText(): Promise<string> {
+    if (project.isFree) return project.prompt;
+    // Prompt pago não vem no HTML — busca protegido no servidor.
+    setLoading(true);
+    try {
+      const res = await fetch(`/api/projects/${project.id}/unlock`);
+      if (!res.ok) throw new Error("unlock-failed");
+      const { prompt: text } = await res.json();
+      return text;
+    } finally {
+      setLoading(false);
+    }
+  }
+
   async function copyPrompt() {
     setError("");
     try {
-      let text = project.prompt;
-      // Prompt pago não vem no HTML — busca protegido no servidor.
-      if (!project.isFree) {
-        setLoading(true);
-        const res = await fetch(`/api/projects/${project.id}/unlock`);
-        setLoading(false);
-        if (!res.ok) {
-          setError("Não foi possível liberar. Faça login novamente.");
-          return;
-        }
-        ({ prompt: text } = await res.json());
+      if (typeof ClipboardItem !== "undefined") {
+        // Safari/iOS só trata clipboard.write() como gesto do usuário quando
+        // ele é chamado de forma síncrona dentro do clique — mesmo que o
+        // texto resolva depois, via Promise no ClipboardItem. Um `await`
+        // antes de writeText() (o fetch de unlock do prompt pago) quebra
+        // essa associação e falha silenciosamente no iOS.
+        const item = new ClipboardItem({
+          "text/plain": resolveText().then((text) => new Blob([text], { type: "text/plain" })),
+        });
+        await navigator.clipboard.write([item]);
+      } else {
+        await navigator.clipboard.writeText(await resolveText());
       }
-      await navigator.clipboard.writeText(text);
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
-    } catch {
+    } catch (err) {
       setLoading(false);
-      setError("Erro ao copiar.");
+      setError(
+        err instanceof Error && err.message === "unlock-failed"
+          ? "Não foi possível liberar. Faça login novamente."
+          : "Erro ao copiar."
+      );
     }
   }
 
