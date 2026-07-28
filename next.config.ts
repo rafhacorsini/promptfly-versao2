@@ -21,6 +21,16 @@ const nextConfig: NextConfig = {
         ],
       },
       {
+        // Modelos .glb em /templates são carregados via fetch/XHR (GLTFLoader)
+        // por sites de terceiros que copiam o prompt — sem CORS liberado aqui
+        // o navegador do comprador bloqueia a resposta e o modelo 3D nunca carrega.
+        source: "/templates/(.*\\.glb)",
+        headers: [
+          { key: "Access-Control-Allow-Origin", value: "*" },
+          { key: "Cache-Control", value: "public, max-age=31536000, immutable" },
+        ],
+      },
+      {
         source: "/(.*)",
         headers: [
           { key: "X-Content-Type-Options", value: "nosniff" },
