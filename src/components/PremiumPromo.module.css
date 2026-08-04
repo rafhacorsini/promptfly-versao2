@@ -1,0 +1,133 @@
+.card {
+  background: #0d1117;
+  border-radius: var(--radius-lg);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-left: 3px solid var(--color-accent);
+  overflow: hidden;
+  margin: 2.5rem 0;
+  opacity: 0;
+  transform: translateY(16px);
+  transition: opacity 0.5s ease, transform 0.5s ease;
+}
+
+.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ── Eyebrow ── */
+.eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 1.5rem 1.5rem 0;
+  margin-bottom: 1rem;
+}
+
+.badge {
+  font-family: var(--font-primary);
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #666;
+}
+
+.badgeLive {
+  font-family: var(--font-primary);
+  font-size: 0.6rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #3ddc84;
+  background: rgba(61, 220, 132, 0.1);
+  padding: 0.15rem 0.45rem;
+  border-radius: 4px;
+}
+
+/* ── Title ── */
+.title {
+  font-family: var(--font-primary);
+  font-size: clamp(1.3rem, 3vw, 1.75rem);
+  font-weight: 800;
+  color: #f2f2f2;
+  line-height: 1.18;
+  text-wrap: balance;
+  padding: 0 1.5rem;
+  margin-bottom: 0.875rem;
+  letter-spacing: -0.02em;
+}
+
+.accent {
+  color: var(--color-accent);
+}
+
+/* ── Subtitle ── */
+.subtitle {
+  font-family: var(--font-primary);
+  font-size: 0.88rem;
+  color: rgba(242, 242, 242, 0.65);
+  line-height: 1.65;
+  padding: 0 1.5rem;
+  margin-bottom: 1.375rem;
+}
+
+/* ── Perks ── */
+.perks {
+  list-style: none;
+  padding: 0 1.5rem;
+  margin-bottom: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.perk {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.6rem;
+  font-family: var(--font-primary);
+  font-size: 0.85rem;
+  color: #f2f2f2;
+  line-height: 1.5;
+  opacity: 0;
+  transform: translateY(8px);
+  transition: opacity 0.4s ease, transform 0.4s ease;
+  transition-delay: calc(0.1s + var(--i, 0) * 0.07s);
+}
+
+.visible .perk {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.check {
+  color: var(--color-accent);
+  font-weight: 700;
+  flex-shrink: 0;
+  margin-top: 0.1rem;
+}
+
+/* ── CTA ── */
+.cta {
+  display: block;
+  font-family: var(--font-primary);
+  font-size: 0.92rem;
+  font-weight: 700;
+  color: #fff;
+  background: var(--color-accent);
+  text-decoration: none;
+  text-align: center;
+  padding: 1.1rem 1.5rem;
+  margin-top: 1.5rem;
+  letter-spacing: 0.01em;
+  transition: opacity 0.18s ease;
+}
+
+.cta:hover {
+  opacity: 0.88;
+}
+
+.cta:active {
+  opacity: 0.75;
+}

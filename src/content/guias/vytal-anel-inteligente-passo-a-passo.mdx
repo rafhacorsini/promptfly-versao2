@@ -1,0 +1,77 @@
+---
+title: "Como eu fiz o site do anel inteligente VYTAL (passo a passo com IA)"
+description: "Do zero à landing page completa: imagens geradas com GPT, vídeo do produto girando feito no Veo3, remoção de fundo e um scrubber sincronizado ao scroll. O processo completo, prompt por prompt."
+date: "2026-08-04"
+tags: ["sites cinematográficos", "prompts", "ia", "gsap", "e-commerce"]
+readTime: "11 min"
+category: "prompts"
+featured: true
+premium: false
+---
+
+Esse é o passo a passo completo de como eu construí a landing do **VYTAL**, um anel inteligente fictício — hero com efeito de holofote no mouse, um anel girando em 3D sincronizado ao scroll, seção de precisão com foto que "abre" conforme você rola a página, e um contador de batimento cardíaco de verdade.
+
+Nada disso é template pronto. Cada seção nasceu de uma imagem ou vídeo gerado com IA, tratado, e depois transformado em código com um prompt específico. Aqui está a ordem exata.
+
+<video autoPlay muted loop playsInline style={{width: "100%", borderRadius: "12px", margin: "2rem 0", border: "1px solid rgba(0,0,0,0.08)"}}>
+  <source src="https://res.cloudinary.com/dwmrunhxa/video/upload/v1785775897/Grava%C3%A7%C3%A3o_de_Tela_2026-08-03_135051_uwhi5i.mp4" type="video/mp4" />
+</video>
+
+## 01 — As duas fotos do hero (GPT)
+
+Antes de qualquer código, referência. Eu já tinha em mente o tipo de composição que queria — mão segurando o anel, fundo claro, estética de produto premium — inspirado em sites de anel inteligente de verdade.
+
+Com a referência definida, gerei duas imagens com o GPT:
+
+- **Foto padrão:** a mão com o anel, ângulo de luz normal.
+- **Foto de hover:** a mesma pose, mas com a luz vindo de outro ângulo — quase uma segunda "exposição" da mesma cena.
+
+A sacada é o que eu fiz com a segunda foto depois: no site, ela só aparece **dentro de um círculo que segue o mouse** — como um holofote passando por cima da primeira imagem e revelando a segunda por baixo. Pra isso funcionar sem travar, é tudo feito com `mask-image` (um gradiente radial que cria a borda macia do círculo) e um `requestAnimationFrame` que faz o círculo perseguir o cursor com um pequeno atraso, em vez de saltar direto pra posição — é esse atraso que dá a sensação de peso.
+
+## 02 — O anel girando (Veo3 + CapCut) e o scrubber "stories"
+
+Essa é a parte mais trabalhosa. Gerei um vídeo do anel girando 360° com o **Veo3**. Depois, pós-produção no **CapCut** pra tirar o fundo e deixar só o anel isolado.
+
+Com o fundo removido, exportei o vídeo como sequência de imagens (frames) e coloquei tudo no código. O prompt pra IA nessa etapa foi mais ou menos assim:
+
+> "Quero um scrubber: conforme o usuário rola a página, ele percorre os frames do vídeo do anel girando — não é um `<video>` tocando sozinho, é o scroll que controla qual frame aparece. Junto com isso, quero um efeito de **stories do Instagram**: uma barra dividida em segmentos no topo, cada um preenchendo conforme um bloco de texto correspondente aparece na tela, e o texto trocando de um bloco pro outro conforme a rolagem avança."
+
+O resultado é a seção que "sobe" por cima do hero: um painel com o anel girando pintado frame a frame num `<canvas>`, sincronizado a um scroll pinado de mais de 3 telas de altura, com 3 blocos de texto (frequência cardíaca, sono, recomendação) revezando por cima — cada um preenchendo seu segmento da barra de progresso antes do próximo aparecer.
+
+<PremiumPromo />
+
+## 03 — A foto do atleta e o efeito de "abrir" a imagem
+
+Pra seção seguinte eu queria transmitir precisão e confiança — usei uma foto de um atleta correndo usando o anel. O prompt pra essa parte:
+
+> "Quero uma seção pinada no scroll onde a foto começa recortada, como se estivesse dentro de uma moldura menor, e conforme o usuário rola a página essa moldura vai 'abrindo' até a foto ocupar o painel inteiro — com um leve efeito de zoom acontecendo ao mesmo tempo, pra reforçar a sensação de que a imagem está crescendo, não só a moldura."
+
+Tecnicamente isso é um `clip-path: inset()` animado junto com um `scale()` na própria imagem — os dois se movem juntos, e é essa combinação que faz o olho ler "a foto está crescendo" em vez de "uma cortina está abrindo".
+
+## 04 — O anel de frente e o contador de batimento real
+
+Pra seção do coração eu queria algo que parecesse dado real, não decoração. O prompt:
+
+> "Quero uma seção com o anel visto de frente, com um leve parallax vertical enquanto o usuário rola. Abaixo, um ícone de coração pulsando e um número de BPM que sobe de 0 até o valor final quando a seção entra na tela. O pulso do ícone tem que bater na frequência real do número mostrado, não numa velocidade arbitrária."
+
+Essa última parte é o detalhe que faz a diferença: a duração da animação do coração não é um número fixo tipo `1s` — é calculada como `60 / bpm` segundos. Se o número exibido é 154 bpm, o coração pulsa literalmente 154 vezes por minuto. É pouco código a mais, mas é o tipo de detalhe que faz o site parecer produto de verdade em vez de maquete.
+
+## 05 — Vídeo final e fechamento
+
+Pra fechar, um vídeo curto do anel em uso (também Veo3) ao lado de um CTA final, e um rodapé com o nome da marca gigante sangrando na base da página — um wordmark que quase não se lê como texto, mais como textura, graças a uma máscara radial que apaga as bordas dele.
+
+Todo esse fechamento entra em cascata conforme a rolagem chega perto: vídeo e texto sobem com fade, um pouco atrasados um do outro, pra não parecer que tudo apareceu de uma vez.
+
+## O processo, resumido
+
+1. Referência visual definida antes de gerar qualquer coisa.
+2. Imagens e vídeos gerados com IA (GPT para fotos, Veo3 para o produto girando).
+3. Pós-produção leve (remoção de fundo no CapCut) pra isolar o que importa.
+4. Cada seção virou um prompt específico, descrevendo o comportamento — não o código.
+5. Os assets (frames, fotos, vídeos) hospedados e referenciados direto no prompt final.
+
+Nenhuma dessas seções nasceu pronta. Cada uma foi um ciclo de: gerar o asset, escrever o comportamento que eu queria em português, testar, ajustar o prompt até o efeito bater com o que eu tinha na cabeça.
+
+Se você quer o código completo desse site — e de todos os outros templates que eu já construí — mais o grupo pra tirar dúvida direto comigo enquanto constrói o seu, é isso que o Premium libera.
+
+<PremiumPromo />
