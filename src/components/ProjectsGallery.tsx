@@ -8,9 +8,12 @@ import styles from "./ProjectsGallery.module.css";
 
 type Me = { email: string | null; purchased: string[] };
 
+type Filtro = "todos" | "gratis" | "premium";
+
 export default function ProjectsGallery({ projects }: { projects: Project[] }) {
   const [me, setMe] = useState<Me>({ email: null, purchased: [] });
   const [group, setGroup] = useState<{ url: string | null; label?: string }>({ url: null });
+  const [filtro, setFiltro] = useState<Filtro>("todos");
   const [showLogin, setShowLogin] = useState(false);
   const [emailInput, setEmailInput] = useState("");
   const [sending, setSending] = useState(false);
@@ -95,6 +98,12 @@ export default function ProjectsGallery({ projects }: { projects: Project[] }) {
     return !!p.hotmartProductId && me.purchased.includes(p.hotmartProductId);
   }
 
+  const projetosFiltrados = projects.filter((p) => {
+    if (filtro === "gratis") return p.isFree;
+    if (filtro === "premium") return !p.isFree;
+    return true;
+  });
+
   return (
     <>
       <div className={styles.account}>
@@ -144,8 +153,38 @@ export default function ProjectsGallery({ projects }: { projects: Project[] }) {
         </a>
       )}
 
+      <div className={styles.filterBar} role="group" aria-label="Filtrar templates">
+        <button
+          type="button"
+          className={styles.filterBtn}
+          data-active={filtro === "todos"}
+          onClick={() => setFiltro("todos")}
+        >
+          Todos
+          <span className={styles.filterCount}>{projects.length}</span>
+        </button>
+        <button
+          type="button"
+          className={styles.filterBtn}
+          data-active={filtro === "gratis"}
+          onClick={() => setFiltro("gratis")}
+        >
+          Grátis
+          <span className={styles.filterCount}>{projects.filter((p) => p.isFree).length}</span>
+        </button>
+        <button
+          type="button"
+          className={styles.filterBtn}
+          data-active={filtro === "premium"}
+          onClick={() => setFiltro("premium")}
+        >
+          Premium
+          <span className={styles.filterCount}>{projects.filter((p) => !p.isFree).length}</span>
+        </button>
+      </div>
+
       <div className={styles.grid}>
-        {projects.map((project) => (
+        {projetosFiltrados.map((project) => (
           <ProjectCard
             key={project.id}
             project={project}

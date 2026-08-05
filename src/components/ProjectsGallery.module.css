@@ -116,6 +116,53 @@ button.accountPill:hover {
   color: var(--color-accent);
 }
 
+.filterBar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: var(--spacing-lg);
+}
+
+.filterBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.5rem 0.95rem;
+  border: 1px solid var(--color-border);
+  border-radius: 999px;
+  background: #fff;
+  color: var(--color-subtitle);
+  font-family: var(--font-primary);
+  font-size: 0.86rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: border-color 0.15s ease, color 0.15s ease, background 0.15s ease;
+}
+
+.filterBtn:hover {
+  border-color: var(--color-title);
+  color: var(--color-title);
+}
+
+.filterBtn[data-active="true"] {
+  background: var(--color-title);
+  border-color: var(--color-title);
+  color: #fff;
+}
+
+.filterCount {
+  font-size: 0.76rem;
+  font-weight: 600;
+  padding: 0.05rem 0.4rem;
+  border-radius: 999px;
+  background: rgba(0, 0, 0, 0.06);
+  color: inherit;
+}
+
+.filterBtn[data-active="true"] .filterCount {
+  background: rgba(255, 255, 255, 0.2);
+}
+
 .grid {
   display: grid;
   grid-template-columns: 1fr;
