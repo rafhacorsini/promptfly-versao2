@@ -1,0 +1,106 @@
+---
+title: "Os 2 prompts que usei pra fazer o VYTAL: holofote e animação por scroll"
+description: "Os prompts completos, prontos pra copiar: o efeito de holofote que revela uma segunda imagem no hover, e a técnica de animação controlada por scroll com GSAP + ScrollTrigger. Com a seção de cuidados que evita os erros mais comuns."
+date: "2026-08-06"
+tags: ["prompt engineering", "gsap", "scroll", "claude code", "vytal"]
+readTime: "8 min"
+category: "tecnicas"
+featured: true
+premium: false
+---
+
+Depois do [guia de como fiz o VYTAL](/guias/vytal-anel-inteligente-passo-a-passo), a pergunta que mais recebi foi: "beleza, mas qual foi o prompt de verdade?"
+
+Então aqui estão os dois. Não são prompts genéricos tipo "faz uma animação legal" — são os que eu realmente usei, com cada regra e cada cuidado que evita a IA quebrar no meio do caminho. Um resolve o hover de holofote do hero. O outro resolve qualquer seção controlada por scroll — foi o mesmo prompt (com a seção trocada) que gerou o scrubber do anel, a abertura da foto do atleta e o parallax do coração.
+
+## 🔦 Prompt 1 — Hover com revelação (holofote)
+
+Use quando você tem duas versões da mesma imagem e quer que uma apareça só dentro de um círculo que segue o mouse — como uma lanterna passando por cima da foto.
+
+```text
+Quero um efeito de holofote na [SEÇÃO] do meu site.
+
+COMPORTAMENTO:
+Tenho duas versões da mesma imagem: [IMAGEM A] fica sempre visível,
+e [IMAGEM B] só aparece dentro de um círculo que segue o cursor.
+O círculo abre quando o mouse entra na seção e fecha quando sai.
+
+REGRAS:
+- O círculo deve ter raio de ~26% da largura do container.
+- A borda do círculo precisa ser suave, não recortada: use uma
+  máscara radial sólida até 52% do raio e transparente em 78%.
+- O movimento NÃO pode grudar no cursor. Use interpolação (lerp)
+  em requestAnimationFrame com fator ~0.2 na posição e ~0.12 no raio,
+  pra ter peso e arrasto.
+- No mobile: o círculo segue o dedo enquanto arrasta, mas NUNCA
+  pode bloquear o scroll da página.
+- Encerre o loop de animação quando o círculo fechar de vez,
+  pra não gastar frame à toa.
+- Respeite prefers-reduced-motion.
+
+CUIDADOS:
+- A máscara deve morar num elemento SEM transform, senão as
+  coordenadas do círculo não batem com a posição real do mouse.
+- Se as duas imagens tiverem enquadramentos diferentes, me ajude a
+  alinhar com translate/scale, senão a imagem "pula" na troca.
+- Se o mouse já estiver sobre a seção quando a página carrega,
+  o pointerenter não dispara — trate esse caso.
+```
+
+**Onde aplicar:** produto/mockup, retrato antes-e-depois, mapa, print de dashboard, foto noite/dia.
+
+<PremiumPromo />
+
+## 🎞️ Prompt 2 — Animação controlada pelo scroll
+
+Use quando quiser que o scroll do usuário seja o próprio timeline da animação — não um gatilho que dispara um vídeo, mas algo que avança e recua junto com a rolagem.
+
+```text
+Quero que a [SEÇÃO] seja controlada pela rolagem, usando GSAP + ScrollTrigger.
+
+COMPORTAMENTO:
+A seção deve travar na tela (pin) e, conforme eu rolo,
+[DESCREVA O QUE MUDA — ex: a imagem abre / os frames avançam /
+os textos se revezam / o número sobe].
+Quando terminar, a página volta a rolar normal.
+
+REGRAS:
+- Use scrub (0.1 a 0.3), nunca duração fixa. O scroll é o timeline,
+  não um gatilho de "play".
+- Defina o curso do pin em porcentagem ('+=140%', '+=320%'),
+  não em pixels — precisa funcionar em qualquer tela.
+- Dentro do onUpdate use gsap.quickSetter, não crie tween novo
+  a cada frame.
+- Para transições entre elementos, use uma curva em S (smoothstep)
+  no cruzamento, não interpolação linear — linear dá corte seco.
+- Amarre a animação a um dado real quando existir (ex: se mostro
+  154 bpm, a pulsação deve durar 60/154s). Isso é o que faz
+  parecer intencional e não decorativo.
+- Recalcule medidas no ScrollTrigger.refresh(), não só no resize:
+  enquanto pinado, os valores lidos estão desatualizados.
+- Respeite prefers-reduced-motion mostrando o estado final.
+
+CUIDADOS:
+- Se for sequência de frames: pré-carregue TODAS as imagens antes,
+  use img.decode() e mostre um % de carregamento. Sem isso engasga.
+- Se um elemento precisa ficar parado enquanto outro sobe por cima:
+  position: fixed, não sticky — sticky quebra se qualquer ancestral
+  tiver overflow (o overflow-x-hidden do body já basta pra quebrar).
+  Controle a sobreposição com z-index.
+- Não anime a mesma propriedade em dois lugares (ex: y no scroll e
+  y no parallax de mouse) — eles brigam pelo transform.
+```
+
+**Onde aplicar:** revelação de produto, timeline, comparativo, apresentação de features, storytelling de marca.
+
+## O detalhe que muda tudo
+
+Os dois prompts têm uma seção **CUIDADOS**. É ela que economiza horas.
+
+A IA acerta o efeito na primeira tentativa — mas quebra em coisas que ninguém avisou: sticky que não gruda, imagem que pula, animação que engasga. Quando você entrega o erro antes dele acontecer, ela já nasce certa.
+
+Prompt bom não é o que descreve o que você quer. É o que descreve o que você não quer que dê errado.
+
+Se você quer todos os prompts assim — completos, com a seção de cuidados de cada efeito que eu já construí — mais o código de todos os templates e o grupo pra tirar dúvida direto comigo, é isso que o Premium libera.
+
+<PremiumPromo />
