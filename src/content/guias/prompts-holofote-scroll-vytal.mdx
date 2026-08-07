@@ -1,9 +1,9 @@
 ---
 title: "Os 2 prompts que usei pra fazer o VYTAL: holofote e animação por scroll"
-description: "Os prompts completos, prontos pra copiar: o efeito de holofote que revela uma segunda imagem no hover, e a técnica de animação controlada por scroll com GSAP + ScrollTrigger. Com a seção de cuidados que evita os erros mais comuns."
+description: "Os prompts completos, prontos pra copiar — com os links reais das fotos e dos frames do anel do VYTAL, pra você testar o efeito de verdade antes de usar no seu projeto. Com a seção de cuidados que evita os erros mais comuns."
 date: "2026-08-06"
 tags: ["prompt engineering", "gsap", "scroll", "claude code", "vytal"]
-readTime: "8 min"
+readTime: "9 min"
 category: "tecnicas"
 featured: true
 premium: false
@@ -11,7 +11,11 @@ premium: false
 
 Depois do [guia de como fiz o VYTAL](/guias/vytal-anel-inteligente-passo-a-passo), a pergunta que mais recebi foi: "beleza, mas qual foi o prompt de verdade?"
 
-Então aqui estão os dois. Não são prompts genéricos tipo "faz uma animação legal" — são os que eu realmente usei, com cada regra e cada cuidado que evita a IA quebrar no meio do caminho. Um resolve o hover de holofote do hero. O outro resolve qualquer seção controlada por scroll — foi o mesmo prompt (com a seção trocada) que gerou o scrubber do anel, a abertura da foto do atleta e o parallax do coração.
+Então aqui estão os dois. Não são prompts genéricos tipo "faz uma animação legal" — são os que eu realmente usei, com cada regra e cada cuidado que evita a IA quebrar no meio do caminho. E pra você não precisar confiar na minha palavra: deixei os links reais das imagens e dos frames do VYTAL logo abaixo de cada um, pra testar o efeito de verdade, com o asset de verdade, antes de usar no seu projeto.
+
+Se você curtir o resultado, vale saber: no **Promptfly Premium** você tem acesso à comunidade exclusiva, a todos os meus templates completos — é só copiar o código e vender pra empresas — e a prompts como esses, todos com a seção de cuidados já pronta.
+
+<PremiumPromo />
 
 ## 🔦 Prompt 1 — Hover com revelação (holofote)
 
@@ -49,7 +53,19 @@ CUIDADOS:
 
 **Onde aplicar:** produto/mockup, retrato antes-e-depois, mapa, print de dashboard, foto noite/dia.
 
-<PremiumPromo />
+### Teste você mesmo, com os links reais do VYTAL
+
+Cole o prompt acima na IA e, no lugar de `[IMAGEM A]` e `[IMAGEM B]`, cole exatamente estes dois links — são as duas fotos reais do hero do VYTAL, a mesma mão com o anel em dois ângulos de luz diferentes:
+
+```text
+IMAGEM A (sempre visível):
+https://res.cloudinary.com/dwmrunhxa/image/upload/w_2880/e_sharpen:60/f_auto/q_auto/v1785437593/98ef51ed-7e2a-4ace-9e4c-f1aa28578e6f_1_g0ntjt.png
+
+IMAGEM B (revelada dentro do círculo):
+https://res.cloudinary.com/dwmrunhxa/image/upload/w_2880/e_sharpen:60/f_auto/q_auto/v1785437851/cdb76d67-dd03-4230-94f1-454395dd5ca6_1_uptxh7.png
+```
+
+Suba um projeto vazio, cole os dois blocos (o prompt + esses links) na IA, rode `npm run dev` e passe o mouse por cima da imagem. Se dentro do círculo aparecer a segunda foto com a luz diferente, o efeito saiu certo.
 
 ## 🎞️ Prompt 2 — Animação controlada pelo scroll
 
@@ -92,6 +108,31 @@ CUIDADOS:
 ```
 
 **Onde aplicar:** revelação de produto, timeline, comparativo, apresentação de features, storytelling de marca.
+
+### Teste você mesmo, com o anel do VYTAL girando
+
+Esse é o mesmo prompt que gerou o scrubber do anel do VYTAL — a sequência de 102 frames que gira conforme você rola, com o efeito de "stories" trocando de bloco de texto. Pra testar de verdade, preencha `[SEÇÃO]` e `[DESCREVA O QUE MUDA]` assim:
+
+```text
+[SEÇÃO] = um painel de tela cheia
+[DESCREVA O QUE MUDA] = conforme eu rolo, o scroll percorre uma sequência de
+102 frames do anel girando, desenhados frame a frame num <canvas> — não é um
+<video> tocando sozinho, é o scroll que escolhe qual frame aparece. Junto,
+uma barra dividida em 3 segmentos no topo, cada um preenchendo enquanto um
+bloco de texto correspondente aparece, e o texto trocando de bloco conforme
+a rolagem avança (efeito "stories").
+```
+
+E os frames reais, já hospedados — os 102 arquivos seguem esse padrão, só trocando o número de `001` até `102`:
+
+```text
+https://www.promptfly.com.br/templates/vytal-anel-inteligente/ring-frames/ring-001.webp
+https://www.promptfly.com.br/templates/vytal-anel-inteligente/ring-frames/ring-002.webp
+...
+https://www.promptfly.com.br/templates/vytal-anel-inteligente/ring-frames/ring-102.webp
+```
+
+Em código, isso vira um `Array.from({ length: 102 }, (_, i) => ...)` gerando as 102 URLs — não precisa colar as 102 na mão, só descrever o padrão pra IA (o guia completo do VYTAL tem esse trecho pronto, linha por linha).
 
 ## O detalhe que muda tudo
 
