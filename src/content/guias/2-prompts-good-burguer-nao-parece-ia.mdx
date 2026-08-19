@@ -1,0 +1,124 @@
+---
+title: "Os 2 prompts que fazem meus sites cinematográficos não terem cara de IA"
+description: "Testados no GOOD Burguer: o prompt de motion que anima cada elemento por conta própria (não a seção inteira de uma vez), e o de composição que quebra o grid genérico. Os dois prontos pra copiar."
+date: "2026-08-07"
+tags: ["prompt engineering", "gsap", "motion design", "claude code", "cinematográfico"]
+readTime: "9 min"
+category: "tecnicas"
+featured: true
+premium: false
+---
+
+Tem um jeito de saber, em menos de 2 segundos, se um site foi "feito com IA" ou desenhado de verdade. Não é a paleta de cores, nem a fonte. É o **momento em que a página carrega**.
+
+No site genérico, tudo aparece junto — um `fade-in` cobrindo a seção inteira, título e botão e imagem entrando exatamente no mesmo ritmo, porque foi um único prompt tipo "anima a entrada" respondido com uma única animação. No site cinematográfico, cada elemento tem seu próprio peso, seu próprio tempo de chegada. A cena se monta, não aparece.
+
+Foi assim que fiz o **GOOD Burguer** — landing brutalista de hambúrguer artesanal, com spinner de anéis de texto girando, cardápio deslizante e texto 3D em cilindro.
+
+<video autoPlay muted loop playsInline style={{width: "100%", borderRadius: "12px", margin: "2rem 0", border: "1px solid rgba(0,0,0,0.08)"}}>
+  <source src="https://res.cloudinary.com/dwmrunhxa/video/upload/v1783369566/Grava%C3%A7%C3%A3o_de_Tela_2026-07-06_172529_c5r4ti.mp4" type="video/mp4" />
+</video>
+
+Dois prompts fazem essa diferença. Um cuida do **movimento** — como cada elemento entra. O outro cuida da **composição** — como os elementos se posicionam entre si. Sozinhos, eles já tiram qualquer seção do "template genérico". Juntos, é o que separa um site com cara de IA de um site que parece dirigido.
+
+## 🎬 Prompt 1 — Motion: cada elemento anima por conta própria
+
+Esse é o prompt mais importante que eu uso. A maioria das pessoas pede "anima a entrada dessa seção" e recebe um fade-in cobrindo tudo de uma vez — título, imagem e botão subindo juntos, no mesmo ritmo. É isso que grita "gerado por IA": nada ali tem peso próprio.
+
+A correção não é pedir uma animação melhor. É pedir **animações separadas, com personalidade diferente pra cada tipo de elemento**.
+
+```text
+Quero animar a entrada da [SEÇÃO], mas NÃO como um fade único cobrindo tudo.
+Cada elemento precisa ter seu próprio comportamento de entrada, como se cada
+peça da cena tivesse peso e tempo diferentes.
+
+COMPORTAMENTO:
+Divida os elementos da seção em grupos por PAPEL, não por posição no DOM:
+- Rótulo/label pequeno (ex: "NOVO", categoria, tag)
+- Título/headline principal
+- Imagem ou vídeo de destaque
+- Botão / CTA
+- Elementos decorativos (badges, ícones, linhas, números)
+
+Cada grupo entra com timing, easing e direção PRÓPRIOS — nenhum grupo
+compartilha a mesma tween com outro.
+
+REGRAS:
+- Elementos "pesados" (título grande, imagem/vídeo) usam easing longo e que
+  desacelera no fim (expo.out ou power3.out, duration 1 a 1.8s) — é esse
+  decaimento lento que dá peso cinematográfico, não uma entrada rápida.
+- Elementos "leves" (label, ícone, número) usam easing curto e ágil
+  (power2.out, duration 0.4 a 0.6s) — eles pontuam a cena, não a carregam.
+- A ORDEM de entrada segue a hierarquia de leitura (o que ancora a
+  composição primeiro, o que chama ação por último) — nunca a ordem em
+  que os elementos aparecem no código.
+- Use uma única gsap.timeline com posições relativas ('>', '-=0.4') pra criar
+  sobreposição controlada entre as entradas — nunca tudo sequencial (fica
+  lento) nem tudo simultâneo (vira o fade genérico que eu quero evitar).
+- Se houver uma LISTA dentro de um grupo (badges, itens de menu, grid), use
+  stagger DENTRO desse grupo — mas o grupo inteiro ainda entra no seu próprio
+  momento da timeline, não junto com os outros tipos de elemento.
+- Respeite prefers-reduced-motion mostrando o estado final direto.
+
+CUIDADOS:
+- Não exagere: mais de 5-6 timings diferentes na mesma seção vira ruído
+  visual, não sofisticação. Se a seção é simples, 3 grupos já bastam.
+- gsap.context + revert no cleanup, sempre — sem isso a timeline duplica
+  em cada remount e a entrada começa a "tropicar" nela mesma.
+- Estado inicial (opacity/y/scale) precisa estar em gsap.set() ANTES da
+  timeline rodar, nunca só no primeiro frame da animação — senão o usuário
+  vê um flash do elemento no lugar errado antes da animação começar.
+```
+
+**Onde aplicar:** literalmente qualquer seção com mais de 2 elementos — hero, cards de produto, seção "sobre", rodapé. É o prompt que eu reutilizo mais.
+
+## 🧱 Prompt 2 — Composição: quebra o grid que grita "gerado por IA"
+
+Esse resolve outro sintoma clássico: tudo centralizado, tudo do mesmo tamanho, tudo no grid perfeito. Isso é seguro — e seguro é exatamente a cara de "IA". Composição brutalista/editorial quebra essa simetria de propósito.
+
+```text
+Quero a composição da [SEÇÃO] mais assimétrica e editorial — não um grid
+centralizado e simétrico, que é a composição padrão que toda IA gera
+quando não é instruída a fugir dela.
+
+COMPORTAMENTO:
+- Elementos de tamanhos DIFERENTES na mesma linha de composição (um título
+  gigante ao lado de um texto pequeno, não dois blocos do mesmo peso).
+- Pelo menos um elemento (foto, badge, número) SOBREPONDO outro de propósito
+  — position: absolute, sem empurrar o layout, só sobrepondo visualmente.
+- Alinhamento MISTO dentro do mesmo bloco: uma linha alinhada à esquerda, a
+  próxima à direita, outra centralizada — não tudo no mesmo eixo.
+- Se fizer sentido pro contexto, rotacione levemente um elemento solto
+  (entre -8 e -15 graus) — uma foto, uma tag, nunca o texto de leitura
+  principal, que precisa continuar reto pra não prejudicar a leitura.
+
+REGRAS:
+- A assimetria precisa ter uma RAZÃO de leitura — o elemento maior é o mais
+  importante, o menor é o de apoio. Bagunça sem hierarquia não é editorial,
+  é ruído.
+- Mantenha UM eixo de alinhamento consistente por seção (ex: tudo ancorado
+  numa margem lateral comum), mesmo com blocos girando ao redor dele — é
+  esse fio que impede o layout de parecer quebrado.
+- Espaçamento generoso ao redor do elemento sobreposto — ele precisa
+  "flutuar" sobre a composição, não brigar por espaço com o texto.
+
+CUIDADOS:
+- Teste em mobile: rotação e sobreposição que funcionam em desktop
+  costumam colidir em telas estreitas — reduza ou remova a rotação abaixo
+  de 640px se precisar.
+- Não sobreponha texto legível com texto legível — sobreposição é pra
+  elemento visual sobre elemento visual, ou elemento visual sobre área de
+  respiro, nunca dificultando a leitura.
+```
+
+**Onde aplicar:** heros, seções "sobre nós", grids de equipe/produto — qualquer lugar onde a composição "óbvia" seria um grid de cards iguais.
+
+## Por que isso pede uma skill, não só um prompt
+
+Os dois prompts acima funcionam sozinhos. Mas toda vez que eu abro um projeto novo, não quero descrever "elementos por papel, easing por peso, gsap.context com cleanup" de novo — quero chamar um comando e já sair pronto, no padrão certo, sem eu ter que lembrar de cada detalhe.
+
+É pra isso que existem as **skills** do Claude Code: comandos que você chama uma vez (`/gsap-component`, por exemplo) e o agente já aplica esse tipo de raciocínio — motion por grupo, cleanup correto, estado inicial sem flash — sem você reescrever o prompt inteiro toda vez.
+
+As nativas são gratuitas e eu já documentei elas [nesse guia](/guias/skills-gratuitas-claude-code-cinematografico). Mas as que eu uso pra esse nível de acabamento — motion coreografado por papel de elemento, composição assimétrica com eixo consistente, os mesmos padrões dos meus templates — são as **skills personalizadas**, feitas especificamente pra estética cinematográfica. Você instala uma vez na pasta `.claude/commands/` e usa em qualquer projeto daqui pra frente.
+
+→ **[Quero as skills personalizadas](https://promptfly.com.br/skills)**
