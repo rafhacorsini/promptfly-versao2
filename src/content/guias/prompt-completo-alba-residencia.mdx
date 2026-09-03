@@ -1,0 +1,3513 @@
+---
+title: "O prompt completo do Alba Residência (o site com chroma-key ao vivo)"
+description: "Copie e cole. O prompt inteiro do template de imóvel de luxo mais avançado que já publiquei — hero dia/noite, chroma-key em tempo real, slider de localização e formulário editorial. 100% grátis."
+date: "2026-09-03"
+tags: ["prompt engineering", "imobiliária", "gsap", "cinematográfico"]
+readTime: "4 min"
+category: "modelos"
+featured: true
+premium: false
+---
+
+Esse é o template mais avançado que já publiquei: **Alba Residência**, uma landing de imóvel de luxo com hero dia/noite, borboletas com **chroma-key em tempo real** (removendo o fundo verde do vídeo ao vivo, via canvas — sem After Effects, sem servidor), vídeo de drone que expande no scroll, slider horizontal de localização e um formulário estilo folha de papel.
+
+<video autoPlay muted loop playsInline style={{width: "100%", borderRadius: "12px", margin: "2rem 0", border: "1px solid rgba(0,0,0,0.08)"}}>
+  <source src="https://res.cloudinary.com/dwmrunhxa/video/upload/v1788466351/Grava%C3%A7%C3%A3o_de_Tela_2026-09-03_171150_v8uvro.mp4" type="video/mp4" />
+</video>
+
+Ele é grátis. Cola o prompt abaixo inteiro numa IA (Claude Code, Cursor, o que você usar) e você tem o site completo rodando.
+
+````text
+PROMPT (copie a partir daqui)
+
+Quero que você recrie exatamente a landing page descrita abaixo, sem mudar nada: nem cores, nem espaçamentos, nem tempos de animação, nem os links de asset. Copie o código tal como está e organize os arquivos exatamente na estrutura indicada.
+
+Stack obrigatória
+
+- React 19 + TypeScript
+- Vite como bundler
+- Tailwind CSS v4 (via plugin @tailwindcss/vite, sem arquivo de config separado — tudo em CSS com @theme)
+- gsap (com os plugins ScrollTrigger e SplitText — desde 2024 o Club GSAP inteiro é gratuito, incluído no pacote normal)
+- lenis — smooth scroll
+- lucide-react — ícones
+- Fontes locais via @fontsource (Instrument Serif, Bricolage Grotesque, Monsieur La Doulaise) + Bodoni Moda/Italiana via Google Fonts
+- Nenhuma outra lib de animação (sem Framer Motion, sem three.js)
+
+Estrutura de arquivos a criar
+
+```
+alba-residencia/
+├── index.html
+├── package.json
+├── vite.config.ts
+├── tsconfig.json
+├── tsconfig.app.json
+├── tsconfig.node.json
+└── src/
+    ├── main.tsx
+    ├── App.tsx
+    ├── index.css
+    ├── lib/
+    │   └── useSmoothScroll.ts
+    └── components/
+        ├── hero/
+        │   ├── Hero.tsx
+        │   ├── hero.css
+        │   └── hero.tokens.css
+        ├── apartments/
+        │   ├── ApartmentsSection.tsx
+        │   ├── GreenScreenVideo.tsx
+        │   └── apartments.css
+        ├── video/
+        │   └── DroneVideoSection.tsx
+        ├── location-slider/
+        │   └── LocationSliderSection.tsx
+        ├── twilight/
+        │   └── TwilightSection.tsx
+        ├── contact/
+        │   └── ContactSection.tsx
+        └── footer/
+            └── Footer.tsx
+```
+
+O que é a página
+
+Landing de residência de luxo ("Alba — Costa del Sol"), editorial e cinematográfica, organizada em 6 seções + rodapé, quase todas pinadas no scroll:
+
+1. **Hero**: imagem de dia/noite alternável por botão (cross-fade), 3 hotspots interativos sobre a foto (cada um abre um card explicando um detalhe arquitetônico), selo circular rotativo com texto em curva (SVG `textPath`), título "Alba Residência" em `SplitText` por caractere subindo atrás de uma cortina que abre no load, e uma sequência de saída pinada pelo scroll: o texto sai, a foto ganha parallax vertical e um botão de vidro "Ver Apartamentos" aparece.
+2. **Apartamentos**: nuvens fotorealistas em múltiplas camadas com deriva horizontal (paralaxe de profundidade) "subindo como cortina" por cima da Hero, **borboletas com chroma-key em tempo real** cruzando a tela (removendo o fundo verde do vídeo ao vivo, via canvas — sem servidor, sem After Effects) em dois voos diferentes (um atravessando a largura toda, outro subindo em diagonal), colunas editoriais "Sobre Nós"/"Conceito" com entrada escalonada, citação autoral com assinatura em fonte script, e um tríptico de materiais com parallax de scroll.
+3. **Vídeo de Drone**: seção pinada onde os textos laterais somem e o vídeo central expande via `scale` do GSAP (não largura/altura), revelando um texto de localização abaixo.
+4. **Slider de Localização**: seção pinada com 4 slides que deslizam horizontalmente conforme o scroll vertical avança (a rolagem vertical é convertida em deslocamento horizontal via `x: -(scrollWidth - innerWidth)`), terminando num mapa com grid de pontos de distância (aeroporto, marina, golfe etc.) que entram em cascata.
+5. **Crepúsculo**: seção pinada com efeito de "lanterna" — uma segunda cópia mais clara da mesma foto só é revelada dentro de um círculo que segue o mouse (`mask-image: radial-gradient` dinâmico), com 3 fases de texto entrando/saindo e um CTA final "Agendar Experiência Privada".
+6. **Contato**: título grande com reveal por linha atrás de máscaras, e um cartão de "folha de papel" texturizada com clipe metálico no topo, formulário de 6 campos numerados (incluindo checkboxes customizados de tipo de interesse) que mostra uma tela de confirmação ao enviar.
+7. **Rodapé**: colunas de navegação/contato, repetição monumental do título da Hero, e barra de copyright com botão "voltar ao topo".
+
+Toda a tipografia de título usa `font-display` (Instrument Serif), toques manuscritos usam `font-script` (Monsieur La Doulaise), e texto técnico/rótulos usam `font-sans` (Bricolage Grotesque) em uppercase com tracking largo. Responsivo mobile-first: as seções pinadas ajustam posição/direção via `matchMedia('(max-width: 767px)')` dentro do próprio GSAP, não só CSS.
+
+1. index.html (copiar exatamente)
+
+```html
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400..900;1,6..96,400..900&family=Italiana&display=swap" rel="stylesheet" />
+    <title>Alba — Costa del Sol</title>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>
+```
+
+2. package.json (dependências exatas)
+
+```json
+{
+  "name": "alba-residencia",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc -b && vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@fontsource/bricolage-grotesque": "^5.3.0",
+    "@fontsource/instrument-serif": "^5.3.0",
+    "@fontsource/monsieur-la-doulaise": "^5.3.0",
+    "gsap": "^3.15.0",
+    "lenis": "^1.3.26",
+    "lucide-react": "^1.40.0",
+    "react": "^19.2.8",
+    "react-dom": "^19.2.8"
+  },
+  "devDependencies": {
+    "@tailwindcss/vite": "^4.3.3",
+    "@types/react": "^19.2.18",
+    "@types/react-dom": "^19.2.4",
+    "@vitejs/plugin-react": "^6.1.0",
+    "tailwindcss": "^4.3.3",
+    "typescript": "~6.0.2",
+    "vite": "^8.2.2"
+  }
+}
+```
+
+3. vite.config.ts
+
+```typescript
+import react from '@vitejs/plugin-react'
+import tailwindcss from '@tailwindcss/vite'
+import { defineConfig } from 'vite'
+
+export default defineConfig({
+  plugins: [react(), tailwindcss()],
+  server: {
+    port: Number(process.env.PORT) || 5173,
+    strictPort: false,
+  },
+})
+```
+
+4. tsconfig.json
+
+```json
+{
+  "files": [],
+  "references": [
+    { "path": "./tsconfig.app.json" },
+    { "path": "./tsconfig.node.json" }
+  ]
+}
+```
+
+5. tsconfig.app.json
+
+```json
+{
+  "compilerOptions": {
+    "target": "es2023",
+    "lib": ["ES2023", "DOM"],
+    "module": "esnext",
+    "types": ["vite/client"],
+    "allowArbitraryExtensions": true,
+    "skipLibCheck": true,
+    "moduleResolution": "bundler",
+    "allowImportingTsExtensions": true,
+    "verbatimModuleSyntax": true,
+    "moduleDetection": "force",
+    "noEmit": true,
+    "jsx": "react-jsx",
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "erasableSyntaxOnly": true,
+    "noFallthroughCasesInSwitch": true
+  },
+  "include": ["src"]
+}
+```
+
+6. tsconfig.node.json
+
+```json
+{
+  "compilerOptions": {
+    "target": "es2023",
+    "lib": ["ES2023"],
+    "types": ["node"],
+    "skipLibCheck": true,
+    "module": "nodenext",
+    "allowImportingTsExtensions": true,
+    "verbatimModuleSyntax": true,
+    "moduleDetection": "force",
+    "noEmit": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "erasableSyntaxOnly": true,
+    "noFallthroughCasesInSwitch": true
+  },
+  "include": ["vite.config.ts"]
+}
+```
+
+7. src/main.tsx
+
+```tsx
+import { StrictMode } from 'react'
+import { createRoot } from 'react-dom/client'
+import './index.css'
+import App from './App.tsx'
+
+createRoot(document.getElementById('root')!).render(
+  <StrictMode>
+    <App />
+  </StrictMode>,
+)
+```
+
+8. src/App.tsx
+
+```tsx
+import { Hero } from './components/hero/Hero'
+import { ApartmentsSection } from './components/apartments/ApartmentsSection'
+import { DroneVideoSection } from './components/video/DroneVideoSection'
+import { LocationSliderSection } from './components/location-slider/LocationSliderSection'
+import { TwilightSection } from './components/twilight/TwilightSection'
+import { ContactSection } from './components/contact/ContactSection'
+import { Footer } from './components/footer/Footer'
+import { useSmoothScroll } from './lib/useSmoothScroll'
+
+function App() {
+  useSmoothScroll()
+
+  return (
+    <main className="relative bg-ink overflow-x-hidden">
+      <Hero />
+      <ApartmentsSection />
+      <DroneVideoSection />
+      <LocationSliderSection />
+      <TwilightSection />
+      <ContactSection />
+      <Footer />
+    </main>
+  )
+}
+
+export default App
+```
+
+9. src/index.css (copiar exatamente — define toda a paleta e fontes via @theme do Tailwind v4)
+
+```css
+@import 'tailwindcss';
+
+@import '@fontsource/instrument-serif/400.css';
+@import '@fontsource/instrument-serif/400-italic.css';
+@import '@fontsource/bricolage-grotesque/300.css';
+@import '@fontsource/bricolage-grotesque/400.css';
+@import '@fontsource/bricolage-grotesque/500.css';
+@import '@fontsource/bricolage-grotesque/600.css';
+@import '@fontsource/monsieur-la-doulaise/400.css';
+
+@theme {
+  --color-ink: #0c0a08;
+  --color-paper: #ffffff;
+  --color-line: rgba(255, 255, 255, 0.55);
+
+  --font-display: 'Instrument Serif', 'Times New Roman', serif;
+  --font-sans: 'Bricolage Grotesque', system-ui, sans-serif;
+  --font-script: 'Monsieur La Doulaise', cursive;
+  --font-serif-card: 'Bodoni Moda', 'Italiana', 'Instrument Serif', Georgia, serif;
+}
+
+:root {
+  color-scheme: dark;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  margin: 0;
+  min-height: 100%;
+  background: var(--color-ink);
+}
+
+body {
+  font-family: var(--font-sans);
+  color: var(--color-paper);
+  overflow-x: clip;
+}
+
+::selection {
+  background: var(--color-paper);
+  color: var(--color-ink);
+}
+```
+
+10. src/lib/useSmoothScroll.ts (copiar exatamente)
+
+```typescript
+import { useEffect } from 'react'
+import gsap from 'gsap'
+import ScrollTrigger from 'gsap/ScrollTrigger'
+import Lenis from 'lenis'
+
+gsap.registerPlugin(ScrollTrigger)
+
+export function useSmoothScroll() {
+  useEffect(() => {
+    const lenis = new Lenis({
+      duration: 1.2,
+      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+      smoothWheel: true,
+    })
+
+    lenis.on('scroll', ScrollTrigger.update)
+
+    const tick = (time: number) => {
+      lenis.raf(time * 1000)
+    }
+    gsap.ticker.add(tick)
+    gsap.ticker.lagSmoothing(0)
+
+    return () => {
+      gsap.ticker.remove(tick)
+      lenis.destroy()
+    }
+  }, [])
+}
+```
+
+11. src/components/apartments/GreenScreenVideo.tsx (o coração do efeito de chroma-key — copiar exatamente)
+
+Nota para a IA: este componente NÃO usa nenhuma lib de remoção de fundo. Ele desenha cada frame do vídeo num `<canvas>` 2D e zera o canal alfa de qualquer pixel que seja predominantemente verde — é chroma-key de verdade, rodando 60x por segundo, só com Canvas API.
+
+```tsx
+import { useEffect, useRef, useState, type FC } from 'react'
+
+type GreenScreenVideoProps = {
+  src: string
+  className?: string
+}
+
+export const GreenScreenVideo: FC<GreenScreenVideoProps> = ({ src, className }) => {
+  const videoRef = useRef<HTMLVideoElement>(null)
+  const canvasRef = useRef<HTMLCanvasElement>(null)
+  const [shouldLoad, setShouldLoad] = useState(false)
+
+  useEffect(() => {
+    const canvas = canvasRef.current
+    if (!canvas) return
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0]?.isIntersecting) {
+          setShouldLoad(true)
+          observer.disconnect()
+        }
+      },
+      { rootMargin: '600px' },
+    )
+
+    observer.observe(canvas)
+    return () => observer.disconnect()
+  }, [])
+
+  useEffect(() => {
+    if (!shouldLoad) return
+
+    const video = videoRef.current
+    const canvas = canvasRef.current
+    if (!video || !canvas) return
+
+    const ctx = canvas.getContext('2d', { willReadFrequently: true })
+    if (!ctx) return
+
+    canvas.width = 480
+    canvas.height = 270
+
+    const tryPlay = () => {
+      video.play().catch(() => {})
+    }
+
+    video.addEventListener('loadeddata', tryPlay)
+    video.addEventListener('canplay', tryPlay)
+    if (video.readyState >= 2) tryPlay()
+
+    let raf = 0
+
+    const render = () => {
+      if (video.readyState >= 2) {
+        ctx.drawImage(video, 0, 0, canvas.width, canvas.height)
+        const frame = ctx.getImageData(0, 0, canvas.width, canvas.height)
+        const data = frame.data
+        for (let i = 0; i < data.length; i += 4) {
+          const r = data[i]
+          const g = data[i + 1]
+          const b = data[i + 2]
+          if (g > 85 && g > r * 1.3 && g > b * 1.3) {
+            data[i + 3] = 0
+          }
+        }
+        ctx.putImageData(frame, 0, 0)
+      }
+      raf = requestAnimationFrame(render)
+    }
+
+    render()
+
+    return () => {
+      cancelAnimationFrame(raf)
+      video.removeEventListener('loadeddata', tryPlay)
+      video.removeEventListener('canplay', tryPlay)
+    }
+  }, [shouldLoad])
+
+  return (
+    <>
+      {shouldLoad && (
+        <video
+          ref={videoRef}
+          src={src}
+          autoPlay
+          loop
+          muted
+          playsInline
+          crossOrigin="anonymous"
+          className="pointer-events-none fixed left-0 top-0 h-px w-px opacity-0"
+        />
+      )}
+      <canvas ref={canvasRef} className={className} />
+    </>
+  )
+}
+```
+
+12. src/components/hero/hero.tokens.css (copiar exatamente — ajustes finos da Hero em variáveis CSS)
+
+```css
+/*
+  Ajustes da Hero — mexa nesses valores à vontade.
+*/
+.hero-root {
+  --hero-gap: 8px;
+  --hero-scale: 0.82;
+  --hero-top: 3.75rem;
+  --hero-img-pos-y: 39%;
+
+  /* inclinação do "Luxury" em script */
+  --hero-luxury-rotate: -19deg;
+
+  /* tamanho do "Luxury" em script */
+  --hero-luxury-size: 6.8rem;
+
+  /* espaço entre "Residência" e "Luxury" (negativo = mais perto/sobrepondo) */
+  --hero-luxury-gap: -22px;
+}
+
+@media (max-width: 767px) {
+  .hero-root {
+    --hero-scale: 0.78;
+    --hero-top: 10rem;
+    --hero-img-pos-y: 0%;
+    --hero-luxury-size: 4.6rem;
+    --hero-luxury-gap: -16px;
+    --hero-gap: 5px;
+  }
+}
+```
+
+13. src/components/hero/hero.css (copiar exatamente)
+
+```css
+.hero-grain {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size: 180px 180px;
+  animation: grain-shift 1s steps(4) infinite;
+}
+
+@keyframes grain-shift {
+  0% {
+    transform: translate(0, 0);
+  }
+  25% {
+    transform: translate(-2%, 1%);
+  }
+  50% {
+    transform: translate(1%, -2%);
+  }
+  75% {
+    transform: translate(-1%, 2%);
+  }
+  100% {
+    transform: translate(0, 0);
+  }
+}
+
+.hero-mark .char {
+  display: inline-block;
+}
+
+.hero-nav-item {
+  pointer-events: auto;
+}
+
+.hero-luxury {
+  display: inline-block;
+  margin-top: var(--hero-luxury-gap);
+  rotate: var(--hero-luxury-rotate);
+}
+
+.hero-luxury-in {
+  font-size: var(--hero-luxury-size);
+}
+
+.hero-glass {
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  transition: border-color 0.3s ease;
+}
+
+.hero-glass:hover {
+  border-color: rgba(255, 255, 255, 0.7);
+}
+
+.hero-hotspot {
+  position: absolute;
+  z-index: 25;
+  opacity: 0;
+  cursor: pointer;
+  outline: none;
+  user-select: none;
+}
+
+.hero-hotspot-dot {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  border-radius: 9999px;
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.hero-hotspot:hover .hero-hotspot-dot,
+.hero-hotspot:focus-visible .hero-hotspot-dot,
+.hero-hotspot.is-active .hero-hotspot-dot {
+  transform: scale(1.15);
+}
+
+.hero-hotspot-ping {
+  position: absolute;
+  inset: -4px;
+  border-radius: 9999px;
+  background: rgba(255, 255, 255, 0.45);
+  animation: hero-hotspot-ping 2.4s cubic-bezier(0, 0, 0.2, 1) infinite;
+  transition: opacity 0.3s ease;
+}
+
+.hero-hotspot:hover .hero-hotspot-ping,
+.hero-hotspot:focus-within .hero-hotspot-ping,
+.hero-hotspot.is-active .hero-hotspot-ping {
+  opacity: 0;
+  animation-play-state: paused;
+}
+
+@keyframes hero-hotspot-ping {
+  75%,
+  100% {
+    transform: scale(2.2);
+    opacity: 0;
+  }
+}
+
+.hero-hotspot-core {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  border-radius: 9999px;
+  border: 1px solid rgba(255, 255, 255, 0.7);
+  background: rgba(255, 255, 255, 0.22);
+  backdrop-filter: blur(6px);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
+  transition:
+    background-color 0.3s ease,
+    border-color 0.3s ease,
+    box-shadow 0.3s ease,
+    transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.hero-hotspot:hover .hero-hotspot-core,
+.hero-hotspot:focus-within .hero-hotspot-core,
+.hero-hotspot.is-active .hero-hotspot-core {
+  background: #ffffff;
+  border-color: #ffffff;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.35);
+}
+
+.hero-hotspot-point {
+  width: 6px;
+  height: 6px;
+  border-radius: 9999px;
+  background: #ffffff;
+  box-shadow: 0 0 4px rgba(255, 255, 255, 0.9);
+  opacity: 1;
+  transform: scale(1);
+  transition:
+    transform 0.25s cubic-bezier(0.16, 1, 0.3, 1),
+    opacity 0.2s ease;
+}
+
+.hero-hotspot:hover .hero-hotspot-point,
+.hero-hotspot:focus-within .hero-hotspot-point,
+.hero-hotspot.is-active .hero-hotspot-point {
+  opacity: 0;
+  transform: scale(0);
+}
+
+.hero-hotspot-close {
+  position: absolute;
+  width: 7.5px;
+  height: 7.5px;
+  color: #1e2633;
+  opacity: 0;
+  transform: scale(0.3) rotate(-90deg);
+  transition:
+    transform 0.3s cubic-bezier(0.16, 1, 0.3, 1),
+    opacity 0.25s ease;
+}
+
+.hero-hotspot:hover .hero-hotspot-close,
+.hero-hotspot:focus-within .hero-hotspot-close,
+.hero-hotspot.is-active .hero-hotspot-close {
+  opacity: 1;
+  transform: scale(1) rotate(0deg);
+}
+
+/* Card Container */
+.hero-hotspot-card {
+  position: absolute;
+  width: 235px;
+  min-height: 285px;
+  border-radius: 6px;
+  background: #f2ede4;
+  border: 1px solid rgba(20, 26, 36, 0.08);
+  box-shadow: none;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  z-index: 50;
+  transition:
+    opacity 0.35s cubic-bezier(0.16, 1, 0.3, 1),
+    transform 0.35s cubic-bezier(0.16, 1, 0.3, 1),
+    visibility 0.35s;
+}
+
+/* Positioning variants */
+.hero-hotspot--right .hero-hotspot-card {
+  left: calc(100% + 14px);
+  top: 50%;
+  transform: translateY(-50%) translateX(-8px);
+}
+
+.hero-hotspot--right:hover .hero-hotspot-card,
+.hero-hotspot--right:focus-within .hero-hotspot-card,
+.hero-hotspot--right.is-active .hero-hotspot-card {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+  transform: translateY(-50%) translateX(0);
+}
+
+.hero-hotspot--left .hero-hotspot-card {
+  right: calc(100% + 14px);
+  left: auto;
+  top: 50%;
+  transform: translateY(-50%) translateX(8px);
+}
+
+.hero-hotspot--left:hover .hero-hotspot-card,
+.hero-hotspot--left:focus-within .hero-hotspot-card,
+.hero-hotspot--left.is-active .hero-hotspot-card {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+  transform: translateY(-50%) translateX(0);
+}
+
+.hero-hotspot--right-bottom .hero-hotspot-card {
+  left: calc(100% + 14px);
+  top: auto;
+  bottom: -20px;
+  transform: translateX(-8px);
+}
+
+.hero-hotspot--right-bottom:hover .hero-hotspot-card,
+.hero-hotspot--right-bottom:focus-within .hero-hotspot-card,
+.hero-hotspot--right-bottom.is-active .hero-hotspot-card {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+  transform: translateX(0);
+}
+
+/* Decorative inner frame with beveled / chamfered corners */
+.hero-hotspot-card-frame {
+  position: absolute;
+  inset: 8px;
+  background: rgba(28, 36, 48, 0.16);
+  clip-path: polygon(
+    11px 0%,
+    calc(100% - 11px) 0%,
+    100% 11px,
+    100% calc(100% - 11px),
+    calc(100% - 11px) 100%,
+    11px 100%,
+    0% calc(100% - 11px),
+    0% 11px
+  );
+  pointer-events: none;
+}
+
+.hero-hotspot-card-frame-inner {
+  position: absolute;
+  inset: 1px;
+  background: #f2ede4;
+  clip-path: polygon(
+    10.6px 0%,
+    calc(100% - 10.6px) 0%,
+    100% 10.6px,
+    100% calc(100% - 10.6px),
+    calc(100% - 10.6px) 100%,
+    10.6px 100%,
+    0% calc(100% - 10.6px),
+    0% 10.6px
+  );
+}
+
+/* Card Content */
+.hero-hotspot-card-content {
+  position: relative;
+  z-index: 2;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100%;
+  min-height: 285px;
+  padding: 18px 16px 16px 16px;
+}
+
+.hero-hotspot-card-title {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: 23px;
+  font-weight: 400;
+  line-height: 1.05;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  color: #141c28;
+}
+
+.hero-hotspot-card-desc {
+  margin: 0;
+  font-family: var(--font-sans), 'Bricolage Grotesque', system-ui, sans-serif;
+  font-size: 11px;
+  line-height: 1.5;
+  font-weight: 400;
+  letter-spacing: -0.01em;
+  color: #242d3a;
+}
+
+@media (max-width: 640px) {
+  .hero-hotspot-card {
+    width: 200px;
+    min-height: 250px;
+  }
+
+  .hero-hotspot--right .hero-hotspot-card,
+  .hero-hotspot--left .hero-hotspot-card,
+  .hero-hotspot--right-bottom .hero-hotspot-card {
+    left: 50%;
+    right: auto;
+    top: calc(100% + 12px);
+    bottom: auto;
+    transform: translateX(-50%) translateY(4px);
+    transform-origin: center top;
+  }
+
+  .hero-hotspot--right:hover .hero-hotspot-card,
+  .hero-hotspot--right:focus-within .hero-hotspot-card,
+  .hero-hotspot--right.is-active .hero-hotspot-card,
+  .hero-hotspot--left:hover .hero-hotspot-card,
+  .hero-hotspot--left:focus-within .hero-hotspot-card,
+  .hero-hotspot--left.is-active .hero-hotspot-card,
+  .hero-hotspot--right-bottom:hover .hero-hotspot-card,
+  .hero-hotspot--right-bottom:focus-within .hero-hotspot-card,
+  .hero-hotspot--right-bottom.is-active .hero-hotspot-card {
+    transform: translateX(-50%) translateY(0);
+  }
+
+  .hero-hotspot-card-content {
+    min-height: 250px;
+    padding: 16px 13px 13px 13px;
+  }
+
+  .hero-hotspot-card-title {
+    font-size: 19px;
+  }
+
+  .hero-hotspot-card-desc {
+    font-size: 10px;
+    line-height: 1.45;
+  }
+}
+```
+
+14. src/components/hero/Hero.tsx (copiar exatamente — as duas imagens já estão hospedadas)
+
+```tsx
+import { useLayoutEffect, useRef, useState } from 'react'
+import gsap from 'gsap'
+import ScrollTrigger from 'gsap/ScrollTrigger'
+import SplitText from 'gsap/SplitText'
+import './hero.tokens.css'
+import './hero.css'
+
+gsap.registerPlugin(SplitText, ScrollTrigger)
+
+const heroBg = 'https://www.promptfly.com.br/templates/alba-residencia/hero-bg.webp'
+const heroBgNight = 'https://www.promptfly.com.br/templates/alba-residencia/hero-bg-night.webp'
+
+const HOTSPOTS = [
+  {
+    id: 'cabana',
+    title: 'ESPAÇOS ATEMPORAIS',
+    desc: 'Quiosque de estar integrado ao jardim mediterrâneo, criando um refúgio acolhedor e sombreado à beira da piscina.',
+    top: '67%',
+    left: '16%',
+    placement: 'right',
+  },
+  {
+    id: 'facade',
+    title: 'CRIADO PARA PERDURAR',
+    desc: 'Fachadas em pedra natural foram selecionadas por sua estética atemporal, durabilidade e harmonia com a luz do entardecer.',
+    top: '60%',
+    left: '34%',
+    placement: 'right',
+  },
+  {
+    id: 'pergolado',
+    title: 'HARMONIA ORGÂNICA',
+    desc: 'Pergolados em madeira rústica e vegetação suspensa que abraçam as paredes de pedra e os terraços da residência.',
+    top: '62%',
+    left: '84%',
+    placement: 'left',
+  },
+]
+
+export function Hero() {
+  const [activeHotspot, setActiveHotspot] = useState<string | null>(null)
+  const [isNight, setIsNight] = useState(false)
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
+  const pinWrap = useRef<HTMLElement>(null)
+  const root = useRef<HTMLDivElement>(null)
+  const scrollCountWrap = useRef<HTMLDivElement>(null)
+  const scrollCountNum = useRef<HTMLSpanElement>(null)
+  const scrollCountFill = useRef<HTMLDivElement>(null)
+
+  useLayoutEffect(() => {
+    const ctx = gsap.context(() => {
+      const split = new SplitText('.hero-mark', { type: 'chars' })
+
+      const tl = gsap.timeline({ defaults: { ease: 'expo.out' } })
+
+      tl.to('.hero-curtain', {
+          scaleY: 0,
+          duration: 1.4,
+          ease: 'power4.inOut',
+          delay: 0.2,
+        })
+        .from(
+          split.chars,
+          { yPercent: 130, opacity: 0, duration: 1.1, stagger: 0.035 },
+          0.7,
+        )
+        .from('.hero-sub', { opacity: 0, y: 10, duration: 0.8 }, 1.1)
+        .from('.hero-luxury-in', { opacity: 0, y: 10, duration: 0.8 }, 1.2)
+        .from('.hero-subbar', { opacity: 0, y: 12, duration: 0.8 }, 1.3)
+        .from(
+          '.hero-nav-item',
+          { opacity: 0, y: -8, duration: 0.6, stagger: 0.08 },
+          1,
+        )
+        .from(
+          '.hero-seal',
+          { opacity: 0, scale: 0.85, duration: 0.8 },
+          1,
+        )
+        .from(
+          '.hero-foot-item',
+          { opacity: 0, y: 8, duration: 0.7, stagger: 0.1 },
+          1.4,
+        )
+        .from(
+          '.hero-scrollcount',
+          { opacity: 0, x: 8, duration: 0.8 },
+          1.4,
+        )
+
+      gsap.to('.hero-seal-rotate', {
+        rotate: 360,
+        duration: 48,
+        ease: 'none',
+        repeat: -1,
+      })
+
+      const isMobile = window.matchMedia('(max-width: 767px)').matches
+
+      if (!isMobile) {
+        gsap.fromTo(
+          '.hero-img',
+          { scale: 1 },
+          {
+            scale: 1.08,
+            duration: 22,
+            ease: 'sine.inOut',
+            yoyo: true,
+            repeat: -1,
+          },
+        )
+      }
+
+      // Sai da hero rolando: textos saem pra cima/baixo, a foto ganha
+      // parallax e o botão de vidro "Ver Apartamentos" aparece no fim.
+      const totalSteps = 13
+
+      const exit = gsap.timeline({
+        scrollTrigger: {
+          trigger: pinWrap.current,
+          start: 'top top',
+          end: 'bottom bottom',
+          scrub: 1,
+          pin: root.current,
+          pinSpacing: false,
+          onUpdate: (self) => {
+            const step = Math.min(
+              totalSteps,
+              Math.max(1, Math.ceil(self.progress * totalSteps)),
+            )
+            if (scrollCountNum.current) {
+              scrollCountNum.current.textContent = String(step).padStart(2, '0')
+            }
+            if (scrollCountFill.current) {
+              scrollCountFill.current.style.height = `${self.progress * 100}%`
+            }
+            if (scrollCountWrap.current) {
+              const fadeStart = 0.88
+              const opacity =
+                self.progress > fadeStart
+                  ? Math.max(0, 1 - (self.progress - fadeStart) / (1 - fadeStart))
+                  : 1
+              scrollCountWrap.current.style.opacity = String(opacity)
+            }
+          },
+        },
+      })
+
+      const startObjectPos = isMobile ? 'center 0%' : 'center 39%'
+
+      exit
+        .fromTo(
+          '.hero-img',
+          { objectPosition: startObjectPos },
+          { objectPosition: 'center 100%', ease: 'none', duration: 1 },
+          0,
+        )
+        .fromTo(
+          '.hero-img-wrap',
+          { yPercent: 0 },
+          { yPercent: -4, ease: 'none', duration: 1 },
+          0,
+        )
+        .fromTo(
+          '.hero-copy',
+          { yPercent: 0, autoAlpha: 1 },
+          { yPercent: -55, autoAlpha: 0, ease: 'none', duration: 0.7 },
+          0,
+        )
+        .fromTo(
+          ['.hero-nav-item', '.hero-seal'],
+          { yPercent: 0, autoAlpha: 1 },
+          { yPercent: -25, autoAlpha: 0, ease: 'none', duration: 0.7 },
+          0,
+        )
+        .fromTo(
+          '.hero-foot-item',
+          { yPercent: 0, autoAlpha: 1 },
+          { yPercent: 25, autoAlpha: 0, ease: 'none', duration: 0.7 },
+          0,
+        )
+        .fromTo(
+          '.hero-glass',
+          { opacity: 0, scale: 0.7, yPercent: 30 },
+          { opacity: 1, scale: 1, yPercent: 0, ease: 'none', duration: 0.5 },
+          0.35,
+        )
+        .fromTo(
+          '.hero-hotspot',
+          { opacity: 0, scale: 0.5 },
+          { opacity: 1, scale: 1, ease: 'none', duration: 0.45, stagger: 0.1 },
+          0.3,
+        )
+        // Pausa generosa com a Hero totalmente visível e interativa antes da próxima seção subir
+        .to({}, { duration: 1.6 })
+    }, pinWrap)
+
+    return () => ctx.revert()
+  }, [])
+
+  return (
+    <section ref={pinWrap} className="relative h-[320vh] w-full">
+      <div
+        ref={root}
+        className="hero-root relative h-[100svh] w-full overflow-hidden bg-ink"
+      >
+        <div className="hero-curtain absolute inset-0 z-40 origin-bottom bg-ink" />
+
+        <div className="hero-img-wrap absolute inset-0 md:-top-[6%] md:-bottom-[6%]">
+          <div className="absolute inset-0 overflow-hidden">
+            <img
+              src={heroBg}
+              alt="Residência Alba durante o dia, piscina voltada para o mar"
+              className={`hero-img absolute inset-0 h-full w-full object-cover object-[center_var(--hero-img-pos-y)] transition-opacity duration-1000 ease-in-out ${
+                isNight ? 'opacity-0 pointer-events-none' : 'opacity-100'
+              }`}
+            />
+            <img
+              src={heroBgNight}
+              alt="Residência Alba à noite sob as estrelas, piscina iluminada"
+              className={`hero-img absolute inset-0 h-full w-full object-cover object-[center_var(--hero-img-pos-y)] transition-opacity duration-1000 ease-in-out ${
+                isNight ? 'opacity-100' : 'opacity-0 pointer-events-none'
+              }`}
+            />
+            <div
+              className={`hero-overlay pointer-events-none absolute inset-0 transition-opacity duration-1000 ${
+                isNight ? 'bg-black/10' : 'bg-black/15'
+              }`}
+            />
+            <div className="hero-grain pointer-events-none absolute inset-0 opacity-[0.05] mix-blend-overlay" />
+          </div>
+
+          {HOTSPOTS.map((h) => {
+            const isActive = activeHotspot === h.id
+            return (
+              <div
+                key={h.id || h.title}
+                className={`hero-hotspot hero-hotspot--${h.placement || 'right'} ${isActive ? 'is-active' : ''}`}
+                style={{ top: h.top, left: h.left }}
+                tabIndex={0}
+                role="button"
+                aria-label={h.title}
+                onClick={() => setActiveHotspot(isActive ? null : h.id)}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault()
+                    setActiveHotspot(isActive ? null : h.id)
+                  }
+                }}
+              >
+                <div className="pin_dot hero-hotspot-dot">
+                  <span className="hero-hotspot-ping" />
+                  <span className="hero-hotspot-core">
+                    <span className="hero-hotspot-point" />
+                    <svg
+                      className="hero-hotspot-close"
+                      viewBox="0 0 12 12"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="1"
+                      strokeLinecap="round"
+                      aria-hidden="true"
+                    >
+                      <path d="M3.2 3.2L8.8 8.8M8.8 3.2L3.2 8.8" />
+                    </svg>
+                  </span>
+                </div>
+                <div className="hero-hotspot-card" role="tooltip">
+                  <div className="hero-hotspot-card-frame" aria-hidden="true">
+                    <div className="hero-hotspot-card-frame-inner" />
+                  </div>
+                  <div className="hero-hotspot-card-content">
+                    <h3 className="hero-hotspot-card-title">{h.title}</h3>
+                    <p className="hero-hotspot-card-desc">{h.desc}</p>
+                  </div>
+                </div>
+              </div>
+            )
+          })}
+        </div>
+
+        <header className="pointer-events-none absolute inset-x-0 top-0 z-30 flex items-start justify-between p-6 md:p-10">
+          <div className="hero-seal flex h-11 w-11 items-center justify-center md:h-14 md:w-14">
+            <svg
+              className="hero-seal-rotate h-full w-full"
+              viewBox="0 0 100 100"
+              fill="none"
+            >
+              <circle
+                cx="50"
+                cy="50"
+                r="47"
+                stroke="var(--color-paper)"
+                strokeOpacity="0.5"
+                strokeWidth="0.6"
+              />
+              <path id="sealCirclePath" d="M50,50 m-38,0 a38,38 0 1,1 76,0 a38,38 0 1,1 -76,0" fill="none" />
+              <text fontSize="7.6" fill="var(--color-paper)" letterSpacing="3" className="font-sans uppercase">
+                <textPath href="#sealCirclePath" startOffset="0%">
+                  Alba · Costa del Sol · Alba · Costa del Sol ·
+                </textPath>
+              </text>
+              <text
+                x="50"
+                y="54"
+                textAnchor="middle"
+                fill="var(--color-paper)"
+                fontSize="13"
+                className="font-display italic"
+              >
+                A
+              </text>
+            </svg>
+          </div>
+
+          <nav className="flex flex-col items-end gap-4 pt-1 text-paper">
+            <button
+              type="button"
+              aria-label="Abrir menu"
+              onClick={() => setIsMobileMenuOpen(true)}
+              className="hero-nav-item pointer-events-auto flex flex-col items-end gap-[6px] p-2 text-paper transition-opacity hover:opacity-75 md:hidden"
+            >
+              <span className="block h-[1.5px] w-6 bg-paper" />
+              <span className="block h-[1.5px] w-4 bg-paper" />
+            </button>
+
+            <div className="hidden flex-col items-end gap-2 text-right md:flex">
+              <a
+                href="#apartamentos"
+                className="hero-nav-item font-display text-base uppercase tracking-[0.1em] opacity-95 underline decoration-paper/60 decoration-[1px] underline-offset-[7px] transition-opacity hover:opacity-60 md:text-lg"
+              >
+                Ver Apartamentos
+              </a>
+              <div className="flex flex-col items-end gap-0.5">
+                <a
+                  href="#agendar"
+                  className="hero-nav-item text-[10px] uppercase tracking-[0.2em] text-paper/65 transition-opacity hover:opacity-70 md:text-[11px]"
+                >
+                  Agendar Chamada
+                </a>
+                <a
+                  href="#contato"
+                  className="hero-nav-item text-[10px] uppercase tracking-[0.2em] text-paper/65 transition-opacity hover:opacity-70 md:text-[11px]"
+                >
+                  Contato
+                </a>
+              </div>
+            </div>
+          </nav>
+        </header>
+
+        <div className="hero-copy absolute inset-x-0 top-0 z-20 flex origin-top flex-col items-center px-6 text-center [padding-top:var(--hero-top)] [scale:var(--hero-scale)]">
+          <h1 className="hero-mark font-display text-[19vw] uppercase leading-[0.87] tracking-[-0.024em] text-paper sm:text-[16vw] md:text-[8.5rem] lg:text-[9.8rem]">
+            Alba
+          </h1>
+          <span className="hero-sub font-display text-[19vw] uppercase leading-[0.87] tracking-[-0.024em] text-paper sm:text-[16vw] md:text-[8.5rem] lg:text-[9.8rem] [margin-top:var(--hero-gap)]">
+            Residência
+          </span>
+          <span className="hero-luxury inline-block">
+            <span className="hero-luxury-in inline-block font-script leading-none text-paper">
+              Luxury
+            </span>
+          </span>
+
+          {/* Sub-hero bar: Left text | Center Day-Night Switch | Right text */}
+          <div className="hero-subbar mt-10 sm:mt-12 md:mt-16 flex w-full max-w-xl md:max-w-2xl lg:max-w-3xl items-center justify-between gap-3 md:gap-4 px-2 sm:px-6">
+            <span className="hero-subbar-text font-display text-xs sm:text-base md:text-lg lg:text-[1.35rem] uppercase tracking-[0.06em] text-paper/90">
+              Um Lugar
+            </span>
+
+            <button
+              type="button"
+              onClick={() => setIsNight((prev) => !prev)}
+              className="hero-theme-toggle pointer-events-auto group flex items-center gap-1.5 md:gap-2 rounded-full border border-paper/30 bg-transparent px-3 md:px-4 py-1 md:py-1.5 transition-all duration-300 hover:border-paper/80 active:scale-95"
+              aria-label={isNight ? 'Alternar para vista diurna' : 'Alternar para vista noturna'}
+            >
+              <span className="relative flex h-3 w-3 md:h-3.5 md:w-3.5 items-center justify-center">
+                {/* Sun icon */}
+                <svg
+                  className={`absolute inset-0 h-full w-full transition-all duration-500 ease-out ${
+                    isNight
+                      ? 'rotate-90 scale-0 opacity-0'
+                      : 'rotate-0 scale-100 opacity-90 text-paper'
+                  }`}
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="1.3"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                >
+                  <circle cx="12" cy="12" r="4" />
+                  <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41" />
+                </svg>
+                {/* Moon icon */}
+                <svg
+                  className={`absolute inset-0 h-full w-full transition-all duration-500 ease-out ${
+                    isNight
+                      ? 'rotate-0 scale-100 opacity-90 text-paper'
+                      : '-rotate-90 scale-0 opacity-0'
+                  }`}
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="1.3"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                >
+                  <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z" />
+                </svg>
+              </span>
+              <span className="font-sans text-[8.5px] md:text-[10px] uppercase tracking-[0.24em] text-paper/75 transition-colors group-hover:text-paper">
+                {isNight ? 'Ver de Dia' : 'Ver à Noite'}
+              </span>
+            </button>
+
+            <span className="hero-subbar-text font-display text-xs sm:text-base md:text-lg lg:text-[1.35rem] uppercase tracking-[0.06em] text-paper/90">
+              Para Retornar
+            </span>
+          </div>
+        </div>
+
+        <a
+          href="#apartamentos"
+          className="hero-glass absolute inset-x-0 bottom-[9%] z-30 mx-auto flex h-28 w-28 flex-col items-center justify-center rounded-full text-center opacity-0 backdrop-blur-md md:h-32 md:w-32"
+        >
+          <span className="hero-glass-label flex flex-col items-center">
+            <span className="font-sans text-[10px] uppercase leading-tight tracking-[0.15em] text-paper md:text-[11px]">
+              Ver
+            </span>
+            <span className="font-sans text-[10px] uppercase leading-tight tracking-[0.15em] text-paper md:text-[11px]">
+              Apartamentos
+            </span>
+          </span>
+        </a>
+
+        <div
+          ref={scrollCountWrap}
+          className="hero-scrollcount pointer-events-none absolute right-4 top-1/2 z-30 flex -translate-y-1/2 flex-col items-center gap-3 md:right-8"
+        >
+          <span
+            ref={scrollCountNum}
+            className="font-sans text-[10px] tracking-[0.2em] text-paper"
+          >
+            01
+          </span>
+          <div className="relative h-14 w-px overflow-hidden bg-paper/25 md:h-16">
+            <div
+              ref={scrollCountFill}
+              className="absolute inset-x-0 top-0 w-px bg-paper"
+              style={{ height: '0%' }}
+            />
+          </div>
+          <span className="font-sans text-[10px] tracking-[0.2em] text-paper/40">
+            {String(13).padStart(2, '0')}
+          </span>
+        </div>
+
+        <footer className="pointer-events-none absolute inset-x-0 bottom-0 z-30 flex items-end justify-between gap-4 p-6 md:p-10">
+          <span className="hero-foot-item pointer-events-auto font-sans text-[11px] tracking-[0.2em] text-paper/70 md:text-xs">
+            01 &nbsp;—&nbsp; 06
+          </span>
+        </footer>
+
+        {/* Mobile Navigation Menu Drawer */}
+        <div
+          className={`fixed inset-0 z-50 flex flex-col justify-between bg-ink/95 p-6 backdrop-blur-2xl transition-all duration-300 ease-out md:hidden ${
+            isMobileMenuOpen
+              ? 'pointer-events-auto opacity-100 translate-y-0'
+              : 'pointer-events-none opacity-0 -translate-y-3'
+          }`}
+          aria-hidden={!isMobileMenuOpen}
+        >
+          {/* Header with Alba Seal & Close Button */}
+          <div className="flex items-center justify-between border-b border-paper/10 pb-4">
+            <div className="flex items-center gap-2">
+              <span className="font-display text-xl uppercase tracking-[0.12em] text-paper">
+                Alba
+              </span>
+              <span className="font-sans text-[10px] tracking-[0.2em] text-paper/50 uppercase">
+                Costa del Sol
+              </span>
+            </div>
+            <button
+              type="button"
+              onClick={() => setIsMobileMenuOpen(false)}
+              className="flex h-10 w-10 items-center justify-center rounded-full border border-paper/20 text-paper transition-colors hover:border-paper/60 active:scale-95"
+              aria-label="Fechar menu"
+            >
+              <svg
+                className="h-4 w-4"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="1.5"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
+                <path d="M18 6L6 18M6 6l12 12" />
+              </svg>
+            </button>
+          </div>
+
+          {/* Links list */}
+          <nav className="flex flex-col items-start gap-7 py-8">
+            <span className="font-sans text-[10px] uppercase tracking-[0.25em] text-paper/40">
+              Menu
+            </span>
+            <a
+              href="#apartamentos"
+              onClick={() => setIsMobileMenuOpen(false)}
+              className="font-display text-3xl uppercase tracking-[0.06em] text-paper transition-opacity hover:opacity-65"
+            >
+              Ver Apartamentos
+            </a>
+            <a
+              href="#agendar"
+              onClick={() => setIsMobileMenuOpen(false)}
+              className="font-display text-3xl uppercase tracking-[0.06em] text-paper transition-opacity hover:opacity-65"
+            >
+              Agendar Chamada
+            </a>
+            <a
+              href="#contato"
+              onClick={() => setIsMobileMenuOpen(false)}
+              className="font-display text-3xl uppercase tracking-[0.06em] text-paper transition-opacity hover:opacity-65"
+            >
+              Contato
+            </a>
+          </nav>
+
+          {/* Footer inside mobile menu */}
+          <div className="flex items-center justify-between border-t border-paper/10 pt-6">
+            <span className="font-sans text-[11px] tracking-[0.2em] text-paper/60">
+              01 &nbsp;—&nbsp; 06
+            </span>
+            <button
+              type="button"
+              onClick={() => {
+                setIsNight((prev) => !prev)
+              }}
+              className="flex items-center gap-2 rounded-full border border-paper/30 bg-paper/5 px-3.5 py-1.5 font-sans text-[10px] uppercase tracking-[0.2em] text-paper transition-all active:scale-95"
+            >
+              {isNight ? '☀️ Vista Diurna' : '🌙 Vista Noturna'}
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+  )
+}
+```
+
+15. src/components/apartments/apartments.css (copiar exatamente)
+
+```css
+/* Deriva horizontal lenta das nuvens — cada camada numa velocidade
+   diferente pra dar sensação de profundidade (fundo mais devagar,
+   frente mais rápido), como se estivessem passando pelo lado. */
+
+@keyframes cloud-drift {
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+  50% {
+    transform: translateX(var(--cloud-drift-x, 3%));
+  }
+}
+
+@keyframes cloud-drift-flip {
+  0%,
+  100% {
+    transform: scaleX(-1) translateX(0);
+  }
+  50% {
+    transform: scaleX(-1) translateX(var(--cloud-drift-x, 3%));
+  }
+}
+
+.cloud-drift {
+  animation: cloud-drift var(--cloud-drift-duration, 30s) ease-in-out infinite;
+}
+
+.cloud-drift-flip {
+  animation: cloud-drift-flip var(--cloud-drift-duration, 30s) ease-in-out infinite;
+}
+
+/* Borboletas atravessando a largura inteira da página, da esquerda pra
+   direita, com fade nas pontas pra esconder o corte do loop. */
+@keyframes birds-cross {
+  0% {
+    transform: translateX(-100%);
+    opacity: 0;
+  }
+  6% {
+    opacity: 1;
+  }
+  94% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateX(calc(100vw + 100%));
+    opacity: 0;
+  }
+}
+
+.birds-fly {
+  animation: birds-cross 22s linear infinite;
+}
+
+@keyframes butterflies-rise {
+  0% {
+    left: 88%;
+    top: 82%;
+    opacity: 0;
+  }
+  8% {
+    opacity: 1;
+  }
+  22% {
+    left: 74%;
+    top: 62%;
+  }
+  40% {
+    left: 58%;
+    top: 44%;
+  }
+  55% {
+    left: 48%;
+    top: 40%;
+  }
+  70% {
+    left: 34%;
+    top: 26%;
+  }
+  88% {
+    left: 14%;
+    top: 8%;
+    opacity: 1;
+  }
+  100% {
+    left: 0%;
+    top: 0%;
+    opacity: 0;
+  }
+}
+
+.butterflies-fly {
+  position: absolute;
+  animation: butterflies-rise 26s ease-in-out infinite;
+}
+```
+
+16. src/components/apartments/ApartmentsSection.tsx (copiar exatamente — nuvens, borboletas com chroma-key e o tríptico de materiais)
+
+Nota para a IA: `BUTTERFLIES_SRC` abaixo é usado DUAS vezes — uma cruzando a tela inteira (mesma trajetória que antes seria de pássaros) e outra subindo em diagonal — as duas usam o `GreenScreenVideo` da seção 11, então o fundo verde do vídeo desaparece nas duas em tempo real, sem qualquer edição prévia do vídeo.
+
+```tsx
+import { useLayoutEffect, useRef, type FC } from 'react'
+import gsap from 'gsap'
+import ScrollTrigger from 'gsap/ScrollTrigger'
+import { GreenScreenVideo } from './GreenScreenVideo'
+import './apartments.css'
+
+const cloud1 = 'https://www.promptfly.com.br/templates/alba-residencia/cloud-1.avif'
+const cloud2 = 'https://www.promptfly.com.br/templates/alba-residencia/cloud-2.avif'
+const cloud3 = 'https://www.promptfly.com.br/templates/alba-residencia/cloud-3.avif'
+const apartmentsFinal = 'https://www.promptfly.com.br/templates/alba-residencia/apartments-final.webp'
+
+const BUTTERFLIES_SRC =
+  'https://res.cloudinary.com/dwmrunhxa/video/upload/v1788388974/217367_gwpvfy.mp4'
+
+gsap.registerPlugin(ScrollTrigger)
+
+export const ApartmentsSection: FC = () => {
+  const sectionRef = useRef<HTMLElement>(null)
+  const editorialWrap = useRef<HTMLDivElement>(null)
+  const sobreNosCol = useRef<HTMLDivElement>(null)
+  const conceitoCol = useRef<HTMLDivElement>(null)
+  const triptychWrap = useRef<HTMLDivElement>(null)
+  const card1Ref = useRef<HTMLDivElement>(null)
+  const card2Ref = useRef<HTMLDivElement>(null)
+  const card3Ref = useRef<HTMLDivElement>(null)
+
+  const quoteRef = useRef<HTMLDivElement>(null)
+
+  useLayoutEffect(() => {
+    const ctx = gsap.context(() => {
+      // 1. Animação Escalonada em Sobre Nós e Conceito
+      const editorialTl = gsap.timeline({
+        scrollTrigger: {
+          trigger: editorialWrap.current,
+          start: 'top 80%',
+          toggleActions: 'play none none none',
+        },
+      })
+
+      editorialTl
+        .fromTo(
+          sobreNosCol.current ? sobreNosCol.current.children : [],
+          { y: 40, autoAlpha: 0 },
+          { y: 0, autoAlpha: 1, duration: 1, stagger: 0.12, ease: 'power3.out' },
+          0,
+        )
+        .fromTo(
+          conceitoCol.current ? conceitoCol.current.children : [],
+          { y: 45, autoAlpha: 0 },
+          { y: 0, autoAlpha: 1, duration: 1.05, stagger: 0.12, ease: 'power3.out' },
+          0.15,
+        )
+
+      // 2. Animação da Citação Autoral
+      gsap.fromTo(
+        quoteRef.current,
+        { y: 35, autoAlpha: 0 },
+        {
+          y: 0,
+          autoAlpha: 1,
+          duration: 1.2,
+          ease: 'power3.out',
+          scrollTrigger: {
+            trigger: quoteRef.current,
+            start: 'top 85%',
+            toggleActions: 'play none none none',
+          },
+        },
+      )
+
+      // 3. Entrada e Parallax do Tríptico de Texturas & Materiais
+      const triptychTl = gsap.timeline({
+        scrollTrigger: {
+          trigger: triptychWrap.current,
+          start: 'top 80%',
+          toggleActions: 'play none none none',
+        },
+      })
+
+      triptychTl
+        .fromTo(
+          '.triptych-header',
+          { y: 30, autoAlpha: 0 },
+          { y: 0, autoAlpha: 1, duration: 0.9, ease: 'power3.out' },
+          0,
+        )
+        .fromTo(
+          card1Ref.current,
+          { y: 60, autoAlpha: 0, scale: 0.98 },
+          { y: 0, autoAlpha: 1, scale: 1, duration: 1, ease: 'power3.out' },
+          0.1,
+        )
+        .fromTo(
+          card2Ref.current,
+          { y: 80, autoAlpha: 0, scale: 0.98 },
+          { y: 0, autoAlpha: 1, scale: 1, duration: 1.1, ease: 'power3.out' },
+          0.25,
+        )
+        .fromTo(
+          card3Ref.current,
+          { y: 70, autoAlpha: 0, scale: 0.98 },
+          { y: 0, autoAlpha: 1, scale: 1, duration: 1.05, ease: 'power3.out' },
+          0.4,
+        )
+
+      // Parallax sutil contínuo nos cards
+      gsap.to(card1Ref.current, {
+        yPercent: -10,
+        ease: 'none',
+        scrollTrigger: {
+          trigger: triptychWrap.current,
+          start: 'top bottom',
+          end: 'bottom top',
+          scrub: true,
+        },
+      })
+      gsap.to(card2Ref.current, {
+        yPercent: -6,
+        ease: 'none',
+        scrollTrigger: {
+          trigger: triptychWrap.current,
+          start: 'top bottom',
+          end: 'bottom top',
+          scrub: true,
+        },
+      })
+      gsap.to(card3Ref.current, {
+        yPercent: -14,
+        ease: 'none',
+        scrollTrigger: {
+          trigger: triptychWrap.current,
+          start: 'top bottom',
+          end: 'bottom top',
+          scrub: true,
+        },
+      })
+    }, sectionRef)
+
+    return () => ctx.revert()
+  }, [])
+
+  return (
+    <section
+      ref={sectionRef}
+      id="apartamentos"
+      className="relative z-40 w-full bg-white text-ink pt-16 sm:pt-24 pb-24 sm:pb-36"
+    >
+      {/* Nuvens Fotorealistas no Topo — Sobem como cortina cobrindo toda a Hero */}
+      <div className="pointer-events-none absolute -top-[160px] sm:-top-[260px] md:-top-[360px] lg:-top-[460px] inset-x-0 w-full overflow-visible leading-none z-20 h-[200px] sm:h-[320px] md:h-[440px] lg:h-[560px]">
+        {/* Camada 3: Nuvem de Fundo / Profundidade — deriva mais lenta */}
+        <img
+          src={cloud3}
+          alt=""
+          style={{ '--cloud-drift-duration': '18s', '--cloud-drift-x': '2.5%' } as React.CSSProperties}
+          className="cloud-drift absolute -top-[12%] left-[-10%] w-[72%] max-w-none opacity-85 mix-blend-screen pointer-events-none select-none"
+        />
+        <img
+          src={cloud3}
+          alt=""
+          style={{ '--cloud-drift-duration': '20s', '--cloud-drift-x': '-2.5%' } as React.CSSProperties}
+          className="cloud-drift-flip absolute -top-[8%] right-[-12%] w-[68%] max-w-none opacity-80 mix-blend-screen pointer-events-none select-none"
+        />
+
+        {/* Camada 2: Nuvem Intermediária Central */}
+        <img
+          src={cloud2}
+          alt=""
+          style={{ '--cloud-drift-duration': '15s', '--cloud-drift-x': '3%' } as React.CSSProperties}
+          className="cloud-drift absolute top-[2%] left-[18%] w-[64%] max-w-none opacity-90 mix-blend-screen pointer-events-none select-none"
+        />
+
+        {/* Camada 1: Nuvens Frontais com Volume denso — deriva mais rápida */}
+        <img
+          src={cloud1}
+          alt=""
+          style={{ '--cloud-drift-duration': '10s', '--cloud-drift-x': '4%' } as React.CSSProperties}
+          className="cloud-drift absolute top-[16%] -left-[12%] w-[82%] max-w-none opacity-100 mix-blend-screen pointer-events-none select-none"
+        />
+        <img
+          src={cloud1}
+          alt=""
+          style={{ '--cloud-drift-duration': '11s', '--cloud-drift-x': '-4%' } as React.CSSProperties}
+          className="cloud-drift-flip absolute top-[18%] right-[-14%] w-[85%] max-w-none opacity-100 mix-blend-screen pointer-events-none select-none"
+        />
+
+        {/* Camada 4: Reforço no meio/baixo — fecha os vãos antes da névoa branca */}
+        <img
+          src={cloud2}
+          alt=""
+          style={{ '--cloud-drift-duration': '13s', '--cloud-drift-x': '3.5%' } as React.CSSProperties}
+          className="cloud-drift absolute top-[32%] left-[8%] w-[60%] max-w-none opacity-95 mix-blend-screen pointer-events-none select-none"
+        />
+        <img
+          src={cloud1}
+          alt=""
+          style={{ '--cloud-drift-duration': '12s', '--cloud-drift-x': '-3.5%' } as React.CSSProperties}
+          className="cloud-drift-flip absolute top-[30%] left-[30%] w-[62%] max-w-none opacity-100 mix-blend-screen pointer-events-none select-none"
+        />
+        <img
+          src={cloud1}
+          alt=""
+          style={{ '--cloud-drift-duration': '14s', '--cloud-drift-x': '3%' } as React.CSSProperties}
+          className="cloud-drift absolute top-[38%] -left-[6%] w-[58%] max-w-none opacity-100 mix-blend-screen pointer-events-none select-none"
+        />
+        <img
+          src={cloud1}
+          alt=""
+          style={{ '--cloud-drift-duration': '12.5s', '--cloud-drift-x': '-3%' } as React.CSSProperties}
+          className="cloud-drift-flip absolute top-[36%] right-[-8%] w-[58%] max-w-none opacity-100 mix-blend-screen pointer-events-none select-none"
+        />
+
+        {/* Gradiente de névoa branca que funde perfeitamente com a seção branca */}
+        <div className="absolute inset-x-0 bottom-0 h-[68%] bg-gradient-to-t from-white via-white/95 to-transparent" />
+      </div>
+
+      {/* Borboletas atravessando a página inteira, da esquerda pra direita (mesmo
+          recurso de chroma-key em tempo real do GreenScreenVideo usado mais abaixo) */}
+      <div className="birds-fly pointer-events-none absolute left-0 top-4 sm:top-8 z-[25] h-[130px] w-56 select-none sm:h-[170px] sm:w-72 md:h-[200px] md:w-80">
+        <GreenScreenVideo src={BUTTERFLIES_SRC} className="h-full w-full object-contain select-none opacity-80" />
+      </div>
+
+      {/* Conteúdo Editorial: Sobre Nós & Conceito */}
+      <div
+        ref={editorialWrap}
+        className="relative z-20 mx-auto max-w-6xl px-6 sm:px-10 lg:px-16 pt-8 sm:pt-12 pb-4 sm:pb-6"
+      >
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-10 lg:gap-16 items-start">
+
+          {/* Coluna Esquerda: SOBRE NÓS */}
+          <div ref={sobreNosCol} className="flex flex-col items-start">
+            <h2 className="font-display text-4xl sm:text-5xl lg:text-6xl uppercase tracking-[-0.015em] text-ink leading-none">
+              Sobre Nós
+            </h2>
+
+            {/* Linha decorativa dupla */}
+            <div className="flex flex-col gap-[2.5px] w-11 my-4 sm:my-5">
+              <div className="h-[1px] w-full bg-ink/70" />
+              <div className="h-[1px] w-full bg-ink/70" />
+            </div>
+
+            <p className="font-sans text-[9px] sm:text-[9.5px] lg:text-[10px] uppercase tracking-[0.04em] leading-[1.75] text-ink/80 font-medium max-w-[139px] sm:max-w-[186px] lg:max-w-[232px]">
+              Alba Residência é um novo refúgio de poder na Costa del Sol, onde a cultura e a hospitalidade mediterrânea são reinterpretadas através de arquitetura escultural, projeto espacial e arte contemporânea. Aqui, as tradições assumem uma nova forma, e a brisa serena do mar se funde com o moderno conforto atemporal.
+            </p>
+
+            <a
+              href="#contato"
+              className="mt-6 sm:mt-8 inline-flex items-center justify-center rounded-full bg-ink px-6 py-2.5 font-sans text-[10px] uppercase tracking-[0.2em] text-paper shadow-sm transition-all duration-300 hover:bg-ink/85 hover:scale-[1.02] active:scale-95"
+            >
+              Consulta
+            </a>
+          </div>
+
+          {/* Coluna Direita: CONCEITO (Deslocada / Staggered mais para baixo) */}
+          <div ref={conceitoCol} className="flex flex-col items-start md:pt-14 lg:pt-20">
+            <h2 className="font-display text-4xl sm:text-5xl lg:text-6xl uppercase tracking-[-0.015em] text-ink leading-none">
+              Conceito
+            </h2>
+
+            {/* Linha decorativa dupla */}
+            <div className="flex flex-col gap-[2.5px] w-11 my-4 sm:my-5">
+              <div className="h-[1px] w-full bg-ink/70" />
+              <div className="h-[1px] w-full bg-ink/70" />
+            </div>
+
+            <div className="space-y-4 font-sans text-[9px] sm:text-[9.5px] lg:text-[10px] uppercase tracking-[0.04em] leading-[1.75] text-ink/80 font-medium max-w-[129px] sm:max-w-[172px] lg:max-w-[215px]">
+              <p>
+                A arquitetura do complexo cresce integrada à paisagem, preservando sua força na pedra natural e o calor da madeira panorâmica. Os terraços oferecem vistas a partir das quais o espírito intercepta a luz e as tradições entrelaçam-se com a modernidade, criando um novo formato de recreação: profundo, significativo e repleto da energia da natureza costeira.
+              </p>
+              <p>
+                Um sonho de um lugar onde privacidade, natureza e confortos modernos se unem juntos como um.
+              </p>
+            </div>
+
+            {/* Caixa de Vídeo Moldurada (Double Border Frame) */}
+            <div className="mt-8 sm:mt-10 w-full max-w-[129px] sm:max-w-[172px] lg:max-w-[215px]">
+              <div className="p-1.5 border border-ink/40 rounded-[2px] bg-stone-100/60 shadow-sm">
+                <div className="relative aspect-[16/10] overflow-hidden border border-ink/20 bg-ink/90 group cursor-pointer">
+                  {/* Imagem de Thumbnail / Vídeo Editorial */}
+                  <img
+                    src={apartmentsFinal}
+                    alt="Visão conceitual da Residência Alba"
+                    className="h-full w-full object-cover object-center opacity-85 transition-transform duration-700 ease-out group-hover:scale-105"
+                  />
+                  <div className="absolute inset-0 bg-black/25 transition-opacity group-hover:opacity-10" />
+
+                  {/* Botão Play Central ▷ */}
+                  <div className="absolute inset-0 flex items-center justify-center">
+                    <div className="flex h-10 w-10 items-center justify-center rounded-full border border-white/80 bg-white/30 backdrop-blur-md text-white shadow-md transition-transform duration-300 group-hover:scale-110">
+                      <svg
+                        className="h-3.5 w-3.5 translate-x-0.5"
+                        viewBox="0 0 24 24"
+                        fill="currentColor"
+                      >
+                        <path d="M8 5v14l11-7z" />
+                      </svg>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Legenda abaixo do vídeo */}
+              <span className="block mt-2.5 font-sans text-[9px] sm:text-[10px] uppercase tracking-[0.22em] text-ink/65 text-center sm:text-left">
+                Viva o seu sonho à beira-mar
+              </span>
+            </div>
+
+          </div>
+
+        </div>
+
+        {/* Citação Autoral com Assinatura em Script */}
+        <div
+          ref={quoteRef}
+          className="mt-14 sm:mt-18 md:mt-22 flex flex-col items-center text-center max-w-2xl mx-auto px-4 relative z-20"
+        >
+          <p className="font-display italic text-lg sm:text-2xl md:text-[1.75rem] text-ink/85 leading-snug tracking-[-0.01em]">
+            "Onde a arquitetura esculpe o silêncio e a luz do Mediterrâneo."
+          </p>
+          <div className="flex items-center gap-3 mt-3 sm:mt-4">
+            <span className="h-px w-6 sm:w-10 bg-ink/25" />
+            <span className="font-script text-3xl sm:text-4xl md:text-[2.75rem] text-ink/75 -rotate-2 inline-block pt-1">
+              Atelier Alba Arquitetura
+            </span>
+            <span className="h-px w-6 sm:w-10 bg-ink/25" />
+          </div>
+        </div>
+
+        {/* Tríptico Editorial de Texturas & Detalhes */}
+        <div
+          ref={triptychWrap}
+          className="mt-20 sm:mt-28 md:mt-36 relative z-20 mx-auto max-w-6xl px-4 sm:px-8"
+        >
+          <div className="triptych-header flex flex-col items-center text-center mb-12 sm:mb-16">
+            <span className="font-sans text-[10px] sm:text-[11px] uppercase tracking-[0.25em] text-ink/50 font-semibold mb-2">
+              02 — Materialidade
+            </span>
+            <h3 className="font-display text-3xl sm:text-4xl md:text-5xl uppercase tracking-[-0.015em] text-ink leading-tight">
+              A Essência dos Materiais
+            </h3>
+            <div className="flex flex-col gap-[2.5px] w-12 my-4">
+              <div className="h-[1px] w-full bg-ink/70" />
+              <div className="h-[1px] w-full bg-ink/70" />
+            </div>
+            <p className="font-sans text-[9.5px] sm:text-[10px] uppercase tracking-[0.04em] leading-[1.75] text-ink/75 font-medium max-w-md">
+              Cada textura foi selecionada para dialogar com a luz costeira e criar uma transição orgânica entre o interior e a natureza.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 lg:gap-10 items-start">
+
+            {/* Card 1: Pedra Natural */}
+            <div ref={card1Ref} className="flex flex-col group">
+              <div className="p-1.5 sm:p-2 border border-ink/30 rounded-[3px] bg-stone-100/60 shadow-sm transition-all duration-500 group-hover:shadow-md group-hover:border-ink/50">
+                <div className="relative aspect-[4/5] overflow-hidden rounded-[2px] bg-ink/80">
+                  <img
+                    src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=800&q=80"
+                    alt="Textura da pedra natural da fachada ao entardecer"
+                    className="h-full w-full object-cover object-center transition-transform duration-700 ease-out group-hover:scale-105"
+                  />
+                  <div className="absolute inset-0 bg-black/10 transition-opacity group-hover:opacity-0" />
+                </div>
+              </div>
+              <div className="mt-4 flex flex-col">
+                <span className="font-sans text-[9px] uppercase tracking-[0.22em] text-ink/50 font-semibold">
+                  01 · Geometria & Pedra
+                </span>
+                <h4 className="font-display text-xl sm:text-2xl uppercase tracking-[-0.01em] text-ink mt-1">
+                  Pedra Calcária Natural
+                </h4>
+                <p className="font-sans text-[9px] sm:text-[9.5px] uppercase tracking-[0.03em] leading-[1.65] text-ink/70 mt-1.5 font-medium">
+                  Fachadas esculpidas em rocha clara que absorvem a luz solar ao entardecer e mantêm o frescor térmico natural.
+                </p>
+              </div>
+            </div>
+
+            {/* Card 2: Terraço Vivo (Deslocado / Staggered para baixo) */}
+            <div ref={card2Ref} className="flex flex-col md:translate-y-12 lg:translate-y-16 group">
+              <div className="p-1.5 sm:p-2 border border-ink/30 rounded-[3px] bg-stone-100/60 shadow-sm transition-all duration-500 group-hover:shadow-md group-hover:border-ink/50">
+                <div className="relative aspect-[4/5] overflow-hidden rounded-[2px] bg-ink/80">
+                  <img
+                    src="https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=800&q=80"
+                    alt="Terraço panorâmico com pérgola e vegetação"
+                    className="h-full w-full object-cover object-center transition-transform duration-700 ease-out group-hover:scale-105"
+                  />
+                  <div className="absolute inset-0 bg-black/10 transition-opacity group-hover:opacity-0" />
+                </div>
+              </div>
+              <div className="mt-4 flex flex-col">
+                <span className="font-sans text-[9px] uppercase tracking-[0.22em] text-ink/50 font-semibold">
+                  02 · Natureza Integrada
+                </span>
+                <h4 className="font-display text-xl sm:text-2xl uppercase tracking-[-0.01em] text-ink mt-1">
+                  Terraços & Pérgolas
+                </h4>
+                <p className="font-sans text-[9px] sm:text-[9.5px] uppercase tracking-[0.03em] leading-[1.65] text-ink/70 mt-1.5 font-medium">
+                  Pergolados em madeira nobre e jardins suspensos que criam micropaisagens privativas com sombra natural.
+                </p>
+              </div>
+            </div>
+
+            {/* Card 3: Água & Madeira */}
+            <div ref={card3Ref} className="flex flex-col md:-translate-y-4 group">
+              <div className="p-1.5 sm:p-2 border border-ink/30 rounded-[3px] bg-stone-100/60 shadow-sm transition-all duration-500 group-hover:shadow-md group-hover:border-ink/50">
+                <div className="relative aspect-[4/5] overflow-hidden rounded-[2px] bg-ink/80">
+                  <img
+                    src="https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=800&q=80"
+                    alt="Detalhe da água cristalina e acabamento em madeira nobre"
+                    className="h-full w-full object-cover object-center transition-transform duration-700 ease-out group-hover:scale-105"
+                  />
+                  <div className="absolute inset-0 bg-black/10 transition-opacity group-hover:opacity-0" />
+                </div>
+              </div>
+              <div className="mt-4 flex flex-col">
+                <span className="font-sans text-[9px] uppercase tracking-[0.22em] text-ink/50 font-semibold">
+                  03 · Fluidez Costeira
+                </span>
+                <h4 className="font-display text-xl sm:text-2xl uppercase tracking-[-0.01em] text-ink mt-1">
+                  Madeira & Espelhos d'Água
+                </h4>
+                <p className="font-sans text-[9px] sm:text-[9.5px] uppercase tracking-[0.03em] leading-[1.65] text-ink/70 mt-1.5 font-medium">
+                  Decks táteis e lâminas d'água que refletem o horizonte mediterrâneo, convidando ao descanso absoluto.
+                </p>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <div className="pointer-events-none absolute inset-x-0 bottom-0 z-[28] h-36 sm:h-56 md:h-80 lg:h-[26rem] xl:h-[32rem]">
+          <GreenScreenVideo
+            src={BUTTERFLIES_SRC}
+            className="butterflies-fly aspect-video w-32 select-none sm:w-44 md:w-56"
+          />
+        </div>
+      </div>
+    </section>
+  )
+}
+```
+
+17. src/components/video/DroneVideoSection.tsx (copiar exatamente)
+
+```tsx
+import { useLayoutEffect, useRef, type FC } from 'react'
+import gsap from 'gsap'
+import ScrollTrigger from 'gsap/ScrollTrigger'
+
+gsap.registerPlugin(ScrollTrigger)
+
+const DRONE_VIDEO_WEBM =
+  'https://res.cloudinary.com/dwmrunhxa/video/upload/q_auto:good,w_1920,c_limit,f_webm/v1788454937/19206599-uhd_3840_2160_30fps_lqqt8c.webm'
+
+const DRONE_VIDEO_MP4 =
+  'https://res.cloudinary.com/dwmrunhxa/video/upload/q_auto:good,w_1920,c_limit/v1788454937/19206599-uhd_3840_2160_30fps_lqqt8c.mp4'
+
+const DRONE_VIDEO_POSTER =
+  'https://res.cloudinary.com/dwmrunhxa/video/upload/so_1,q_auto:good,w_1920,c_limit/v1788454937/19206599-uhd_3840_2160_30fps_lqqt8c.jpg'
+
+export const DroneVideoSection: FC = () => {
+  const sectionRef = useRef<HTMLElement>(null)
+  const pinRef = useRef<HTMLDivElement>(null)
+  const leftTextRef = useRef<HTMLDivElement>(null)
+  const rightTextRef = useRef<HTMLDivElement>(null)
+  const videoBoxRef = useRef<HTMLDivElement>(null)
+  const videoElementRef = useRef<HTMLVideoElement>(null)
+  const revealedTextRef = useRef<HTMLDivElement>(null)
+
+  useLayoutEffect(() => {
+    const ctx = gsap.context(() => {
+      const isMobile = window.matchMedia('(max-width: 767px)').matches
+
+      // Timeline principal vinculada ao scroll (GSAP Pin nativo sem sticky CSS)
+      const tl = gsap.timeline({
+        scrollTrigger: {
+          trigger: sectionRef.current,
+          start: 'top top',
+          end: 'bottom bottom',
+          pin: pinRef.current,
+          pinSpacing: true,
+          scrub: 0.6,
+        },
+      })
+
+      // 1. Textos laterais afastam-se e somem
+      tl.to(
+        leftTextRef.current,
+        {
+          autoAlpha: 0,
+          x: isMobile ? 0 : -90,
+          y: isMobile ? -40 : 0,
+          duration: 0.4,
+          ease: 'power2.inOut',
+        },
+        0,
+      )
+      .to(
+        rightTextRef.current,
+        {
+          autoAlpha: 0,
+          x: isMobile ? 0 : 90,
+          y: isMobile ? 40 : 0,
+          duration: 0.4,
+          ease: 'power2.inOut',
+        },
+        0,
+      )
+
+      // 2. O vídeo expande suavemente via transform (scale) e sobe sutilmente
+      .to(
+        videoBoxRef.current,
+        {
+          scale: isMobile ? 1.32 : 1.95,
+          y: isMobile ? -25 : -40,
+          duration: 0.75,
+          ease: 'power2.inOut',
+        },
+        0.05,
+      )
+
+      // Parallax sutil interno no vídeo
+      .fromTo(
+        videoElementRef.current,
+        { scale: 1.1 },
+        { scale: 1.0, duration: 0.8, ease: 'none' },
+        0,
+      )
+
+      // 3. O texto de localização surge abaixo do vídeo expandido
+      .fromTo(
+        revealedTextRef.current,
+        { autoAlpha: 0, y: 30 },
+        {
+          autoAlpha: 1,
+          y: 0,
+          duration: 0.45,
+          ease: 'power3.out',
+        },
+        0.45,
+      )
+
+      // Pausa final suave para contemplação
+      .to({}, { duration: 0.3 })
+    }, sectionRef)
+
+    return () => ctx.revert()
+  }, [])
+
+  return (
+    <section
+      ref={sectionRef}
+      id="localizacao"
+      className="relative z-30 w-full h-[220vh] bg-white text-ink"
+    >
+      <div
+        ref={pinRef}
+        className="relative h-screen w-full flex flex-col items-center justify-center overflow-hidden bg-white px-4 sm:px-8"
+      >
+        {/* Palco Principal do Vídeo & Textos Laterais */}
+        <div className="relative flex w-full max-w-6xl flex-col md:flex-row items-center justify-center gap-6 md:gap-0">
+
+          {/* Bloco Esquerdo: Localização */}
+          <div
+            ref={leftTextRef}
+            className="md:absolute md:left-4 lg:left-8 md:top-1/2 md:-translate-y-1/2 z-20 flex flex-col items-center md:items-start text-center md:text-left w-full max-w-[260px] sm:max-w-[280px] md:max-w-[220px] pointer-events-none mb-2 md:mb-0"
+          >
+            <span className="font-sans text-[9px] sm:text-[9.5px] uppercase tracking-[0.25em] text-ink/50 font-semibold mb-1">
+              03 — Paisagem
+            </span>
+            <h2 className="font-display text-3xl sm:text-4xl lg:text-5xl uppercase tracking-[-0.015em] text-ink leading-none">
+              Localização
+            </h2>
+
+            {/* Linha decorativa dupla */}
+            <div className="flex flex-col gap-[2.5px] w-10 my-2.5 sm:my-3">
+              <div className="h-[1px] w-full bg-ink/70" />
+              <div className="h-[1px] w-full bg-ink/70" />
+            </div>
+
+            <p className="font-sans text-[8.5px] sm:text-[9px] md:text-[9.5px] uppercase tracking-[0.04em] leading-[1.65] text-ink/80 font-medium">
+              Entre águas calmas e piscinas naturais, um santuário esculpido pelo calor da luz mediterrânea e a brisa do oceano.
+            </p>
+          </div>
+
+          {/* Vídeo Central (Escala com GSAP Transform) */}
+          <div
+            ref={videoBoxRef}
+            className="relative z-10 w-[240px] sm:w-[320px] md:w-[420px] lg:w-[460px] aspect-[16/10] origin-center my-1 md:my-0"
+          >
+            {/* Moldura refinada estilo galeria */}
+            <div className="p-1 sm:p-1.5 border border-ink/35 rounded-[3px] bg-stone-100/70 shadow-lg">
+              <div className="relative aspect-[16/10] w-full overflow-hidden rounded-[2px] bg-ink">
+                <video
+                  ref={videoElementRef}
+                  autoPlay
+                  loop
+                  muted
+                  playsInline
+                  preload="auto"
+                  poster={DRONE_VIDEO_POSTER}
+                  className="h-full w-full object-cover object-center origin-center select-none"
+                >
+                  <source src={DRONE_VIDEO_WEBM} type="video/webm" />
+                  <source src={DRONE_VIDEO_MP4} type="video/mp4" />
+                </video>
+
+                {/* Vinheta suave de profundidade */}
+                <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-black/15 via-transparent to-black/25" />
+              </div>
+            </div>
+          </div>
+
+          {/* Bloco Direito: Mar de Corais */}
+          <div
+            ref={rightTextRef}
+            className="md:absolute md:right-4 lg:right-8 md:top-1/2 md:-translate-y-1/2 z-20 flex flex-col items-center md:items-end text-center md:text-right w-full max-w-[260px] sm:max-w-[280px] md:max-w-[220px] pointer-events-none mt-2 md:mt-0"
+          >
+            <span className="font-sans text-[9px] sm:text-[9.5px] uppercase tracking-[0.25em] text-ink/50 font-semibold mb-1">
+              Costa del Sol
+            </span>
+            <h2 className="font-display text-3xl sm:text-4xl lg:text-5xl uppercase tracking-[-0.015em] text-ink leading-none">
+              Mar de Corais
+            </h2>
+
+            {/* Linha decorativa dupla */}
+            <div className="flex flex-col gap-[2.5px] w-10 my-2.5 sm:my-3">
+              <div className="h-[1px] w-full bg-ink/70" />
+              <div className="h-[1px] w-full bg-ink/70" />
+            </div>
+
+            <p className="font-sans text-[8.5px] sm:text-[9px] md:text-[9.5px] uppercase tracking-[0.04em] leading-[1.65] text-ink/80 font-medium">
+              A segunda maior barreira de corais do mundo emoldura um refúgio exclusivo com temperatura amena e águas mornas o ano todo.
+            </p>
+          </div>
+
+        </div>
+
+        {/* Novo Bloco de Conteúdo Revelado (Surge abaixo do vídeo expandido) */}
+        <div
+          ref={revealedTextRef}
+          className="pointer-events-none absolute bottom-5 sm:bottom-7 md:bottom-9 inset-x-0 mx-auto flex flex-col items-center text-center px-4 max-w-xl opacity-0"
+        >
+          <span className="font-sans text-[9px] sm:text-[10px] uppercase tracking-[0.28em] text-ink/60 font-semibold mb-1">
+            Refúgio Costeiro Privilegiado
+          </span>
+          <h3 className="font-display text-2xl sm:text-3xl md:text-4xl uppercase tracking-[-0.015em] text-ink leading-tight mb-2">
+            Onde o mar calmo encontra a arquitetura viva
+          </h3>
+          <p className="font-sans text-[8.5px] sm:text-[9.5px] md:text-[10px] uppercase tracking-[0.04em] leading-[1.7] text-ink/75 font-medium max-w-md">
+            Um ecossistema intocado com privacidade absoluta, projetado para harmonizar terraços com a imensidão das águas turquesa e os coqueirais nativos.
+          </p>
+          <div className="flex items-center gap-3 mt-2.5">
+            <span className="h-px w-6 bg-ink/25" />
+            <span className="font-sans text-[8px] sm:text-[8.5px] uppercase tracking-[0.22em] text-ink/50 font-medium">
+              9°01'44" S · 35°13'22" W — Costa del Sol
+            </span>
+            <span className="h-px w-6 bg-ink/25" />
+          </div>
+        </div>
+
+      </div>
+    </section>
+  )
+}
+```
+
+18. src/components/location-slider/LocationSliderSection.tsx (copiar exatamente)
+
+```tsx
+import { useLayoutEffect, useRef, type FC } from 'react'
+import gsap from 'gsap'
+import ScrollTrigger from 'gsap/ScrollTrigger'
+import {
+  Plane,
+  Sailboat,
+  Target,
+  UtensilsCrossed,
+  Waves,
+  Building2,
+} from 'lucide-react'
+
+gsap.registerPlugin(ScrollTrigger)
+
+const MAP_IMAGE_URL =
+  'https://res.cloudinary.com/dwmrunhxa/image/upload/q_auto,f_auto,w_2000/v1788460108/Minimalist_Mediterranean_coastli__2K_202609031528_ih31jy.jpg'
+
+const DESTINATION_POINTS = [
+  {
+    category: 'Aviação Executiva & Comercial',
+    name: 'Aeroporto Internacional',
+    time: '18 min',
+    distance: '24 km',
+    icon: Plane,
+  },
+  {
+    category: 'Náutica & Iatismo',
+    name: 'Marina & Yacht Club',
+    time: '10 min',
+    distance: '8 km',
+    icon: Sailboat,
+  },
+  {
+    category: 'Esporte & Lazer',
+    name: 'Championship Golf Club',
+    time: '06 min',
+    distance: '4.5 km',
+    icon: Target,
+  },
+  {
+    category: 'Cultura & Gastronomia',
+    name: 'Polo Gastronômico & Vilarejo',
+    time: '12 min',
+    distance: '9 km',
+    icon: UtensilsCrossed,
+  },
+  {
+    category: 'Santuário Marinho',
+    name: 'Piscinas Naturais Protegidas',
+    time: '03 min',
+    distance: '1.2 km',
+    icon: Waves,
+  },
+  {
+    category: 'Saúde & Conveniência',
+    name: 'Centro Médico & Heliponto',
+    time: '08 min',
+    distance: '6 km',
+    icon: Building2,
+  },
+]
+
+export const LocationSliderSection: FC = () => {
+  const sectionRef = useRef<HTMLElement>(null)
+  const pinRef = useRef<HTMLDivElement>(null)
+  const trackRef = useRef<HTMLDivElement>(null)
+  const progressNumRef = useRef<HTMLSpanElement>(null)
+  const progressBarRef = useRef<HTMLDivElement>(null)
+
+  useLayoutEffect(() => {
+    const ctx = gsap.context(() => {
+      const track = trackRef.current
+      if (!track) return
+
+      const totalSlides = 4
+
+      const tl = gsap.timeline({
+        scrollTrigger: {
+          trigger: sectionRef.current,
+          start: 'top top',
+          end: 'bottom bottom',
+          pin: pinRef.current,
+          pinSpacing: true,
+          scrub: 0.8,
+          onUpdate: (self) => {
+            const currentSlide = Math.min(
+              totalSlides,
+              Math.max(1, Math.ceil(self.progress * totalSlides)),
+            )
+            if (progressNumRef.current) {
+              progressNumRef.current.textContent = `0${currentSlide} / 0${totalSlides}`
+            }
+            if (progressBarRef.current) {
+              progressBarRef.current.style.width = `${self.progress * 100}%`
+            }
+          },
+        },
+      })
+
+      // Deslocamento horizontal dos 4 slides
+      tl.to(track, {
+        x: () => -(track.scrollWidth - window.innerWidth),
+        ease: 'none',
+      })
+
+      // Animação de entrada dos cards de conectividade no Slide 4
+      tl.fromTo(
+        '.destination-point-card',
+        { y: 30, autoAlpha: 0, scale: 0.96 },
+        { y: 0, autoAlpha: 1, scale: 1, duration: 0.35, stagger: 0.05, ease: 'power2.out' },
+        0.7,
+      )
+    }, sectionRef)
+
+    return () => ctx.revert()
+  }, [])
+
+  return (
+    <section
+      ref={sectionRef}
+      id="destino"
+      className="relative z-30 h-[380vh] w-full bg-white text-ink"
+    >
+      <div
+        ref={pinRef}
+        className="relative flex h-screen w-full flex-col justify-between overflow-hidden bg-[#faf8f5] text-ink"
+      >
+        {/* Barra Superior com Indicador de Progresso */}
+        <header className="relative z-30 flex items-center justify-between border-b border-ink/10 px-6 sm:px-10 lg:px-16 py-4 sm:py-5 bg-[#faf8f5]/90 backdrop-blur-md">
+          <div className="flex items-center gap-3">
+            <span className="font-sans text-[10px] uppercase tracking-[0.25em] text-ink/50 font-semibold">
+              04 — Destino & Conectividade
+            </span>
+          </div>
+
+          <div className="flex items-center gap-4">
+            <div className="h-[2px] w-24 sm:w-36 bg-ink/15 rounded-full overflow-hidden">
+              <div
+                ref={progressBarRef}
+                className="h-full w-0 bg-ink transition-[width] duration-150"
+              />
+            </div>
+            <span
+              ref={progressNumRef}
+              className="font-sans text-[10px] uppercase tracking-[0.2em] text-ink/70 font-semibold"
+            >
+              01 / 04
+            </span>
+          </div>
+        </header>
+
+        {/* Trilho Deslizante Horizontal (Track) */}
+        <div
+          ref={trackRef}
+          className="relative flex h-full items-center will-change-transform"
+        >
+
+          {/* SLIDE 1: O Destino & Microclima */}
+          <div className="flex h-full w-screen shrink-0 items-center justify-center px-4 sm:px-10 lg:px-20 py-4 sm:py-8 overflow-y-auto sm:overflow-hidden">
+            <div className="grid grid-cols-1 md:grid-cols-12 gap-5 sm:gap-8 lg:gap-14 items-center max-w-6xl w-full">
+
+              <div className="md:col-span-6 flex flex-col items-center md:items-start text-center md:text-left">
+                <span className="font-sans text-[9px] sm:text-[9.5px] uppercase tracking-[0.24em] text-ink/50 font-semibold mb-1.5 sm:mb-2">
+                  Capítulo I · A Região
+                </span>
+                <h2 className="font-display text-3xl sm:text-4xl md:text-5xl lg:text-6xl uppercase tracking-[-0.02em] text-ink leading-[1.05]">
+                  Costa del Sol
+                </h2>
+                <span className="font-script text-2xl sm:text-3xl md:text-4xl text-ink/70 mt-1 inline-block">
+                  Onde o sol se põe mais tarde
+                </span>
+
+                <div className="flex flex-col gap-[2.5px] w-12 my-3 sm:my-5">
+                  <div className="h-[1px] w-full bg-ink/70" />
+                  <div className="h-[1px] w-full bg-ink/70" />
+                </div>
+
+                <p className="font-sans text-[8.5px] sm:text-[9.5px] lg:text-[10px] uppercase tracking-[0.04em] leading-[1.7] text-ink/80 font-medium max-w-[220px] sm:max-w-[240px] lg:max-w-[280px]">
+                  Com mais de 300 dias ensolarados por ano e brisas amenas do Atlântico, a Costa del Sol oferece um microclima ímpar onde a vida ao ar livre é celebrada em todas as estações.
+                </p>
+              </div>
+
+              <div className="md:col-span-6 w-full max-w-[290px] sm:max-w-md mx-auto">
+                <div className="p-1.5 sm:p-2 border border-ink/25 rounded-[3px] bg-stone-100/70 shadow-md">
+                  <div className="relative aspect-[16/10] sm:aspect-[16/11] w-full overflow-hidden rounded-[2px] bg-ink">
+                    <img
+                      src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1200&q=80"
+                      alt="Praia e orla da Costa del Sol ao entardecer"
+                      className="h-full w-full object-cover object-center"
+                    />
+                  </div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+
+          {/* SLIDE 2: Gastronomia & Vida Náutica */}
+          <div className="flex h-full w-screen shrink-0 items-center justify-center px-4 sm:px-10 lg:px-20 py-4 sm:py-8 overflow-y-auto sm:overflow-hidden">
+            <div className="grid grid-cols-1 md:grid-cols-12 gap-5 sm:gap-8 lg:gap-14 items-center max-w-6xl w-full">
+
+              <div className="md:col-span-6 order-2 md:order-1 w-full max-w-[290px] sm:max-w-md mx-auto">
+                <div className="p-1.5 sm:p-2 border border-ink/25 rounded-[3px] bg-stone-100/70 shadow-md">
+                  <div className="relative aspect-[16/10] sm:aspect-[16/11] w-full overflow-hidden rounded-[2px] bg-ink">
+                    <img
+                      src="https://images.unsplash.com/photo-1544551763-46a013bb70d5?auto=format&fit=crop&w=1200&q=80"
+                      alt="Vida náutica e marina exclusiva"
+                      className="h-full w-full object-cover object-center"
+                    />
+                  </div>
+                </div>
+              </div>
+
+              <div className="md:col-span-6 flex flex-col items-center md:items-start text-center md:text-left order-1 md:order-2">
+                <span className="font-sans text-[9px] sm:text-[9.5px] uppercase tracking-[0.24em] text-ink/50 font-semibold mb-1.5 sm:mb-2">
+                  Capítulo II · Estilo de Vida
+                </span>
+                <h2 className="font-display text-3xl sm:text-4xl md:text-5xl lg:text-6xl uppercase tracking-[-0.02em] text-ink leading-[1.05]">
+                  Marinas & Alta Gastronomia
+                </h2>
+                <span className="font-script text-2xl sm:text-3xl md:text-4xl text-ink/70 mt-1 inline-block">
+                  Sabores costeiros e esportes ao vento
+                </span>
+
+                <div className="flex flex-col gap-[2.5px] w-12 my-3 sm:my-5">
+                  <div className="h-[1px] w-full bg-ink/70" />
+                  <div className="h-[1px] w-full bg-ink/70" />
+                </div>
+
+                <p className="font-sans text-[8.5px] sm:text-[9.5px] lg:text-[10px] uppercase tracking-[0.04em] leading-[1.7] text-ink/80 font-medium max-w-[220px] sm:max-w-[250px] lg:max-w-[290px]">
+                  Restaurantes estrelados com produtos frescos da pesca local, beach clubs privativos e ancoradouros de alto padrão para iates a poucos minutos da sua residência.
+                </p>
+              </div>
+
+            </div>
+          </div>
+
+          {/* SLIDE 3: Piscinas Naturais & Barreiras de Corais */}
+          <div className="flex h-full w-screen shrink-0 items-center justify-center px-4 sm:px-10 lg:px-20 py-4 sm:py-8 overflow-y-auto sm:overflow-hidden">
+            <div className="grid grid-cols-1 md:grid-cols-12 gap-5 sm:gap-8 lg:gap-14 items-center max-w-6xl w-full">
+
+              <div className="md:col-span-6 flex flex-col items-center md:items-start text-center md:text-left">
+                <span className="font-sans text-[9px] sm:text-[9.5px] uppercase tracking-[0.24em] text-ink/50 font-semibold mb-1.5 sm:mb-2">
+                  Capítulo III · Natureza Intocada
+                </span>
+                <h2 className="font-display text-3xl sm:text-4xl md:text-5xl lg:text-6xl uppercase tracking-[-0.02em] text-ink leading-[1.05]">
+                  Santuário Marinho
+                </h2>
+                <span className="font-script text-2xl sm:text-3xl md:text-4xl text-ink/70 mt-1 inline-block">
+                  Águas mornas e piscinas transparentes
+                </span>
+
+                <div className="flex flex-col gap-[2.5px] w-12 my-3 sm:my-5">
+                  <div className="h-[1px] w-full bg-ink/70" />
+                  <div className="h-[1px] w-full bg-ink/70" />
+                </div>
+
+                <p className="font-sans text-[8.5px] sm:text-[9.5px] lg:text-[10px] uppercase tracking-[0.04em] leading-[1.7] text-ink/80 font-medium max-w-[220px] sm:max-w-[240px] lg:max-w-[280px]">
+                  Protegida pela segunda maior barreira de corais do planeta, a costa forma piscinas naturais de águas calmas e translúcidas, ideais para mergulho e tranquilidade.
+                </p>
+              </div>
+
+              <div className="md:col-span-6 w-full max-w-[290px] sm:max-w-md mx-auto">
+                <div className="p-1.5 sm:p-2 border border-ink/25 rounded-[3px] bg-stone-100/70 shadow-md">
+                  <div className="relative aspect-[16/10] sm:aspect-[16/11] w-full overflow-hidden rounded-[2px] bg-ink">
+                    <img
+                      src="https://images.unsplash.com/photo-1506929562872-bb421503ef21?auto=format&fit=crop&w=1200&q=80"
+                      alt="Águas translúcidas e recifes de corais"
+                      className="h-full w-full object-cover object-center"
+                    />
+                  </div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+
+          {/* SLIDE 4: O Mapa Cartográfico & Distâncias */}
+          <div className="relative flex h-full w-screen shrink-0 items-center justify-center px-4 sm:px-8 lg:px-16 py-4 sm:py-6 overflow-hidden">
+
+            {/* Imagem do Mapa em Baixa Opacidade bem clarinha */}
+            <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none select-none flex items-center justify-center">
+              <img
+                src={MAP_IMAGE_URL}
+                alt="Mapa da Costa del Sol"
+                className="h-full w-full object-cover object-center opacity-30 sm:opacity-35 [filter:contrast(1.05)_brightness(1.02)]"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-[#faf8f5] via-transparent to-[#faf8f5]/80" />
+            </div>
+
+            {/* Conteúdo Sobreposto: Pin da Alba & Grid de Distâncias */}
+            <div className="relative z-10 mx-auto max-w-6xl w-full flex flex-col items-center">
+
+              {/* Cabeçalho do Mapa */}
+              <div className="flex flex-col items-center text-center mb-4 sm:mb-6 md:mb-8">
+                <span className="font-sans text-[8.5px] sm:text-[10px] uppercase tracking-[0.26em] text-ink/60 font-semibold mb-1">
+                  Localização Privilegiada
+                </span>
+                <h3 className="font-display text-2xl sm:text-3xl md:text-5xl uppercase tracking-[-0.015em] text-ink leading-tight">
+                  Conectividade & Distâncias
+                </h3>
+
+                {/* Pin Principal da Alba Residência */}
+                <div className="inline-flex items-center gap-1.5 sm:gap-2 mt-2 sm:mt-3 px-3 sm:px-4 py-1 sm:py-1.5 rounded-full bg-ink text-paper border border-ink/20 shadow-md">
+                  <span className="h-1.5 w-1.5 sm:h-2 sm:w-2 rounded-full bg-emerald-400 animate-ping" />
+                  <span className="font-sans text-[8.5px] sm:text-[9.5px] uppercase tracking-[0.2em] font-semibold">
+                    Alba Residência · Ponto Central
+                  </span>
+                </div>
+              </div>
+
+              {/* Grid com os Pontos de Referência */}
+              <div className="grid grid-cols-2 md:grid-cols-3 gap-2 sm:gap-3.5 md:gap-5 w-full max-w-4xl">
+                {DESTINATION_POINTS.map((point) => {
+                  const Icon = point.icon
+                  return (
+                    <div
+                      key={point.name}
+                      className="destination-point-card flex flex-col justify-between p-2.5 sm:p-4 md:p-5 rounded-[4px] bg-white/85 border border-ink/15 shadow-sm backdrop-blur-md transition-all duration-300 hover:border-ink/40 hover:bg-white hover:shadow-md"
+                    >
+                      <div className="flex items-start justify-between gap-2">
+                        <div className="flex h-6 w-6 sm:h-8 sm:w-8 items-center justify-center rounded-full bg-ink/5 text-ink/80">
+                          <Icon className="h-3 w-3 sm:h-4 sm:w-4 stroke-[1.5]" />
+                        </div>
+                        <span className="font-display text-base sm:text-xl md:text-2xl text-ink font-semibold tracking-tight">
+                          {point.time}
+                        </span>
+                      </div>
+
+                    <div className="mt-1.5 sm:mt-3 flex flex-col">
+                      <span className="font-sans text-[7.5px] sm:text-[8.5px] uppercase tracking-[0.2em] text-ink/50 font-semibold">
+                        {point.category}
+                      </span>
+                      <h4 className="font-display text-xs sm:text-base md:text-lg uppercase tracking-[-0.01em] text-ink mt-0.5 leading-snug">
+                        {point.name}
+                      </h4>
+                      <span className="font-sans text-[7.5px] sm:text-[8.5px] uppercase tracking-[0.12em] text-ink/60 mt-0.5 sm:mt-1 font-medium">
+                        Distância: {point.distance}
+                      </span>
+                    </div>
+                  </div>
+                  )
+                })}
+              </div>
+
+              {/* Rodapé com Coordenadas */}
+              <div className="flex items-center gap-3 mt-4 sm:mt-6 text-ink/50">
+                <span className="h-px w-6 sm:w-8 bg-ink/20" />
+                <span className="font-sans text-[7.5px] sm:text-[9px] uppercase tracking-[0.25em]">
+                  Costa del Sol · Acesso direto pela rodovia costeira
+                </span>
+                <span className="h-px w-6 sm:w-8 bg-ink/20" />
+              </div>
+
+            </div>
+
+          </div>
+
+        </div>
+
+        {/* Rodapé do Slide com Dica de Rolagem */}
+        <footer className="relative z-30 flex items-center justify-between border-t border-ink/10 px-6 sm:px-10 lg:px-16 py-3 bg-[#faf8f5]/90 backdrop-blur-md">
+          <span className="font-sans text-[9px] uppercase tracking-[0.2em] text-ink/50">
+            Role para navegar horizontalmente
+          </span>
+          <span className="font-sans text-[9px] uppercase tracking-[0.2em] text-ink/50">
+            Alba Residência &copy; Costa del Sol
+          </span>
+        </footer>
+
+      </div>
+    </section>
+  )
+}
+```
+
+19. src/components/twilight/TwilightSection.tsx (copiar exatamente)
+
+```tsx
+import { useLayoutEffect, useRef, useState, type FC, type PointerEvent } from 'react'
+import gsap from 'gsap'
+import ScrollTrigger from 'gsap/ScrollTrigger'
+
+gsap.registerPlugin(ScrollTrigger)
+
+const SUNSET_IMAGE_URL =
+  'https://res.cloudinary.com/dwmrunhxa/image/upload/q_auto,f_auto,w_2200/v1788461241/Sunset_view_with_infinity_pool_202609031547_zyfond.jpg'
+
+export const TwilightSection: FC = () => {
+  const sectionRef = useRef<HTMLElement>(null)
+  const pinRef = useRef<HTMLDivElement>(null)
+  const bgImgDarkRef = useRef<HTMLImageElement>(null)
+  const bgImgLightRef = useRef<HTMLImageElement>(null)
+  const phase1Ref = useRef<HTMLDivElement>(null)
+  const phase2Ref = useRef<HTMLDivElement>(null)
+  const phase3Ref = useRef<HTMLDivElement>(null)
+
+  const [mousePos, setMousePos] = useState<{ x: number; y: number; hasMoved: boolean }>({
+    x: 50,
+    y: 50,
+    hasMoved: false,
+  })
+
+  // Rastreia a posição do mouse na tela para o efeito de lanterna/spotlight
+  const handlePointerMove = (e: PointerEvent<HTMLDivElement>) => {
+    const rect = e.currentTarget.getBoundingClientRect()
+    const x = e.clientX - rect.left
+    const y = e.clientY - rect.top
+    setMousePos({ x, y, hasMoved: true })
+  }
+
+  useLayoutEffect(() => {
+    const ctx = gsap.context(() => {
+      const tl = gsap.timeline({
+        scrollTrigger: {
+          trigger: sectionRef.current,
+          start: 'top top',
+          end: 'bottom bottom',
+          pin: pinRef.current,
+          pinSpacing: true,
+          scrub: 0.7,
+        },
+      })
+
+      // Zoom sutil contínuo em ambas as camadas de imagem
+      tl.fromTo(
+        [bgImgDarkRef.current, bgImgLightRef.current],
+        { scale: 1.12 },
+        { scale: 1.0, ease: 'none', duration: 3 },
+        0,
+      )
+
+      // Fase 1: Canto Superior Esquerdo — Começa visível e sai
+      tl.fromTo(
+        phase1Ref.current,
+        { autoAlpha: 1, x: 0, y: 0 },
+        { autoAlpha: 0, x: -30, y: -15, ease: 'power2.inOut', duration: 0.6 },
+        0.4,
+      )
+
+      // Fase 2: Canto Inferior Direito — Surge e sai
+      .fromTo(
+        phase2Ref.current,
+        { autoAlpha: 0, x: 30, y: 25 },
+        { autoAlpha: 1, x: 0, y: 0, ease: 'power2.out', duration: 0.6 },
+        0.9,
+      )
+      .to(
+        phase2Ref.current,
+        { autoAlpha: 0, x: 20, y: -20, ease: 'power2.in', duration: 0.6 },
+        1.7,
+      )
+
+      // Fase 3: Centro Minimalista — Surge e fixa no clímax
+      .fromTo(
+        phase3Ref.current,
+        { autoAlpha: 0, y: 25, scale: 0.96 },
+        { autoAlpha: 1, y: 0, scale: 1, ease: 'power2.out', duration: 0.65 },
+        2.2,
+      )
+      .to({}, { duration: 0.4 })
+    }, sectionRef)
+
+    return () => ctx.revert()
+  }, [])
+
+  return (
+    <section
+      ref={sectionRef}
+      id="crepusculo"
+      className="relative h-[300vh] w-full bg-ink text-paper select-none"
+    >
+      <div
+        ref={pinRef}
+        onPointerMove={handlePointerMove}
+        className="relative flex h-screen w-full overflow-hidden bg-ink cursor-crosshair"
+      >
+        {/* Camada 1: Imagem de Base (Escura, levemente aparente com filtro preto) */}
+        <div className="absolute inset-0 h-full w-full overflow-hidden">
+          <img
+            ref={bgImgDarkRef}
+            src={SUNSET_IMAGE_URL}
+            alt="Pôr do sol cinematográfico"
+            className="h-full w-full object-cover object-center opacity-30 brightness-[0.65] contrast-[1.1] will-change-transform"
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/40 to-black/60" />
+        </div>
+
+        {/* Camada 2: Imagem Iluminada Revelada pelo Movimento do Mouse (Spotlight / Flashlight) */}
+        <div
+          className="pointer-events-none absolute inset-0 h-full w-full overflow-hidden transition-opacity duration-700"
+          style={{
+            opacity: mousePos.hasMoved ? 1 : 0,
+            WebkitMaskImage: mousePos.hasMoved
+              ? `radial-gradient(circle 340px at ${mousePos.x}px ${mousePos.y}px, black 0%, rgba(0,0,0,0.5) 55%, transparent 100%)`
+              : 'none',
+            maskImage: mousePos.hasMoved
+              ? `radial-gradient(circle 340px at ${mousePos.x}px ${mousePos.y}px, black 0%, rgba(0,0,0,0.5) 55%, transparent 100%)`
+              : 'none',
+          }}
+        >
+          <img
+            ref={bgImgLightRef}
+            src={SUNSET_IMAGE_URL}
+            alt="Pôr do sol iluminado"
+            className="h-full w-full object-cover object-center brightness-[1.05] contrast-[1.08] will-change-transform"
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-black/30" />
+        </div>
+
+        {/* Sutil brilho de cursor */}
+        {mousePos.hasMoved && (
+          <div
+            className="pointer-events-none absolute h-2 w-2 -translate-x-1/2 -translate-y-1/2 rounded-full bg-[#cbb592]/60 blur-xs"
+            style={{ left: mousePos.x, top: mousePos.y }}
+          />
+        )}
+
+        {/* FASE 1: Canto Superior Esquerdo (Minimalista) */}
+        <div
+          ref={phase1Ref}
+          className="pointer-events-none absolute top-14 sm:top-20 md:top-24 left-6 sm:left-12 md:left-20 z-20 flex flex-col items-start text-left max-w-xs sm:max-w-md"
+        >
+          <span className="font-sans text-[9px] sm:text-[10px] uppercase tracking-[0.28em] text-[#cbb592] font-semibold mb-2">
+            05 — Crepúsculo
+          </span>
+          <h2 className="font-display text-2xl sm:text-3xl md:text-4xl lg:text-[2.75rem] uppercase tracking-[-0.015em] text-paper leading-[1.05]">
+            "O tempo aqui não tem pressa..."
+          </h2>
+          <div className="flex flex-col gap-[2.5px] w-10 my-3">
+            <div className="h-[1px] w-full bg-[#cbb592]/60" />
+            <div className="h-[1px] w-full bg-[#cbb592]/60" />
+          </div>
+          <p className="font-sans text-[9px] sm:text-[9.5px] uppercase tracking-[0.04em] leading-[1.7] text-paper/60 font-medium">
+            Entre o silêncio da brisa e o horizonte do oceano.
+          </p>
+        </div>
+
+        {/* FASE 2: Canto Inferior Direito (Minimalista) */}
+        <div
+          ref={phase2Ref}
+          className="pointer-events-none absolute bottom-14 sm:bottom-20 md:bottom-24 right-6 sm:right-12 md:right-20 z-20 flex flex-col items-end text-right max-w-xs sm:max-w-md opacity-0"
+        >
+          <span className="font-sans text-[9px] sm:text-[9.5px] uppercase tracking-[0.26em] text-[#cbb592] font-semibold mb-2">
+            A Luz Dourada
+          </span>
+          <h2 className="font-display text-2xl sm:text-3xl md:text-4xl lg:text-[2.75rem] uppercase tracking-[-0.015em] text-paper leading-[1.05]">
+            "...Ele se torna infinito."
+          </h2>
+          <span className="font-script text-2xl sm:text-3xl md:text-4xl text-[#cbb592] mt-1 -rotate-1 inline-block">
+            Sob o céu do Mediterrâneo
+          </span>
+          <div className="flex flex-col gap-[2.5px] w-10 my-3 items-end">
+            <div className="h-[1px] w-full bg-[#cbb592]/60" />
+            <div className="h-[1px] w-full bg-[#cbb592]/60" />
+          </div>
+        </div>
+
+        {/* FASE 3: Centro Minimalista com Botão de Ação VIP */}
+        <div
+          ref={phase3Ref}
+          className="pointer-events-none absolute inset-0 z-20 flex flex-col items-center justify-center text-center px-6 opacity-0"
+        >
+          <span className="font-sans text-[9px] sm:text-[10px] uppercase tracking-[0.3em] text-[#cbb592] font-semibold mb-2">
+            Exclusividade Atemporal
+          </span>
+          <h2 className="font-display text-3xl sm:text-4xl md:text-5xl lg:text-6xl uppercase tracking-[0.06em] text-paper leading-tight">
+            Alba Residência
+          </h2>
+          <span className="font-sans text-[9px] sm:text-[10px] uppercase tracking-[0.22em] text-paper/60 mt-1 mb-7">
+            Costa del Sol · Refúgio de Poder
+          </span>
+
+          {/* Botão com clique habilitado */}
+          <a
+            href="#contato"
+            className="pointer-events-auto inline-flex items-center justify-center gap-2.5 rounded-full bg-[#cbb592] px-7 py-3 font-sans text-[9.5px] sm:text-[10px] uppercase tracking-[0.22em] text-[#16120e] font-semibold shadow-xl transition-all duration-300 hover:bg-[#dfcca8] hover:scale-105 active:scale-95 cursor-pointer"
+          >
+            <span>Agendar Experiência Privada</span>
+            <svg
+              className="h-3 w-3 translate-x-0.5"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
+              <line x1="5" y1="12" x2="19" y2="12" />
+              <polyline points="12 5 19 12 12 19" />
+            </svg>
+          </a>
+        </div>
+
+        {/* Rodapé minimalista */}
+        <footer className="pointer-events-none absolute inset-x-0 bottom-0 z-30 flex items-center justify-between p-6 sm:p-8 text-paper/30">
+          <span className="font-sans text-[8.5px] uppercase tracking-[0.2em]">
+            Mova o cursor para iluminar
+          </span>
+          <span className="font-sans text-[8.5px] uppercase tracking-[0.2em]">
+            05 &nbsp;—&nbsp; 06
+          </span>
+        </footer>
+
+      </div>
+    </section>
+  )
+}
+```
+
+20. src/components/contact/ContactSection.tsx (copiar exatamente)
+
+```tsx
+import { useLayoutEffect, useRef, useState, type FC, type FormEvent } from 'react'
+import gsap from 'gsap'
+import ScrollTrigger from 'gsap/ScrollTrigger'
+
+gsap.registerPlugin(ScrollTrigger)
+
+const PAPER_BG_URL =
+  'https://res.cloudinary.com/dwmrunhxa/image/upload/v1788462009/image_ocmerl.webp'
+
+const CLIP_IMG_URL =
+  'https://res.cloudinary.com/dwmrunhxa/image/upload/v1788462037/image_1_a4lsuo.png'
+
+const PROJECT_TYPES = [
+  'Residência Garden',
+  'Sky Villa Panorâmica',
+  'Grand Penthouse',
+  'Investimento Privado',
+]
+
+export const ContactSection: FC = () => {
+  const sectionRef = useRef<HTMLElement>(null)
+  const titleLinesRef = useRef<HTMLDivElement>(null)
+  const paperCardRef = useRef<HTMLDivElement>(null)
+  const [selectedTypes, setSelectedTypes] = useState<string[]>([])
+  const [isSubmitted, setIsSubmitted] = useState(false)
+
+  const toggleType = (type: string) => {
+    setSelectedTypes((prev) =>
+      prev.includes(type) ? prev.filter((t) => t !== type) : [...prev, type],
+    )
+  }
+
+  const handleSubmit = (e: FormEvent) => {
+    e.preventDefault()
+    setIsSubmitted(true)
+  }
+
+  useLayoutEffect(() => {
+    const ctx = gsap.context(() => {
+      // Animação de Reveal por Linha no Título H2
+      gsap.fromTo(
+        '.contact-title-line',
+        { yPercent: 110 },
+        {
+          yPercent: 0,
+          duration: 1.1,
+          stagger: 0.1,
+          ease: 'power3.out',
+          scrollTrigger: {
+            trigger: titleLinesRef.current,
+            start: 'top 80%',
+            toggleActions: 'play none none none',
+          },
+        },
+      )
+
+      // Entrada suave da folha de papel
+      gsap.fromTo(
+        paperCardRef.current,
+        { y: 60, autoAlpha: 0 },
+        {
+          y: 0,
+          autoAlpha: 1,
+          duration: 1.2,
+          ease: 'power3.out',
+          scrollTrigger: {
+            trigger: paperCardRef.current,
+            start: 'top 80%',
+            toggleActions: 'play none none none',
+          },
+        },
+      )
+
+      // Entrada escalonada dos 6 campos do formulário
+      gsap.fromTo(
+        '.form-field-row',
+        { y: 20, autoAlpha: 0 },
+        {
+          y: 0,
+          autoAlpha: 1,
+          duration: 0.7,
+          stagger: 0.08,
+          ease: 'power2.out',
+          scrollTrigger: {
+            trigger: paperCardRef.current,
+            start: 'top 75%',
+            toggleActions: 'play none none none',
+          },
+        },
+      )
+    }, sectionRef)
+
+    return () => ctx.revert()
+  }, [])
+
+  return (
+    <section
+      ref={sectionRef}
+      id="contato"
+      className="relative z-30 w-full bg-[#f6f3ee] text-ink py-20 sm:py-28 md:py-36 px-4 sm:px-8 lg:px-14 overflow-hidden"
+    >
+      <div className="mx-auto max-w-7xl relative">
+
+        {/* Grid de 2 Colunas Assimétrico */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-0 items-start">
+
+          {/* COLUNA ESQUERDA: Título Grande com Reveal por Linha (Fica Atrás da Folha) */}
+          <div className="lg:col-span-6 flex flex-col items-start z-10 pt-4 lg:pt-8 pr-0 lg:pr-4">
+
+            <span className="font-sans text-[9.5px] uppercase tracking-[0.26em] text-ink/50 font-semibold mb-3">
+              06 — Atendimento Exclusivo
+            </span>
+
+            <div ref={titleLinesRef} className="flex flex-col">
+              <span className="block overflow-hidden">
+                <h2 className="contact-title-line font-display text-4xl sm:text-5xl md:text-6xl lg:text-[5.2rem] uppercase tracking-[-0.025em] text-ink leading-[0.92]">
+                  Inicie uma
+                </h2>
+              </span>
+              <span className="block overflow-hidden">
+                <h2 className="contact-title-line font-display text-4xl sm:text-5xl md:text-6xl lg:text-[5.2rem] uppercase tracking-[-0.025em] text-ink leading-[0.92]">
+                  conversa
+                </h2>
+              </span>
+              <span className="block overflow-hidden">
+                <h2 className="contact-title-line font-display text-4xl sm:text-5xl md:text-6xl lg:text-[5.2rem] uppercase tracking-[-0.025em] text-ink leading-[0.92]">
+                  sobre o seu
+                </h2>
+              </span>
+              <span className="block overflow-hidden">
+                <h2 className="contact-title-line font-display text-4xl sm:text-5xl md:text-6xl lg:text-[5.2rem] uppercase tracking-[-0.025em] text-ink leading-[0.92]">
+                  refúgio na
+                </h2>
+              </span>
+              <span className="block overflow-hidden">
+                <h2 className="contact-title-line font-display text-4xl sm:text-5xl md:text-6xl lg:text-[5.2rem] uppercase tracking-[-0.025em] text-ink leading-[0.92]">
+                  Costa del Sol
+                </h2>
+              </span>
+            </div>
+
+            <p className="font-sans text-[9.5px] sm:text-[10.5px] uppercase tracking-[0.04em] leading-[1.75] text-ink/75 font-medium max-w-[280px] sm:max-w-[320px] mt-6 sm:mt-10 md:mt-12">
+              Seja para planejar uma nova residência, refúgio de temporada ou investimento patrimonial, adoraríamos conhecer a sua visão e apresentar os detalhes da Alba Residência.
+            </p>
+
+            <div className="mt-6 sm:mt-8 flex flex-col gap-1 text-[9.5px] sm:text-[10px] uppercase tracking-[0.18em] text-ink/60 font-sans">
+              <span>Atelier Alba · Costa del Sol</span>
+              <span>concierge@albaresidencia.com</span>
+            </div>
+
+          </div>
+
+          {/* COLUNA DIREITA: Cartão da Folha de Papel com Clipe Metálico (Sobrepõe o Título) */}
+          <div
+            ref={paperCardRef}
+            className="lg:col-span-6 relative z-20 lg:-ml-12 xl:-ml-18 mt-6 lg:mt-0 w-full"
+          >
+            {/* O Clipe de Papel Metálico fixado no topo esquerdo da folha */}
+            <div className="absolute -top-7 sm:-top-9 left-4 sm:left-8 z-40 w-8 sm:w-11 pointer-events-none select-none drop-shadow-md">
+              <img
+                src={CLIP_IMG_URL}
+                alt="Clipe de papel"
+                className="w-full h-auto object-contain"
+              />
+            </div>
+
+            {/* A Folha de Papel Texturizada */}
+            <div
+              className="relative w-full rounded-[2px] p-5 sm:p-8 md:p-12 border border-ink/15 bg-cover bg-center overflow-hidden"
+              style={{
+                backgroundImage: `url(${PAPER_BG_URL})`,
+                backgroundColor: '#faf7f2',
+              }}
+            >
+              {/* Leve ruído / textura sutil */}
+              <div className="pointer-events-none absolute inset-0 bg-stone-100/40 mix-blend-multiply opacity-50" />
+
+              {/* Cabeçalho Interno da Folha */}
+              <div className="relative z-10 flex items-start justify-between pb-8 mb-8 border-b border-ink/15">
+                <div className="flex flex-col">
+                  <span className="font-sans text-[8.5px] uppercase tracking-[0.25em] text-ink/50 font-semibold mb-1">
+                    01
+                  </span>
+                  <h3 className="font-sans text-[11px] sm:text-xs uppercase tracking-[0.22em] font-semibold text-ink">
+                    Spatial Brief Intake
+                  </h3>
+                  <span className="font-sans text-[8.5px] uppercase tracking-[0.18em] text-ink/60 mt-0.5">
+                    Alba Residência · Registro de Interesse
+                  </span>
+                </div>
+
+                {/* Selo Circular Alba Rotativo */}
+                <div className="flex h-12 w-12 sm:h-14 sm:w-14 items-center justify-center shrink-0">
+                  <svg
+                    className="h-full w-full animate-[spin_32s_linear_infinite]"
+                    viewBox="0 0 100 100"
+                    fill="none"
+                  >
+                    <circle
+                      cx="50"
+                      cy="50"
+                      r="46"
+                      stroke="currentColor"
+                      strokeOpacity="0.3"
+                      strokeWidth="0.8"
+                      className="text-ink"
+                    />
+                    <path
+                      id="formSealPath"
+                      d="M50,50 m-37,0 a37,37 0 1,1 74,0 a37,37 0 1,1 -74,0"
+                      fill="none"
+                    />
+                    <text
+                      fontSize="7.4"
+                      fill="currentColor"
+                      letterSpacing="3"
+                      className="font-sans uppercase text-ink"
+                    >
+                      <textPath href="#formSealPath" startOffset="0%">
+                        Alba · Costa del Sol · Alba ·
+                      </textPath>
+                    </text>
+                    <text
+                      x="50"
+                      y="54"
+                      textAnchor="middle"
+                      fill="currentColor"
+                      fontSize="13"
+                      className="font-display italic text-ink"
+                    >
+                      A
+                    </text>
+                  </svg>
+                </div>
+              </div>
+
+              {/* Formulário com os 6 Campos Numerados */}
+              {isSubmitted ? (
+                <div className="relative z-10 py-16 flex flex-col items-center text-center">
+                  <span className="font-sans text-[10px] uppercase tracking-[0.25em] text-ink/50 font-semibold mb-2">
+                    Solicitação Recebida
+                  </span>
+                  <h4 className="font-display text-3xl sm:text-4xl uppercase tracking-[-0.015em] text-ink mb-3">
+                    Obrigado pelo seu contato
+                  </h4>
+                  <p className="font-sans text-[10px] uppercase tracking-[0.05em] leading-[1.8] text-ink/75 max-w-sm">
+                    Nossa equipe de concierge entrará em contato confidencialmente com os materiais detalhados da Alba Residência.
+                  </p>
+                </div>
+              ) : (
+                <form onSubmit={handleSubmit} className="relative z-10 flex flex-col gap-6 sm:gap-7">
+
+                  {/* CAMPO 01: Nome */}
+                  <div className="form-field-row flex flex-col gap-1.5">
+                    <div className="flex items-center gap-2">
+                      <span className="font-sans text-[9px] uppercase tracking-[0.15em] text-ink/45 font-medium">
+                        01)
+                      </span>
+                      <label className="font-sans text-[9.5px] uppercase tracking-[0.16em] text-ink/80 font-semibold">
+                        Nome Completo
+                      </label>
+                    </div>
+                    <input
+                      required
+                      type="text"
+                      placeholder="Digite seu nome..."
+                      className="w-full bg-transparent border-b border-ink/25 focus:border-ink py-1 font-sans text-xs sm:text-[13px] text-ink outline-none placeholder:text-ink/30 transition-colors"
+                    />
+                  </div>
+
+                  {/* CAMPO 02: Email */}
+                  <div className="form-field-row flex flex-col gap-1.5">
+                    <div className="flex items-center gap-2">
+                      <span className="font-sans text-[9px] uppercase tracking-[0.15em] text-ink/45 font-medium">
+                        02)
+                      </span>
+                      <label className="font-sans text-[9.5px] uppercase tracking-[0.16em] text-ink/80 font-semibold">
+                        Email Corporativo / Pessoal
+                      </label>
+                    </div>
+                    <input
+                      required
+                      type="email"
+                      placeholder="seuemail@exemplo.com"
+                      className="w-full bg-transparent border-b border-ink/25 focus:border-ink py-1 font-sans text-xs sm:text-[13px] text-ink outline-none placeholder:text-ink/30 transition-colors"
+                    />
+                  </div>
+
+                  {/* CAMPO 03: Tipo de Interesse (Grid 2x2 com Checkboxes Customizados) */}
+                  <div className="form-field-row flex flex-col gap-2.5 pt-1">
+                    <div className="flex items-center gap-2">
+                      <span className="font-sans text-[9px] uppercase tracking-[0.15em] text-ink/45 font-medium">
+                        03)
+                      </span>
+                      <label className="font-sans text-[9.5px] uppercase tracking-[0.16em] text-ink/80 font-semibold">
+                        Tipo de Interesse / Projeto
+                      </label>
+                    </div>
+
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 pt-1">
+                      {PROJECT_TYPES.map((type) => {
+                        const isChecked = selectedTypes.includes(type)
+                        return (
+                          <button
+                            key={type}
+                            type="button"
+                            onClick={() => toggleType(type)}
+                            className="flex items-center gap-2.5 text-left cursor-pointer group"
+                          >
+                            <span
+                              className={`flex h-3.5 w-3.5 items-center justify-center rounded-[1.5px] border transition-colors ${
+                                isChecked
+                                  ? 'bg-ink border-ink text-paper'
+                                  : 'border-ink/35 bg-white/50 group-hover:border-ink'
+                              }`}
+                            >
+                              {isChecked && (
+                                <svg
+                                  className="h-2.5 w-2.5"
+                                  viewBox="0 0 24 24"
+                                  fill="none"
+                                  stroke="currentColor"
+                                  strokeWidth="3"
+                                  strokeLinecap="round"
+                                  strokeLinejoin="round"
+                                >
+                                  <polyline points="20 6 9 17 4 12" />
+                                </svg>
+                              )}
+                            </span>
+                            <span className="font-sans text-[9px] sm:text-[9.5px] uppercase tracking-[0.08em] text-ink/85 font-medium">
+                              {type}
+                            </span>
+                          </button>
+                        )
+                      })}
+                    </div>
+                  </div>
+
+                  {/* CAMPO 04: Localização */}
+                  <div className="form-field-row flex flex-col gap-1.5">
+                    <div className="flex items-center gap-2">
+                      <span className="font-sans text-[9px] uppercase tracking-[0.15em] text-ink/45 font-medium">
+                        04)
+                      </span>
+                      <label className="font-sans text-[9.5px] uppercase tracking-[0.16em] text-ink/80 font-semibold">
+                        Localização / Cidade Atual
+                      </label>
+                    </div>
+                    <input
+                      type="text"
+                      placeholder="Ex: São Paulo, Madrid, Londres, Miami..."
+                      className="w-full bg-transparent border-b border-ink/25 focus:border-ink py-1 font-sans text-xs sm:text-[13px] text-ink outline-none placeholder:text-ink/30 transition-colors"
+                    />
+                  </div>
+
+                  {/* CAMPO 05: Prazo / Timeline */}
+                  <div className="form-field-row flex flex-col gap-1.5">
+                    <div className="flex items-center gap-2">
+                      <span className="font-sans text-[9px] uppercase tracking-[0.15em] text-ink/45 font-medium">
+                        05)
+                      </span>
+                      <label className="font-sans text-[9.5px] uppercase tracking-[0.16em] text-ink/80 font-semibold">
+                        Prazo / Timeline Desejada
+                      </label>
+                    </div>
+                    <input
+                      type="text"
+                      placeholder="Ex: Próximos 3 meses, 6 meses, 1 ano..."
+                      className="w-full bg-transparent border-b border-ink/25 focus:border-ink py-1 font-sans text-xs sm:text-[13px] text-ink outline-none placeholder:text-ink/30 transition-colors"
+                    />
+                  </div>
+
+                  {/* CAMPO 06: Conte mais (Textarea) */}
+                  <div className="form-field-row flex flex-col gap-1.5">
+                    <div className="flex items-center gap-2">
+                      <span className="font-sans text-[9px] uppercase tracking-[0.15em] text-ink/45 font-medium">
+                        06)
+                      </span>
+                      <label className="font-sans text-[9.5px] uppercase tracking-[0.16em] text-ink/80 font-semibold">
+                        Conte Mais Sobre o Seu Projeto / Visão
+                      </label>
+                    </div>
+                    <textarea
+                      rows={3}
+                      placeholder="Detalhes adicionais, preferências de metragem, número de suítes..."
+                      className="w-full bg-transparent border-b border-ink/25 focus:border-ink py-1 font-sans text-xs sm:text-[13px] text-ink outline-none placeholder:text-ink/30 resize-none transition-colors"
+                    />
+                  </div>
+
+                  {/* Botão de Envio Retangular */}
+                  <div className="form-field-row pt-3">
+                    <button
+                      type="submit"
+                      className="rounded-[2px] bg-ink px-8 py-3.5 font-sans text-[10px] uppercase tracking-[0.22em] text-paper shadow-md transition-all duration-300 hover:bg-ink/85 hover:scale-[1.01] active:scale-95 cursor-pointer"
+                    >
+                      Enviar Briefing
+                    </button>
+                  </div>
+
+                </form>
+              )}
+
+              {/* Rodapé Interno do Cartão de Papel */}
+              <div className="relative z-10 w-full pt-6 mt-8 border-t border-ink/20 flex flex-col sm:flex-row items-center justify-between gap-3 text-[8px] sm:text-[8.5px] uppercase tracking-[0.22em] text-ink/60 font-medium">
+                <span>Alba — 2026 / Ref: 06</span>
+                <span>Obrigado · Confidencial</span>
+                <span>albaresidencia.com</span>
+              </div>
+
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+    </section>
+  )
+}
+```
+
+21. src/components/footer/Footer.tsx (copiar exatamente)
+
+```tsx
+import { useLayoutEffect, useRef, type FC } from 'react'
+import gsap from 'gsap'
+import ScrollTrigger from 'gsap/ScrollTrigger'
+
+gsap.registerPlugin(ScrollTrigger)
+
+export const Footer: FC = () => {
+  const footerRef = useRef<HTMLElement>(null)
+  const topGridRef = useRef<HTMLDivElement>(null)
+  const monumentalTitleRef = useRef<HTMLDivElement>(null)
+  const bottomBarRef = useRef<HTMLDivElement>(null)
+
+  const scrollToTop = () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' })
+  }
+
+  useLayoutEffect(() => {
+    const ctx = gsap.context(() => {
+      // 1. Stagger nas colunas superiores de navegação e contato
+      gsap.fromTo(
+        topGridRef.current ? topGridRef.current.children : [],
+        { y: 40, autoAlpha: 0 },
+        {
+          y: 0,
+          autoAlpha: 1,
+          duration: 1.1,
+          stagger: 0.12,
+          ease: 'power3.out',
+          scrollTrigger: {
+            trigger: topGridRef.current,
+            start: 'top 85%',
+            toggleActions: 'play none none none',
+          },
+        },
+      )
+
+      // 2. Entrada monumental do título da Hero
+      gsap.fromTo(
+        monumentalTitleRef.current ? monumentalTitleRef.current.children : [],
+        { y: 50, autoAlpha: 0, scale: 0.97 },
+        {
+          y: 0,
+          autoAlpha: 1,
+          scale: 1,
+          duration: 1.2,
+          stagger: 0.15,
+          ease: 'power3.out',
+          scrollTrigger: {
+            trigger: monumentalTitleRef.current,
+            start: 'top 80%',
+            toggleActions: 'play none none none',
+          },
+        },
+      )
+
+      // 3. Barra inferior de copyright
+      gsap.fromTo(
+        bottomBarRef.current,
+        { autoAlpha: 0 },
+        {
+          autoAlpha: 1,
+          duration: 1,
+          ease: 'power2.out',
+          scrollTrigger: {
+            trigger: bottomBarRef.current,
+            start: 'top 95%',
+            toggleActions: 'play none none none',
+          },
+        },
+      )
+    }, footerRef)
+
+    return () => ctx.revert()
+  }, [])
+
+  return (
+    <footer
+      ref={footerRef}
+      className="relative z-30 w-full bg-[#0c0a08] text-paper pt-20 sm:pt-28 pb-12 sm:pb-16 px-6 sm:px-10 lg:px-16 overflow-hidden"
+    >
+      <div className="mx-auto max-w-7xl">
+
+        {/* Cabeçalho do Rodapé com Selo e Navegação */}
+        <div
+          ref={topGridRef}
+          className="grid grid-cols-1 md:grid-cols-12 gap-10 md:gap-8 pb-16 border-b border-paper/15"
+        >
+
+          {/* Coluna 1: Selo Alba e Apresentação (5 Colunas) */}
+          <div className="md:col-span-5 flex flex-col items-start">
+            <div className="flex items-center gap-4 mb-5">
+              <div className="flex h-12 w-12 items-center justify-center">
+                <svg
+                  className="h-full w-full animate-[spin_40s_linear_infinite]"
+                  viewBox="0 0 100 100"
+                  fill="none"
+                >
+                  <circle
+                    cx="50"
+                    cy="50"
+                    r="46"
+                    stroke="var(--color-paper)"
+                    strokeOpacity="0.4"
+                    strokeWidth="0.8"
+                  />
+                  <path
+                    id="footerSealPath"
+                    d="M50,50 m-37,0 a37,37 0 1,1 74,0 a37,37 0 1,1 -74,0"
+                    fill="none"
+                  />
+                  <text
+                    fontSize="7.5"
+                    fill="var(--color-paper)"
+                    letterSpacing="3"
+                    className="font-sans uppercase"
+                  >
+                    <textPath href="#footerSealPath" startOffset="0%">
+                      Alba · Costa del Sol · Alba ·
+                    </textPath>
+                  </text>
+                  <text
+                    x="50"
+                    y="54"
+                    textAnchor="middle"
+                    fill="var(--color-paper)"
+                    fontSize="13"
+                    className="font-display italic"
+                  >
+                    A
+                  </text>
+                </svg>
+              </div>
+              <div className="flex flex-col">
+                <span className="font-display text-lg uppercase tracking-wide text-paper">
+                  Alba Residência
+                </span>
+                <span className="font-sans text-[8.5px] uppercase tracking-[0.24em] text-paper/50">
+                  Costa del Sol · Espanha
+                </span>
+              </div>
+            </div>
+
+            <p className="font-sans text-[9.5px] uppercase tracking-[0.04em] leading-[1.75] text-paper/60 font-medium max-w-sm">
+              Um santuário contemporâneo onde a arquitetura escultural encontra a serenidade do oceano e o tempo se torna infinito.
+            </p>
+          </div>
+
+          {/* Coluna 2: Navegação (2 Colunas) */}
+          <div className="md:col-span-2 flex flex-col gap-3">
+            <span className="font-sans text-[9px] uppercase tracking-[0.25em] text-paper/40 font-semibold mb-1">
+              Navegação
+            </span>
+            <a
+              href="#conceito"
+              className="font-sans text-[10px] uppercase tracking-[0.16em] text-paper/75 hover:text-paper transition-colors"
+            >
+              Conceito & Sobre
+            </a>
+            <a
+              href="#apartamentos"
+              className="font-sans text-[10px] uppercase tracking-[0.16em] text-paper/75 hover:text-paper transition-colors"
+            >
+              Arquitetura
+            </a>
+            <a
+              href="#localizacao"
+              className="font-sans text-[10px] uppercase tracking-[0.16em] text-paper/75 hover:text-paper transition-colors"
+            >
+              Vídeo Paisagem
+            </a>
+            <a
+              href="#destino"
+              className="font-sans text-[10px] uppercase tracking-[0.16em] text-paper/75 hover:text-paper transition-colors"
+            >
+              Mapa & Destino
+            </a>
+            <a
+              href="#crepusculo"
+              className="font-sans text-[10px] uppercase tracking-[0.16em] text-paper/75 hover:text-paper transition-colors"
+            >
+              O Crepúsculo
+            </a>
+          </div>
+
+          {/* Coluna 3: Concierge & Contato (3 Colunas) */}
+          <div className="md:col-span-3 flex flex-col gap-2.5">
+            <span className="font-sans text-[9px] uppercase tracking-[0.25em] text-paper/40 font-semibold mb-1">
+              Atendimento Privado
+            </span>
+            <span className="font-sans text-[10px] uppercase tracking-[0.14em] text-paper/75">
+              Atelier Alba · Costa del Sol
+            </span>
+            <span className="font-sans text-[10px] uppercase tracking-[0.14em] text-paper/75">
+              concierge@albaresidencia.com
+            </span>
+            <span className="font-sans text-[10px] uppercase tracking-[0.14em] text-paper/75">
+              +34 952 00 00 00
+            </span>
+            <span className="font-sans text-[9px] uppercase tracking-[0.16em] text-[#cbb592] mt-1">
+              Agendamentos com hora marcada
+            </span>
+          </div>
+
+          {/* Coluna 4: Editorial & Redes (2 Colunas) */}
+          <div className="md:col-span-2 flex flex-col gap-3">
+            <span className="font-sans text-[9px] uppercase tracking-[0.25em] text-paper/40 font-semibold mb-1">
+              Privé
+            </span>
+            <a
+              href="#contato"
+              className="font-sans text-[10px] uppercase tracking-[0.16em] text-paper/75 hover:text-paper transition-colors"
+            >
+              Caderno de Plantas
+            </a>
+            <a
+              href="#contato"
+              className="font-sans text-[10px] uppercase tracking-[0.16em] text-paper/75 hover:text-paper transition-colors"
+            >
+              Relatório de Investimento
+            </a>
+            <a
+              href="#instagram"
+              className="font-sans text-[10px] uppercase tracking-[0.16em] text-paper/75 hover:text-paper transition-colors"
+            >
+              Instagram Oficial
+            </a>
+          </div>
+
+        </div>
+
+        {/* ÁREA CENTRAL MONUMENTAL: O MESMO TÍTULO DA HERO */}
+        <div
+          ref={monumentalTitleRef}
+          className="flex flex-col items-center text-center my-14 sm:my-20 md:my-24 select-none"
+        >
+          <h2 className="font-display text-[17vw] sm:text-[15vw] md:text-[8rem] lg:text-[9.5rem] uppercase leading-[0.87] tracking-[-0.024em] text-paper">
+            Alba
+          </h2>
+          <span className="font-display text-[17vw] sm:text-[15vw] md:text-[8rem] lg:text-[9.5rem] uppercase leading-[0.87] tracking-[-0.024em] text-paper -mt-2 sm:-mt-4">
+            Residência
+          </span>
+          <span className="font-script text-5xl sm:text-7xl md:text-8xl lg:text-[7.5rem] text-paper/90 -mt-5 sm:-mt-8 md:-mt-12 -rotate-2 inline-block">
+            Luxury
+          </span>
+
+          {/* Subbar: Um Lugar | Para Retornar */}
+          <div className="mt-8 sm:mt-12 flex w-full max-w-md sm:max-w-xl items-center justify-between gap-4 px-4">
+            <span className="font-display text-sm sm:text-base md:text-lg uppercase tracking-[0.08em] text-paper/85">
+              Um Lugar
+            </span>
+            <div className="h-px flex-1 bg-paper/20" />
+            <span className="font-display text-sm sm:text-base md:text-lg uppercase tracking-[0.08em] text-paper/85">
+              Para Retornar
+            </span>
+          </div>
+        </div>
+
+        {/* BARRA INFERIOR / COPYRIGHT & RETORNO AO TOPO */}
+        <div
+          ref={bottomBarRef}
+          className="flex flex-col sm:flex-row items-center justify-between gap-4 pt-8 border-t border-paper/10 text-[8.5px] sm:text-[9px] uppercase tracking-[0.22em] text-paper/50"
+        >
+          <span>&copy; 2026 Alba Residência. Todos os direitos reservados.</span>
+
+          <button
+            type="button"
+            onClick={scrollToTop}
+            className="inline-flex items-center gap-2 text-paper/75 hover:text-paper transition-colors cursor-pointer group"
+          >
+            <span>Voltar ao Topo</span>
+            <span className="transition-transform group-hover:-translate-y-0.5">↑</span>
+          </button>
+        </div>
+
+      </div>
+    </footer>
+  )
+}
+```
+
+22. Checklist final para a IA validar antes de entregar
+
+- Hero com cross-fade dia/noite, 3 hotspots interativos com card de detalhe, selo circular rotativo com texto em curva SVG, e sequência de saída pinada (texto sobe/desce, foto ganha parallax, botão de vidro aparece).
+- Nuvens em múltiplas camadas com deriva horizontal "subindo como cortina" sobre a Hero.
+- Borboletas com chroma-key em tempo real (canvas, sem lib externa) em dois voos diferentes — nunca um `<video>` puro com filtro CSS.
+- Vídeo de drone pinado que expande via `scale` (não width/height) enquanto os textos laterais somem.
+- Slider de localização: 4 slides deslizando horizontalmente por scroll vertical, terminando num mapa com grid de distâncias.
+- Crepúsculo: lanterna que revela uma segunda foto mais clara dentro de um círculo seguindo o mouse via `mask-image` dinâmico.
+- Formulário de contato com folha de papel texturizada, clipe metálico, 6 campos numerados e checkboxes customizados.
+- Rodapé com repetição monumental do título da Hero.
+- Nenhuma dependência de animação além de GSAP/ScrollTrigger/SplitText e Lenis.
+````
+
+## Por que eu libero um template desse nível de graça
+
+Porque ele é a prova. Gente já tá faturando **R$2.000+ por projeto** vendendo exatamente esse tipo de site pra imobiliárias e construtoras — e esse aqui é só **1 dos 14 templates completos** que existem no catálogo.
+
+O Premium não é "mais alguns templates". É o catálogo inteiro — cada um documentado com o prompt completo igual esse, pronto pra copiar e entregar pro cliente — mais o grupo de quem já tá vendendo isso como serviço. Pagamento único, e todo template novo que eu lançar depois já entra de graça pra quem já é Premium.
+
+<PremiumPromo />
