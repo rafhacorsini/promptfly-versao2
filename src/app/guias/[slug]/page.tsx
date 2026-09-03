@@ -18,6 +18,8 @@ import AnimationCard from "@/components/AnimationCard";
 import AnimationPromo from "@/components/AnimationPromo";
 import PremiumPromo from "@/components/PremiumPromo";
 import TemplatePromptButton from "@/components/TemplatePromptButton";
+import PromptPreviewBlock from "@/components/PromptPreviewBlock";
+import GradientButton from "@/components/GradientButton";
 import Checklist from "@/components/Checklist";
 import PromptCarousel from "@/components/PromptCarousel";
 import styles from "./page.module.css";
@@ -150,14 +152,14 @@ export default async function GuidePage({ params }: Props) {
           <div className={styles.divider} />
 
           <article className={styles.article}>
-            <MDXRemote source={previewContent} components={{ TemplateCTAInline, GuideCarousel, SkillsCTABanner, VipGroupBanner, AnimationCard, AnimationPromo, PremiumPromo, TemplatePromptButton, Checklist, PromptCarousel }} />
+            <MDXRemote source={previewContent} components={{ TemplateCTAInline, GuideCarousel, SkillsCTABanner, VipGroupBanner, AnimationCard, AnimationPromo, PremiumPromo, TemplatePromptButton, PromptPreviewBlock, GradientButton, Checklist, PromptCarousel }} />
           </article>
 
           {locked && (
             <div className={styles.lockedWrapper}>
               <div className={styles.lockedContent}>
                 <article className={styles.article}>
-                  <MDXRemote source={lockedContent} components={{ TemplateCTAInline, GuideCarousel, SkillsCTABanner, VipGroupBanner, AnimationCard, AnimationPromo, PremiumPromo, TemplatePromptButton, Checklist, PromptCarousel }} />
+                  <MDXRemote source={lockedContent} components={{ TemplateCTAInline, GuideCarousel, SkillsCTABanner, VipGroupBanner, AnimationCard, AnimationPromo, PremiumPromo, TemplatePromptButton, PromptPreviewBlock, GradientButton, Checklist, PromptCarousel }} />
                 </article>
               </div>
               <PremiumGuideGate purchaseUrl={premium.purchaseUrl} />

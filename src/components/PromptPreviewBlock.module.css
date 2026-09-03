@@ -1,0 +1,65 @@
+.wrap {
+  margin: 1.5rem 0;
+  border-radius: 10px;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding: 0.55rem 0.7rem 0.55rem 1rem;
+  background: #141414;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.label {
+  font-family: var(--font-primary);
+  font-size: 0.74rem;
+  color: rgba(255, 255, 255, 0.45);
+  letter-spacing: 0.01em;
+}
+
+.iconBtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 28px;
+  height: 28px;
+  border-radius: 7px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(255, 255, 255, 0.06);
+  color: rgba(255, 255, 255, 0.7);
+  cursor: pointer;
+  transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease, transform 0.15s ease;
+}
+
+.iconBtn:hover {
+  background: var(--color-accent);
+  border-color: var(--color-accent);
+  color: #fff;
+  transform: translateY(-1px);
+}
+
+.iconBtn:disabled {
+  opacity: 0.5;
+  cursor: wait;
+}
+
+.iconBtn[data-copied="true"] {
+  background: #1f7a3d;
+  border-color: #1f7a3d;
+  color: #fff;
+}
+
+/* O <pre> aqui dentro vem do fence markdown normal (```text) que o MDX
+   renderiza como filho deste componente — herda o fundo escuro de
+   `.article pre` da página do guia; só zeramos margem/raio pra colar
+   direto embaixo do header acima. */
+.wrap :global(pre) {
+  margin: 0 !important;
+  border-radius: 0 !important;
+}
