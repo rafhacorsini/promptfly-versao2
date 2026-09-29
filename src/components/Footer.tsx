@@ -2,13 +2,17 @@ import Link from "next/link";
 import styles from "./Footer.module.css";
 
 const navigation = [
-  { label: "Realidade", href: "#realidade" },
-  { label: "Resultados", href: "#resultados" },
-  { label: "Como Funciona", href: "#processo" },
-  { label: "FAQ", href: "#faq" },
+  { label: "Biblioteca", href: "/#biblioteca" },
+  { label: "Como funciona", href: "/#como-funciona" },
+  { label: "Premium", href: "/#premium" },
+  { label: "FAQ", href: "/#faq" },
 ];
 
 const social = [
+  {
+    label: "@rafha.gpt",
+    href: "https://www.instagram.com/rafha.gpt/",
+  },
   {
     label: "Instagram",
     href: "https://instagram.com/promptfly.br",
@@ -99,7 +103,7 @@ export default function Footer() {
         {/* Bottom bar */}
         <div className={styles.bottom}>
           <span className={styles.legal}>
-            © {new Date().getFullYear()} Promptfly® — Todos os direitos reservados.
+            © {new Date().getFullYear()} Promptfly® · Todos os direitos reservados.
           </span>
         </div>
       </div>

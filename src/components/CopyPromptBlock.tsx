@@ -13,10 +13,12 @@ import styles from "./CopyPromptBlock.module.css";
 export default function CopyPromptBlock({
   guia,
   label = "Prompt",
+  buttonLabel = "Copiar prompt",
   children,
 }: {
   guia: string;
   label?: string;
+  buttonLabel?: string;
   children: React.ReactNode;
 }) {
   const bodyRef = useRef<HTMLDivElement>(null);
@@ -49,7 +51,7 @@ export default function CopyPromptBlock({
           aria-live="polite"
         >
           {copied ? <Check size={15} strokeWidth={2.4} /> : <Copy size={15} strokeWidth={2.4} />}
-          {copied ? "Copiado ✓" : "Copiar prompt"}
+          {copied ? "Copiado ✓" : buttonLabel}
         </button>
       </div>
       <div ref={bodyRef} className={styles.body}>

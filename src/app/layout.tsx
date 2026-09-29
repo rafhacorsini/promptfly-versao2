@@ -21,23 +21,23 @@ export const metadata: Metadata = {
   metadataBase: new URL(BASE_URL),
 
   title: {
-    default: "Promptfly — Aprenda IA de verdade. Do prompt ao agent.",
+    default: "Promptfly: prompts, skills e templates pra sites cinematográficos com IA",
     template: "%s | Promptfly",
   },
 
   description:
-    "O ecossistema premium para quem constrói negócios com Inteligência Artificial. Guias, modelos e prompts prontos para usar — em português, sem hype.",
+    "Copie os prompts, skills, templates e snippets dos reels do @rafha.gpt. Prontos pra colar no Claude Code, no ChatGPT ou no Gemini.",
 
   keywords: [
-    "engenharia de prompt",
-    "prompt engineering",
-    "inteligência artificial",
-    "IA para negócios",
-    "ChatGPT",
-    "Claude",
+    "sites cinematográficos",
+    "Claude Code",
     "prompts prontos",
-    "aprender IA",
-    "agentes de IA",
+    "skills Claude Code",
+    "templates de sites",
+    "GSAP",
+    "vibe coding",
+    "ChatGPT",
+    "Gemini",
     "Promptfly",
   ],
 
@@ -50,24 +50,24 @@ export const metadata: Metadata = {
     locale: "pt_BR",
     url: BASE_URL,
     siteName: "Promptfly",
-    title: "Promptfly — Aprenda IA de verdade. Do prompt ao agent.",
+    title: "Promptfly: prompts, skills e templates pra sites cinematográficos com IA",
     description:
-      "O ecossistema premium para quem constrói negócios com Inteligência Artificial. Guias, prompts e modelos em português.",
+      "Copie os prompts, skills, templates e snippets dos reels do @rafha.gpt. Prontos pra colar no Claude Code, no ChatGPT ou no Gemini.",
     images: [
       {
         url: "/og-image.png",
         width: 1200,
         height: 630,
-        alt: "Promptfly — Aprenda IA de verdade",
+        alt: "Promptfly: prompts, skills e templates pra sites cinematográficos com IA",
       },
     ],
   },
 
   twitter: {
     card: "summary_large_image",
-    title: "Promptfly — Aprenda IA de verdade",
+    title: "Promptfly: prompts, skills e templates pra sites cinematográficos com IA",
     description:
-      "O ecossistema premium para quem constrói negócios com IA. Prompts, guias e modelos em português.",
+      "Copie os prompts, skills, templates e snippets dos reels do @rafha.gpt. Prontos pra colar no Claude Code, no ChatGPT ou no Gemini.",
     images: ["/og-image.png"],
     creator: "@promptfly",
   },
@@ -102,7 +102,7 @@ const websiteJsonLd = {
   name: "Promptfly",
   url: BASE_URL,
   description:
-    "Guias semanais de engenharia de prompt para quem quer resultado real com IA.",
+    "Copie os prompts, skills, templates e snippets dos reels do @rafha.gpt. Prontos pra colar no Claude Code, no ChatGPT ou no Gemini.",
   inLanguage: "pt-BR",
   publisher: {
     "@type": "Organization",

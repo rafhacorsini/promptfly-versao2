@@ -18,6 +18,7 @@ export default function BeforeAfter({
   beforeLabel = "Antes",
   afterLabel = "Depois",
   caption,
+  sideBySide = false,
 }: {
   title?: string;
   before: string;
@@ -25,13 +26,15 @@ export default function BeforeAfter({
   beforeLabel?: string;
   afterLabel?: string;
   caption?: string;
+  /** Lado a lado a partir de 1024px. Só faz sentido em coluna larga (a home). */
+  sideBySide?: boolean;
 }) {
   if (!exists(before) || !exists(after)) return null;
 
   return (
     <section className={styles.wrap}>
       {title && <h2>{title}</h2>}
-      <div className={styles.grid}>
+      <div className={`${styles.grid} ${sideBySide ? styles.sideBySide : ""}`}>
         <figure className={styles.item}>
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img src={before} alt={beforeLabel} loading="lazy" className={styles.img} />

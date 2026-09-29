@@ -49,29 +49,33 @@ promptfly-docs/
 ├── public/
 │   ├── Doll_spinning_360_202603201655.mp4   # Vídeo 3D do Hero
 │   ├── logo.png                              # Logo borboleta Promptfly
-│   ├── usuarios1.png                         # Avatar 1 (social proof)
-│   ├── usuarios2.png                         # Avatar 2
-│   ├── usuarios3.png                         # Avatar 3
-│   └── usuarios4.png                         # Avatar 4
+│   └── guias/jurado-awwwards/antes.jpg|depois.jpg  # Imagens do antes/depois
 ├── src/
 │   ├── app/
 │   │   ├── globals.css          # Design tokens + reset global
 │   │   ├── layout.tsx           # Root layout (Inter font, lang pt-BR)
-│   │   └── page.tsx             # Página principal — monta as seções
-│   └── components/
-│       ├── Hero.tsx              # Hero section (vídeo + Navbar)
-│       ├── Hero.module.css
-│       ├── Navbar.tsx            # Navbar flutuante (dentro do Hero)
-│       ├── Navbar.module.css
-│       ├── ValueProposition.tsx  # Título + subtítulo + 2 botões CTA
-│       ├── ValueProposition.module.css
-│       ├── GradientButton.tsx    # Componente reutilizável de botão
-│       ├── GradientButton.module.css
-│       ├── SocialProofBar.tsx    # Avatares + estrelas + marquee de marcas
-│       ├── SocialProofBar.module.css
-│       ├── Reality.tsx           # Seção "Sem Promptfly vs Com Promptfly"
-│       └── Reality.module.css
+│   │   ├── page.tsx             # Página principal — monta as seções
+│   │   └── r/[slug]/page.tsx    # Página de entrega da DM (/r/jurado etc.)
+│   ├── content/
+│   │   ├── resources.ts         # Biblioteca de recursos (fonte da home e do /r)
+│   │   ├── recursos/            # Texto que o botão Copiar copia
+│   │   ├── site.ts              # Números reais da home (null = escondido)
+│   │   ├── projects.json        # Templates (viram recursos automaticamente)
+│   │   └── premium.json         # Checkout Hotmart do Premium
+│   ├── lib/resources.ts         # Monta os recursos no servidor
+│   └── components/              # Um .tsx + um .module.css por componente
 ```
+
+---
+
+## Dados da biblioteca (resources.ts)
+
+- **Recurso novo:** adicionar um objeto em `src/content/resources.ts`. Se tiver texto pra copiar, salvar em `src/content/recursos/` e apontar `contentFile`. O card da home e o `/r/<slug>` saem sozinhos.
+- **Templates** não entram no `resources.ts`: vêm de `projects.json` com o slug igual ao `id`. Capa própria pelo campo opcional `thumbnailUrl`.
+- `featuredSlugs` e `heroSlugs` definem a ordem dos destaques e os 3 cards do hero.
+- `lib/resources.ts` roda só no servidor (lê arquivos e o `projects.json`, que tem prompts pagos). Nunca importar `projects.json` em client component.
+- **Números da home** ficam em `src/content/site.ts`. Sem dado real, deixar `null`: o item some. O nº de recursos é contado automaticamente.
+- **Regras de copy:** nada de número, depoimento ou logo inventado. Nada de travessão (—) em copy nova. Premium é **pagamento único** (Hotmart, garantia de 7 dias) e inclui as skills.
 
 ---
 
@@ -79,9 +83,16 @@ promptfly-docs/
 
 ```tsx
 <Hero />              // Vídeo + Navbar flutuante
-<ValueProposition />  // Título editorial + 2 botões GradientButton
-<SocialProofBar />    // Avatares + ★★★★★ + marquee de logos
-// ... próximas seções abaixo
+<ValueProposition />  // H1 + 2 CTAs + 3 cards de recursos reais (heroSlugs)
+<SocialProofBar />    // Números reais de site.ts (item null não aparece)
+<Library />           // #biblioteca: 6 categorias (filtram) + recursos em destaque
+<Process />           // #como-funciona: reel → copia → cola na IA
+<Comparison />        // Antes/depois (BeforeAfter lado a lado no desktop)
+<Plans />             // #premium: cards Grátis vs Premium
+<About />             // Quem faz (foto em site.ts, senão inicial "R")
+<Faq />               // #faq
+<Newsletter />        // CTA final do Premium + formulário Beehiiv (/api/subscribe)
+<Footer />
 ```
 
 ---
@@ -121,7 +132,7 @@ promptfly-docs/
 - `"use client"` — usa `useState` para o menu mobile.
 - Posição `absolute` dentro do Hero, colada no topo do vídeo.
 - Fundo semitransparente com `backdrop-filter: blur`.
-- **Desktop:** Logo (borboleta desaturada + texto "Promptfly") | Links centrais (Guias, Modelos, Prompts) | Botão "Assinar Newsletter →" com borda de gradiente cônico.
+- **Desktop:** Logo (borboleta desaturada + texto "Promptfly") | Links centrais (Biblioteca, Templates, Guias) | Botão "Ver Premium →" com borda de gradiente cônico.
 - **Mobile (< 768px):** Logo à esquerda + 2 tracinhos (toggle) à direita. Menu dropdown abre dentro da `<nav>` com `position: absolute`, animação de opacity/translateY. O botão de 2 tracinhos funciona como toggle (abre E fecha).
 - O menu overlay está DENTRO da tag `<nav>`, não fora dela.
 
@@ -134,23 +145,22 @@ promptfly-docs/
 - Usa `background-clip: padding-box, border-box` para a borda gradiente.
 
 ### ValueProposition (`ValueProposition.tsx`)
-- Título: "Aprenda **IA de verdade.** Do prompt ao agent." — "IA de verdade." está em `--color-subtitle` (cinza) via classe `.textGray`.
-- Subtítulo: "Promptfly é o ecossistema premium para quem constrói negócios com Inteligência Artificial. Para quem valoriza clareza, lógica e engenharia reversa — sem hype."
-- Dois `GradientButton`: "Explorar o Guia →" (dark) e "Ver biblioteca de prompts" (light).
+- É o `<h1>` da home: "Sites cinematográficos com IA. **Copie o que eu uso pra criar.**" A segunda frase fica em `--color-subtitle` via `.textGray`.
+- Dois `GradientButton`: "Explorar a biblioteca →" (dark, `#biblioteca`) e "Ver Premium" (light, `/premium`).
+- Abaixo, 3 cards de recursos reais (prop `cards`, vinda de `heroSlugs`) que levam pro `/r/<slug>`.
 - **Tipografia fluida** com `clamp()` em tudo — sem media queries duros para tamanhos.
 - `text-wrap: balance` no título e subtítulo (evita palavras viúvas).
 - Mobile: botões empilhados em coluna, max-width 380px.
 - Desktop: botões lado a lado com `flex: 1`.
 
 ### SocialProofBar (`SocialProofBar.tsx`)
-- Barra horizontal com bordas top/bottom sutis (`--color-border`).
-- **Esquerda:** 4 avatares sobrepostos (imagens `/usuarios1-4.png`) + ★★★★★ + "+600 profissionais usando".
-- **Direita:** Marquee infinito com nomes de marcas (Vista, Rentigo, Nuvelo, Arcflow, DriveON, Courto) com fade nas bordas via `mask-image`.
-- Mobile: empilha em coluna; Desktop: lado a lado com divider vertical.
+- Faixa com bordas tracejadas e só números reais (prop `stats`). Item com valor `null` não é renderizado.
+- Mobile: grade de 2 colunas; Desktop: em linha com divisórias tracejadas.
+- Avatares, estrelas e faixa de logos foram removidos de propósito: eram fictícios.
 
-### Reality (`Reality.tsx`)
-- Tag `[ REALIDADE ]` + headline editorial com fade.
-- Dois cards lado a lado: "Sem Promptfly" (fundo claro, ícone ✕) e "Com Promptfly" (fundo escuro, ícone ✓).
+### Plans (`Plans.tsx`, ex-Reality)
+- Tag `[ GRÁTIS VS PREMIUM ]` + headline com fade.
+- Dois cards: "Grátis" (claro, borda tracejada) e "Premium" (escuro, CTA laranja pro checkout da Hotmart).
 
 ---
 
@@ -162,20 +172,17 @@ O Syntiq é a referência de design. A landing page segue a mesma estrutura de s
 
 | # | Seção Syntiq | Seção Promptfly | Status |
 |---|---|---|---|
-| 1 | Hero (imagem + navbar + título) | Hero (vídeo 3D + Navbar flutuante) | ✅ Feito |
-| 2 | Social Proof ("200+ satisfied teams") | Social Proof (+600 profissionais) | ✅ Feito |
-| 3 | Value Prop (título + CTAs) | ValueProposition | ✅ Feito |
-| 4 | Reality (Before/After cards) | Reality (Sem/Com Promptfly) | ✅ Feito |
-| 5 | Outcome (métricas animadas) | **A fazer** — Adaptar para métricas do Promptfly |
-| 6 | Services (4 cards de serviço) | **A fazer** — Adaptar para conteúdos/features do Promptfly |
-| 7 | Process (4 steps) | **A fazer** — Adaptar para jornada do usuário |
-| 8 | Impact (Before/After visual) | **A fazer** — Adaptar com exemplos visuais |
-| 9 | Reviews (testimonials carousel) | **A fazer** — Depoimentos de usuários |
-| 10 | Pricing (3 tiers) | **A fazer** — Planos do Promptfly |
-| 11 | Newsletter CTA | **A fazer** — CTA para newsletter |
-| 12 | FAQ (accordion) | **A fazer** — Perguntas frequentes |
-| 13 | Contact / Get Started (formulário) | **A fazer** — CTA final |
-| 14 | Footer | **A fazer** — Links + social + copyright |
+| 1 | Hero (imagem + navbar + título) | Hero (vídeo 3D + Navbar) + ValueProposition com cards | ✅ Feito |
+| 2 | Social Proof | SocialProofBar (só números reais) | ✅ Feito |
+| 3 | Services | Library (categorias + recursos em destaque) | ✅ Feito |
+| 4 | Process | Process (reel → copia → cola) | ✅ Feito |
+| 5 | Impact (Before/After visual) | Comparison | ✅ Feito |
+| 6 | Pricing | Plans (Grátis vs Premium) | ✅ Feito |
+| 7 | About | About (Quem faz) | ✅ Feito |
+| 8 | FAQ (accordion) | Faq | ✅ Feito |
+| 9 | Newsletter CTA | Newsletter (Premium + newsletter) | ✅ Feito |
+| 10 | Footer | Footer | ✅ Feito |
+| · | Reviews / Outcome | **Removidos**: depoimentos e métricas não eram reais. Só voltam com dado verdadeiro. | · |
 
 ---
 
@@ -231,7 +238,7 @@ Ao criar uma nova seção, seguir este checklist:
 |---|---|
 | `Doll_spinning_360_202603201655.mp4` | Vídeo 3D do Hero |
 | `logo.png` | Logo borboleta (usada na Navbar, desaturada) |
-| `usuarios1.png` a `usuarios4.png` | Avatares da social proof bar |
+| `guias/jurado-awwwards/antes.jpg`, `depois.jpg` | Antes/depois (home e guia do jurado) |
 
 ---
 

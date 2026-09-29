@@ -6,21 +6,21 @@ import styles from "./Process.module.css";
 const steps = [
   {
     number: "01",
-    shortTitle: "Sua Trilha",
-    title: "Escolha sua trilha",
-    description: "Diz onde você está hoje — iniciante, intermediário ou avançado. O Promptfly monta o caminho certo pra você não perder tempo com o que já sabe.",
+    shortTitle: "Viu no reel",
+    title: "Viu no reel",
+    description: "Comenta a palavra que aparece no vídeo e recebe o link no direct.",
   },
   {
     number: "02",
-    shortTitle: "Estrutura",
-    title: "Aprenda com estrutura",
-    description: "Cada guia segue uma lógica progressiva. Conceito, técnica, exemplo real e aplicação prática. Sem enrolação, sem jargão desnecessário.",
+    shortTitle: "Copia aqui",
+    title: "Copia aqui",
+    description: "O link abre direto no recurso. Um clique e tá copiado.",
   },
   {
     number: "03",
-    shortTitle: "Prática",
-    title: "Aplique no mesmo dia",
-    description: "Todo conteúdo vem com prompts prontos pra testar imediatamente. Você aprende e já usa — não precisa esperar terminar o guia.",
+    shortTitle: "Cola na IA",
+    title: "Cola na sua IA e roda",
+    description: "Claude Code, ChatGPT ou Gemini. Roda e ajusta pro seu projeto.",
   },
 ];
 
@@ -47,7 +47,7 @@ export default function Process() {
   }, [activeStep]);
 
   return (
-    <section className={styles.section}>
+    <section className={styles.section} id="como-funciona">
       <div className={styles.inner}>
         {/* Header */}
         <div className={styles.header}>
@@ -55,7 +55,7 @@ export default function Process() {
             <span className={styles.tag}>[ COMO FUNCIONA ]</span>
           </div>
           <h2 className={styles.headline}>
-            Do zero ao domínio{" "}
+            Do reel pro seu site{" "}
             <span className={styles.headlineFade}>em 3 passos.</span>
           </h2>
         </div>

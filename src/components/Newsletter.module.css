@@ -64,6 +64,7 @@
   letter-spacing: -0.03em;
   color: var(--color-title);
   margin: 0;
+  text-wrap: balance;
 }
 
 .headlineFade {
@@ -78,6 +79,50 @@
   color: var(--color-subtitle);
   margin: 0;
   max-width: 46ch;
+}
+
+/* ── CTA principal (Premium) ── */
+.cta {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  max-width: 380px;
+  padding: 1rem 1.6rem;
+  border-radius: 14px;
+  background: var(--color-accent);
+  color: #fff;
+  font-family: var(--font-primary);
+  font-size: 1rem;
+  font-weight: 700;
+  text-decoration: none;
+  box-shadow: 0 10px 26px rgba(255, 76, 0, 0.32);
+  transition: transform 0.15s ease, background 0.2s ease;
+}
+
+.cta:hover {
+  transform: translateY(-1px);
+  background: #ff5f1f;
+}
+
+/* ── Newsletter (CTA secundário) ── */
+.newsletter {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  padding-top: clamp(1.75rem, 4vw, 2.5rem);
+  border-top: 1px dashed rgba(0, 0, 0, 0.13);
+}
+
+.newsletterText {
+  font-family: var(--font-primary);
+  font-size: 0.95rem;
+  line-height: 1.5;
+  color: var(--color-text);
+  margin: 0;
+  text-wrap: balance;
 }
 
 /* ── Form ── */

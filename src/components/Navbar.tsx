@@ -24,14 +24,14 @@ export default function Navbar() {
 
         {/* Links Centro — Desktop */}
         <div className={styles.navLinks}>
+          <Link href="/#biblioteca" className={styles.navLink}>Biblioteca</Link>
+          <Link href="/projetos" className={styles.navLink}>Templates</Link>
           <Link href="/guias" className={styles.navLink}>Guias</Link>
-          <Link href="#" className={styles.navLink}>Modelos</Link>
-          <Link href="/projetos" className={styles.navLink}>Prompts</Link>
         </div>
 
         {/* CTA — Desktop */}
         <Link href="/premium" className={styles.ctaButton}>
-          Assinar Premium →
+          Ver Premium →
         </Link>
 
         {/* Mobile: dois tracinhos */}
@@ -51,9 +51,9 @@ export default function Navbar() {
         </div>
 
         <div className={styles.mobileLinks}>
+          <Link href="/#biblioteca" className={styles.mobileNavLink} onClick={() => setIsMobileMenuOpen(false)}>BIBLIOTECA</Link>
+          <Link href="/projetos" className={styles.mobileNavLink} onClick={() => setIsMobileMenuOpen(false)}>TEMPLATES</Link>
           <Link href="/guias" className={styles.mobileNavLink} onClick={() => setIsMobileMenuOpen(false)}>GUIAS</Link>
-          <Link href="#" className={styles.mobileNavLink} onClick={() => setIsMobileMenuOpen(false)}>MODELOS</Link>
-          <Link href="/projetos" className={styles.mobileNavLink} onClick={() => setIsMobileMenuOpen(false)}>PROMPTS</Link>
         </div>
 
         <div className={styles.mobileFooter}>
@@ -62,7 +62,7 @@ export default function Navbar() {
             className={styles.mobileCtaButton}
             onClick={() => setIsMobileMenuOpen(false)}
           >
-            ASSINAR PREMIUM
+            VER PREMIUM
           </Link>
         </div>
       </div>

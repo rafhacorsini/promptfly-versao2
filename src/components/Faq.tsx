@@ -5,29 +5,29 @@ import styles from "./Faq.module.css";
 
 const faqs = [
   {
-    question: "Preciso saber programar para usar o Promptfly?",
+    question: "Preciso saber programar?",
     answer:
-      "Não. O Promptfly ensina técnicas de inteligência artificial e engenharia de prompt de forma clara e acessível. Você não precisa escrever uma linha de código — precisa apenas aprender a se comunicar melhor com a IA."
+      "Pra copiar e usar, não. Os prompts e templates funcionam colando na IA. Mas saber o básico de HTML, CSS e como rodar um projeto ajuda muito a ajustar o resultado e publicar o site."
   },
   {
-    question: "É realmente gratuito?",
+    question: "Funciona com qual IA?",
     answer:
-      "Sim, 100%. Todo o conteúdo do Promptfly — artigos, guias, técnicas e frameworks de prompt — é gratuito e aberto. Acreditamos que o conhecimento sobre IA deve ser acessível a todos, não apenas a quem pode pagar por cursos caros."
+      "Os prompts funcionam no Claude, no ChatGPT e no Gemini. As skills e os arquivos de contexto, como o CLAUDE.md, são feitos pro Claude Code. É ele que eu uso nos meus sites."
   },
   {
-    question: "Com que frequência os conteúdos são atualizados?",
+    question: "O que é grátis e o que é Premium?",
     answer:
-      "Semanalmente. O campo da inteligência artificial evolui muito rápido, e nosso conteúdo acompanha esse ritmo. Publicamos novos artigos, atualizamos técnicas existentes e testamos os frameworks com os modelos mais recentes do mercado."
+      "Os recursos que aparecem nos reels são grátis e não pedem cadastro. O Premium libera a biblioteca completa: todos os templates de sites, as skills pro Claude Code, o grupo VIP e os templates novos que eu lançar. É um pagamento único pela Hotmart, com garantia de 7 dias."
   },
   {
-    question: "Qual a diferença entre o Promptfly e um curso de IA?",
+    question: "Com que frequência sai recurso novo?",
     answer:
-      "Cursos tradicionais ensinam teoria isolada. O Promptfly ensina um método aplicável: você aprende a estruturar prompts, dominar técnicas como Chain-of-Thought e Few-Shot, e aplicar isso no mesmo dia no seu trabalho real. É conhecimento prático, não acadêmico."
+      "Recurso grátis sai junto com os reels. No Premium, todo template novo que entra na biblioteca já fica liberado pra você, sem pagar de novo."
   },
   {
-    question: "Posso aplicar o que aprendo na minha empresa?",
+    question: "Como recebo o que pedi no reel?",
     answer:
-      "Com certeza. Nossos guias são construídos com casos de uso reais em marketing, vendas, operações e gestão. Você aprende técnicas de IA que geram resultado direto no seu dia a dia profissional — independente do setor."
+      "Comenta a palavra que aparece no vídeo. Você recebe o link no direct, e ele abre direto no recurso, é só copiar. Se não chegou, olha a aba de solicitações de mensagem do Instagram."
   }
 ];
 
@@ -77,7 +77,7 @@ export default function Faq() {
   const [openIndex, setOpenIndex] = useState<number | null>(0); // O primeiro começa aberto
 
   return (
-    <section className={styles.section}>
+    <section className={styles.section} id="faq">
       <div className={styles.inner}>
         {/* Header alinhado com o padrão de grid */}
         <div className={styles.header}>
@@ -87,8 +87,7 @@ export default function Faq() {
           <div className={styles.titleBlock}>
             <h2 className={styles.headline}>Perguntas frequentes</h2>
             <p className={styles.subtext}>
-              Tudo o que você precisa saber antes de transformar sua forma de
-              trabalhar com inteligência artificial.
+              O que todo mundo pergunta antes de copiar o primeiro recurso.
             </p>
           </div>
         </div>

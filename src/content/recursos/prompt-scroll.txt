@@ -1,0 +1,33 @@
+Quero que a [SEÇÃO] seja controlada pela rolagem, usando GSAP + ScrollTrigger.
+
+COMPORTAMENTO:
+A seção deve travar na tela (pin) e, conforme eu rolo,
+[DESCREVA O QUE MUDA, ex: a imagem abre / os frames avançam /
+os textos se revezam / o número sobe].
+Quando terminar, a página volta a rolar normal.
+
+REGRAS:
+- Use scrub (0.1 a 0.3), nunca duração fixa. O scroll é o timeline,
+  não um gatilho de "play".
+- Defina o curso do pin em porcentagem ('+=140%', '+=320%'),
+  não em pixels, porque precisa funcionar em qualquer tela.
+- Dentro do onUpdate use gsap.quickSetter, não crie tween novo
+  a cada frame.
+- Para transições entre elementos, use uma curva em S (smoothstep)
+  no cruzamento, não interpolação linear, porque linear dá corte seco.
+- Amarre a animação a um dado real quando existir (ex: se mostro
+  154 bpm, a pulsação deve durar 60/154s). Isso é o que faz
+  parecer intencional e não decorativo.
+- Recalcule medidas no ScrollTrigger.refresh(), não só no resize:
+  enquanto pinado, os valores lidos estão desatualizados.
+- Respeite prefers-reduced-motion mostrando o estado final.
+
+CUIDADOS:
+- Se for sequência de frames: pré-carregue TODAS as imagens antes,
+  use img.decode() e mostre um % de carregamento. Sem isso engasga.
+- Se um elemento precisa ficar parado enquanto outro sobe por cima:
+  position: fixed, não sticky, porque sticky quebra se qualquer ancestral
+  tiver overflow (o overflow-x-hidden do body já basta pra quebrar).
+  Controle a sobreposição com z-index.
+- Não anime a mesma propriedade em dois lugares (ex: y no scroll e
+  y no parallax de mouse), porque eles brigam pelo transform.

@@ -1,26 +1,14 @@
 import Link from "next/link";
 import projects from "@/content/projects.json";
+import { toThumb } from "@/lib/media";
 import styles from "./ProjectShowcase.module.css";
 
 type Item = { id: string; name: string; subtitle: string; thumb: string; isVideo: boolean };
 
-// Cloudinary gera um frame estático do vídeo trocando a extensão para .jpg,
-// assim a vitrine não baixa 6 vídeos no celular.
-function toThumb(url: string): { thumb: string; isVideo: boolean } {
-  if (url.includes("res.cloudinary.com") && url.includes("/video/upload/")) {
-    return {
-      thumb: url
-        .replace("/video/upload/", "/video/upload/so_2,w_640,h_400,c_fill,q_auto,f_auto/")
-        .replace(/\.(mp4|webm|mov)$/i, ".jpg"),
-      isVideo: false,
-    };
-  }
-  return { thumb: url, isVideo: /\.(mp4|webm|mov)$/i.test(url) };
-}
-
 function toItem(p: (typeof projects)[number]): Item {
   const [name, ...rest] = p.title.split(" — ");
-  return { id: p.id, name, subtitle: rest.join(" "), ...toThumb(p.previewUrl) };
+  const { src, isVideo } = toThumb(p.previewUrl, "thumbnailUrl" in p ? p.thumbnailUrl : undefined);
+  return { id: p.id, name, subtitle: rest.join(" "), thumb: src, isVideo };
 }
 
 function Thumb({ item }: { item: Item }) {

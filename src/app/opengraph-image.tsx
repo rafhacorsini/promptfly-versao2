@@ -63,7 +63,7 @@ export default function OGImage() {
             textAlign: "center",
           }}
         >
-          Aprenda IA de verdade. Do prompt ao agent.
+          Prompts, skills e templates pra sites cinematográficos com IA
         </span>
 
         {/* Bottom accent */}
