@@ -22,9 +22,21 @@ import PromptPreviewBlock from "@/components/PromptPreviewBlock";
 import GradientButton from "@/components/GradientButton";
 import Checklist from "@/components/Checklist";
 import PromptCarousel from "@/components/PromptCarousel";
+import CopyPromptBlock from "@/components/CopyPromptBlock";
+import ProjectShowcase from "@/components/ProjectShowcase";
+import PremiumOffer from "@/components/PremiumOffer";
+import AnchorCTA from "@/components/AnchorCTA";
+import BeforeAfter from "@/components/BeforeAfter";
 import styles from "./page.module.css";
 
 const BASE = "https://promptfly.com.br";
+
+const mdxComponents = {
+  TemplateCTAInline, GuideCarousel, SkillsCTABanner, VipGroupBanner, AnimationCard,
+  AnimationPromo, PremiumPromo, TemplatePromptButton, PromptPreviewBlock, GradientButton,
+  Checklist, PromptCarousel, CopyPromptBlock, ProjectShowcase, PremiumOffer, AnchorCTA,
+  BeforeAfter,
+};
 
 interface Props {
   params: Promise<{ slug: string }>;
@@ -152,14 +164,14 @@ export default async function GuidePage({ params }: Props) {
           <div className={styles.divider} />
 
           <article className={styles.article}>
-            <MDXRemote source={previewContent} components={{ TemplateCTAInline, GuideCarousel, SkillsCTABanner, VipGroupBanner, AnimationCard, AnimationPromo, PremiumPromo, TemplatePromptButton, PromptPreviewBlock, GradientButton, Checklist, PromptCarousel }} />
+            <MDXRemote source={previewContent} components={mdxComponents} />
           </article>
 
           {locked && (
             <div className={styles.lockedWrapper}>
               <div className={styles.lockedContent}>
                 <article className={styles.article}>
-                  <MDXRemote source={lockedContent} components={{ TemplateCTAInline, GuideCarousel, SkillsCTABanner, VipGroupBanner, AnimationCard, AnimationPromo, PremiumPromo, TemplatePromptButton, PromptPreviewBlock, GradientButton, Checklist, PromptCarousel }} />
+                  <MDXRemote source={lockedContent} components={mdxComponents} />
                 </article>
               </div>
               <PremiumGuideGate purchaseUrl={premium.purchaseUrl} />

@@ -1,0 +1,86 @@
+---
+title: "O prompt que faz a IA criticar seu site como um jurado do Awwwards"
+description: "Cola um print do seu site junto com esse prompt e recebe nota de 0 a 10 e a correção exata de cada problema. Sem cadastro."
+date: "2026-09-28"
+tags: ["grátis", "direção de arte", "ui"]
+readTime: "3 min"
+category: "prompts"
+premium: false
+---
+
+A maioria dos sites feitos com IA tem cara de template. E não é falta de capacidade da IA: é que ninguém critica o layout antes de programar. A IA executa bem, mas não tem olho de diretor de arte, a menos que você peça. Esse prompt transforma ela num jurado do Awwwards que dá nota e fala exatamente o que corrigir.
+
+## O prompt, grátis pra copiar
+
+<CopyPromptBlock guia="jurado-awwwards" label="Prompt do jurado">
+
+```text
+Você é um jurado do Awwwards com 15 anos de direção de arte.
+Analise este layout com o rigor de quem avalia Site of the Day.
+
+Dê nota de 0 a 10 para:
+1. Hierarquia visual
+2. Tipografia (tensão, escala, contraste)
+3. Ritmo e respiro entre seções
+4. Originalidade (parece template?)
+5. Potencial de motion (o que deveria se mover e como)
+
+Para cada nota abaixo de 8: diga o problema em 1 frase
+e a correção exata (valores de tamanho, espaçamento, peso, easing).
+
+No final: as 3 mudanças que mais aumentariam a nota geral.
+Seja duro. Elogio genérico não ajuda.
+```
+
+</CopyPromptBlock>
+
+## Como usar
+
+**01** Tira um print do seu site ou do seu Figma. Comece pelo hero.
+
+**02** Cola o print e o prompt no Claude, no ChatGPT ou no Gemini.
+
+**03** Manda a resposta pro Claude Code: "aplica essas correções sem mudar a estrutura".
+
+**Dica:** roda de novo depois de corrigir. Para quando todas as notas passarem de 8.
+
+<AnchorCTA guia="jurado-awwwards" text="Quer pular direto pros sites prontos?" linkLabel="Ver biblioteca ↓" href="#biblioteca" />
+
+## O que o jurado mais aponta
+
+- **Título centralizado e médio, sem tensão.** Aumenta até ele quase encostar nas bordas, alinha à esquerda e fecha o espaçamento entre letras.
+- **Tudo com o mesmo peso de fonte.** Usa no máximo dois pesos e bem distantes: fino no texto, pesado no título.
+- **Pouco respiro entre seções.** Dobra o espaço vertical. Uns 120px entre seções no desktop e 80px no celular.
+- **Nada se move, ou tudo se move igual e rápido demais.** Anima só o que importa, entre 0.8s e 1.2s, com easing suave, e faz os elementos entrarem um de cada vez.
+
+<BeforeAfter
+  title="Antes e depois"
+  before="/guias/jurado-awwwards/antes.jpg"
+  after="/guias/jurado-awwwards/depois.jpg"
+  beforeLabel="Antes · hero genérico de IA"
+  afterLabel="Depois · Alba Residência"
+  caption="Em cima, o hero que a IA entrega sem direção: título médio, tudo com o mesmo peso, cards espremidos. Embaixo, o Alba: título que domina a tela, contraste de fonte e respiro. É isso que o jurado cobra."
+/>
+
+## Ou pula direto pro site pronto.
+
+O jurado mostra o que tá errado. Mas corrigir site por site leva tempo.
+
+No Premium estão os prompts completos de 13 templates cinematográficos, feitos com esse mesmo olhar de direção de arte. Você copia, cola no Claude Code e adapta pro seu cliente.
+
+<ProjectShowcase
+  ids="vytal-anel-inteligente, casa77-imobiliaria-luxo, good-burguer-landing, denta-elite-odontologia-estetica, lucid-beauty-labs-cosmeticos, cosmo-estudio-criativo-landing"
+  freeId="alba-residencia-imovel-luxo"
+/>
+
+<PremiumOffer
+  guia="jurado-awwwards"
+  title="A biblioteca completa de templates cinematográficos"
+  price="Pagamento único de pouco mais de R$100."
+  perks="Acesso vitalício, uma cobrança só | Os prompts completos de 13 templates cinematográficos | Grupo exclusivo no Discord | Todo template novo incluído pra sempre | Pagamento via Hotmart, garantia de 7 dias"
+  ctaLabel="Quero a biblioteca completa"
+  secondaryLabel="Testar o Alba grátis"
+  secondaryHref="/projetos"
+/>
+
+Bastidores e sites novos no **[@rafha.gpt](https://www.instagram.com/rafha.gpt/)** →

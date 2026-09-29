@@ -6,6 +6,14 @@ const nextConfig: NextConfig = {
     deviceSizes: [640, 750, 828, 1080, 1200, 1920],
   },
 
+  // Links curtos pra DM do Instagram. Temporários (307) pra poder apontar
+  // pra outro guia depois sem o navegador ter guardado o destino antigo.
+  async redirects() {
+    return [
+      { source: "/r/jurado", destination: "/guias/jurado-awwwards", permanent: false },
+    ];
+  },
+
   async headers() {
     return [
       {
