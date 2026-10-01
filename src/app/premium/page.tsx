@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { Users, LayoutTemplate, Infinity as InfinityIcon, ShieldCheck } from "lucide-react";
+import { Users, LayoutTemplate, Infinity as InfinityIcon, ShieldCheck, GraduationCap } from "lucide-react";
 import { premium } from "@/lib/premium";
+import { site } from "@/content/site";
 import projectsData from "@/content/projects.json";
 import { type Project } from "@/components/ProjectCard";
 import styles from "./page.module.css";
@@ -9,11 +10,12 @@ import styles from "./page.module.css";
 export const metadata: Metadata = {
   title: "Promptfly Premium — Acesso vitalício | Promptfly",
   description:
-    "Assine o Promptfly Premium e tenha acesso ao grupo exclusivo e a todos os templates e prompts, para sempre.",
+    "Mentoria pronta, grupo exclusivo, todos os templates de sites cinematográficos e as skills pro Claude Code. Pagamento único, acesso vitalício.",
   alternates: { canonical: "https://promptfly.com.br/premium" },
 };
 
 const withoutItems = [
+  "Aprende sozinho, sem um caminho do primeiro site ao primeiro cliente",
   "Testa prompt solto e não sabe por que não funciona",
   "Refaz do zero cada site ou peça que precisa",
   "Fica de fora do grupo onde as técnicas novas circulam primeiro",
@@ -21,6 +23,7 @@ const withoutItems = [
 ];
 
 const withItems = [
+  "Segue a mentoria pronta: do primeiro site ao primeiro cliente",
   "Copia prompts testados e adapta em minutos",
   "Acesso à biblioteca inteira, sem exceção",
   "Grupo exclusivo com quem já está construindo com IA",
@@ -29,6 +32,11 @@ const withItems = [
 
 const features = [
   {
+    icon: GraduationCap,
+    title: "Mentoria pronta",
+    text: "O método que eu uso, em guias exclusivos: como eu crio os sites cinematográficos com IA, o sistema de animação que deixa tudo coerente e o playbook pra achar, abordar e fechar cliente.",
+  },
+  {
     icon: Users,
     title: "Grupo exclusivo",
     text: "Converse direto com quem já está aplicando IA de verdade. Tire dúvidas, troque prompts e veja o que está funcionando agora.",
@@ -36,7 +44,7 @@ const features = [
   {
     icon: LayoutTemplate,
     title: "Biblioteca completa",
-    text: "Todos os templates e prompts do catálogo, sem exceção — heroes, landing pages inteiras, prompts técnicos. Copie, adapte e publique.",
+    text: "Todos os templates e prompts do catálogo, sem exceção: heroes, landing pages inteiras e prompts técnicos, mais as skills cinematográficas pro Claude Code. Copie, adapte e publique.",
   },
   {
     icon: InfinityIcon,
@@ -46,6 +54,10 @@ const features = [
 ];
 
 const faqs = [
+  {
+    q: "O que é a mentoria pronta?",
+    a: "É o meu método em guias exclusivos pra quem é Premium: como eu crio os sites cinematográficos com IA, o sistema de animação que deixa tudo coerente e o playbook de prospecção pra achar, abordar e fechar cliente. Não tem encontros marcados: as dúvidas você tira no grupo exclusivo.",
+  },
   {
     q: "O pagamento é recorrente?",
     a: "Não. É uma cobrança única com acesso vitalício — sem mensalidade e sem renovação.",
@@ -86,8 +98,8 @@ export default function PremiumPage() {
           </h1>
 
           <p className={styles.subtitle}>
-            Grupo exclusivo, a biblioteca inteira de templates e prompts, e todo
-            lançamento futuro incluído — sem mensalidade, numa cobrança só.
+            Mentoria pronta, grupo exclusivo, a biblioteca inteira de templates e
+            prompts, e todo lançamento futuro incluído. Sem mensalidade, numa cobrança só.
           </p>
 
           <div className={styles.heroActions}>
@@ -101,7 +113,7 @@ export default function PremiumPage() {
             </a>
             <span className={styles.trustLine}>
               <ShieldCheck size={14} strokeWidth={2.2} />
-              Pagamento seguro via Hotmart · Garantia de 7 dias
+              {site.premium.price ? `${site.premium.price} vitalício · ` : ""}Pagamento seguro via Hotmart · Garantia de 7 dias
             </span>
           </div>
 
@@ -169,7 +181,7 @@ export default function PremiumPage() {
         <section className={styles.section}>
           <div className={styles.sectionHeader}>
             <span className={styles.tag}>[ O QUE ESTÁ INCLUSO ]</span>
-            <h2 className={styles.sectionTitle}>Três coisas. Uma cobrança.</h2>
+            <h2 className={styles.sectionTitle}>Quatro coisas. Uma cobrança.</h2>
           </div>
 
           <div className={styles.featuresGrid}>
@@ -235,7 +247,7 @@ export default function PremiumPage() {
         <div className={styles.finalCtaInner}>
           <h2 className={styles.finalCtaTitle}>Pronto pra ter tudo?</h2>
           <p className={styles.finalCtaText}>
-            Grupo exclusivo e a biblioteca completa, liberados na hora.
+            A mentoria pronta, o grupo exclusivo e a biblioteca completa, liberados na hora.
           </p>
           <a
             href={premium.purchaseUrl}

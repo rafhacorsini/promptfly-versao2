@@ -6,6 +6,11 @@ const nextConfig: NextConfig = {
     deviceSizes: [640, 750, 828, 1080, 1200, 1920],
   },
 
+  // A mentoria individual (1:1) foi descontinuada: virou a "mentoria pronta" do Premium.
+  async redirects() {
+    return [{ source: "/mentoria", destination: "/premium", permanent: true }];
+  },
+
   async headers() {
     return [
       {

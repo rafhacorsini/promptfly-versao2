@@ -17,7 +17,7 @@ const faqs = [
   {
     question: "O que é grátis e o que é Premium?",
     answer:
-      "Os recursos que aparecem nos reels são grátis e não pedem cadastro. O Premium libera a biblioteca completa: todos os templates de sites, as skills pro Claude Code, o grupo VIP e os templates novos que eu lançar. É um pagamento único pela Hotmart, com garantia de 7 dias."
+      "Os recursos que aparecem nos reels são grátis e não pedem cadastro. O Premium libera a mentoria pronta (o meu método, do primeiro site ao primeiro cliente, em guias exclusivos), todos os templates de sites, as skills pro Claude Code, o grupo VIP e os templates novos que eu lançar. É um pagamento único pela Hotmart, com garantia de 7 dias."
   },
   {
     question: "Com que frequência sai recurso novo?",

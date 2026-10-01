@@ -75,7 +75,7 @@ promptfly-docs/
 - `featuredSlugs` e `heroSlugs` definem a ordem dos destaques e os 3 cards do hero.
 - `lib/resources.ts` roda só no servidor (lê arquivos e o `projects.json`, que tem prompts pagos). Nunca importar `projects.json` em client component.
 - **Números da home** ficam em `src/content/site.ts`. Sem dado real, deixar `null`: o item some. O nº de recursos é contado automaticamente.
-- **Regras de copy:** nada de número, depoimento ou logo inventado. Nada de travessão (—) em copy nova. Premium é **pagamento único** (Hotmart, garantia de 7 dias) e inclui as skills.
+- **Regras de copy:** nada de número, depoimento ou logo inventado. Nada de travessão (—) em copy nova. Premium é **pagamento único de R$ 129** (Hotmart, garantia de 7 dias) e inclui a **mentoria pronta** (guias exclusivos com o método do site ao cliente) e as skills. A mentoria individual 1:1 foi descontinuada: `/mentoria` redireciona pro `/premium`.
 
 ---
 

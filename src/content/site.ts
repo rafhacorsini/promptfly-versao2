@@ -18,7 +18,7 @@ export const site = {
 
   premium: {
     /** Ex: "R$ 127". Com null, a home mostra só "Pagamento único". */
-    price: null as string | null,
+    price: "R$ 129" as string | null,
   },
 
   about: {

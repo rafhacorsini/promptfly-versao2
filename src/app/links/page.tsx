@@ -28,12 +28,12 @@ const links = [
     tagStyle: "neutral",
   },
   {
-    id: "mentoria",
+    id: "premium",
     num: "03",
-    label: "Mentoria Individual",
-    description: "2 encontros por mês, sem horário fixo. Do zero a criar sites com IA.",
-    href: "https://pay.kiwify.com.br/b9rbVdm",
-    tag: "Vagas limitadas",
+    label: "Promptfly Premium",
+    description: "Mentoria pronta + todos os templates cinematográficos. Pagamento único.",
+    href: "https://promptfly.com.br/premium",
+    tag: "R$ 129 vitalício",
     tagStyle: "accent",
   },
   {

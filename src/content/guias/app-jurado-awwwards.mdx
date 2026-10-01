@@ -1,0 +1,57 @@
+---
+title: "O prompt que cria seu próprio app jurado do Awwwards"
+description: "Cola no Claude Code e ele monta um app que recebe vídeo de tela, prints ou o link do site e devolve nota por critério e a correção exata. Com botão que manda as correções direto pro Claude Code."
+date: "2026-10-01"
+tags: ["grátis", "claude api", "app"]
+readTime: "4 min"
+category: "prompts"
+premium: false
+---
+
+No [guia do jurado](/guias/jurado-awwwards) você copiava um prompt e colava junto com o print do site. Esse aqui é o próximo passo: um app que faz isso sozinho.
+
+Você arrasta um vídeo de tela, uns prints ou cola o link. O app tira os frames, manda pro Claude analisar com visão e devolve nota de 0 a 10 por critério, o problema, a correção exata e as 3 mudanças que mais sobem a nota. No final, um botão copia tudo formatado pra você colar no Claude Code e corrigir.
+
+<GuideVideo src="https://res.cloudinary.com/dwmrunhxa/video/upload/q_auto:eco,w_1080/v1790888091/jurado-gluco-flow-curto_tnj7pj.mp4" />
+
+## O que você precisa
+
+- **Claude Code** pra montar o app.
+- **Uma chave da API da Anthropic**, criada em platform.claude.com. A assinatura do Claude Code não cobre as chamadas do app: cada julgamento é cobrado à parte, por uso.
+- **Node.js** instalado.
+
+O modo "link" usa um navegador headless pra tirar os prints, então ele roda no seu computador. Pra publicar o app na internet, use só os modos vídeo e prints.
+
+## O prompt, grátis pra copiar
+
+<ResourcePrompt slug="app-jurado" />
+
+## Como usar
+
+**01** Cria uma pasta vazia, abre o Claude Code nela e cola o prompt.
+
+**02** Cria sua chave em platform.claude.com e coloca no arquivo `.env.local` como `ANTHROPIC_API_KEY`.
+
+**03** Roda `npm run dev`, arrasta um vídeo de tela do seu site e clica em **Julgar**.
+
+**Dica:** julga primeiro um site genérico feito com IA e depois um site que você caprichou. A diferença entre as duas notas mostra rápido o que o jurado cobra.
+
+<AnchorCTA guia="app-jurado-awwwards" text="Quer começar de um site que já foi pensado com esse olhar?" linkLabel="Ver os templates ↓" href="#oferta" />
+
+## Ou começa de um template pronto
+
+O jurado aponta o que corrigir. Os templates do Premium já nascem com tipografia, ritmo e motion pensados. São os prompts completos de 14 sites e seções cinematográficas: você copia, cola no Claude Code e adapta pro seu cliente.
+
+<div id="oferta" />
+
+<PremiumOffer
+  guia="app-jurado-awwwards"
+  title="Templates cinematográficos + mentoria pronta"
+  price="R$ 129, pagamento único e acesso vitalício."
+  perks="Mentoria pronta: o método do primeiro site ao primeiro cliente | Os prompts completos de 14 templates cinematográficos | As skills cinematográficas pro Claude Code | Grupo VIP no Discord | Todo template novo incluído, sem pagar de novo | Pagamento via Hotmart, garantia de 7 dias"
+  ctaLabel="Quero os templates"
+  secondaryLabel="Testar o Alba grátis"
+  secondaryHref="/projetos"
+/>
+
+Bastidores e sites novos no **[@rafha.gpt](https://www.instagram.com/rafha.gpt/)** →

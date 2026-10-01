@@ -48,7 +48,7 @@ export default function PremiumPromo() {
       <p className={styles.subtitle}>
         O Premium libera o código completo de tudo que eu já construí — incluindo esse
         site do anel — mais o grupo exclusivo pra tirar dúvida direto comigo. Pagamento
-        único, por pouco mais de R$100.
+        único, por R$129.
       </p>
 
       <ul className={styles.perks}>

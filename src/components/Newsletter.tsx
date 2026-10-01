@@ -50,8 +50,8 @@ export default function Newsletter() {
             <span className={styles.headlineFade}>Tenha a biblioteca inteira.</span>
           </h2>
           <p className={styles.subtext}>
-            Todos os templates de sites cinematográficos, as skills, o grupo VIP e cada
-            template novo que eu lançar.
+            A mentoria pronta, todos os templates de sites cinematográficos, as skills,
+            o grupo VIP e cada template novo que eu lançar.
           </p>
         </div>
 

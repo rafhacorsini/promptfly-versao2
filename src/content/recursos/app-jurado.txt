@@ -1,0 +1,70 @@
+Crie um app web chamado "Jurado" que avalia o design de um site como um jurado do Awwwards. Eu mando um vídeo de tela, prints ou o link do site, e ele devolve nota de 0 a 10 por critério, o problema e a correção exata. A interface precisa ser bonita e cinematográfica, porque vou mostrar ela pra clientes e no Instagram.
+
+STACK
+- Next.js (App Router) + TypeScript + Tailwind
+- GSAP pras animações
+- SDK oficial da Anthropic (@anthropic-ai/sdk) e zod pro schema
+- Playwright só pro modo "link" (roda local)
+- A chave fica em .env.local como ANTHROPIC_API_KEY e só é usada no servidor. Nunca expor no navegador.
+
+ENTRADAS (3 abas)
+1. Vídeo: arrasto um .mp4 ou .mov gravado da tela. No navegador, carrega num <video> escondido, pula pra 8 momentos espalhados (de 5% a 95% da duração), desenha cada frame num <canvas> com o lado maior em 1568px e exporta JPEG com qualidade 0.8. Mostra os 8 frames como miniaturas com o tempo (ex: 00:04). O vídeo nunca sobe pro servidor, só os frames.
+2. Prints: aceita até 8 imagens (PNG, JPG ou WebP) e redimensiona do mesmo jeito no navegador.
+3. Link: colo uma URL. Uma rota do servidor abre a página com Playwright (Chromium headless), espera a rede acalmar e tira 3 prints: desktop 1440x900 no topo, desktop depois de rolar uma tela e celular 390x844 no topo. Devolve em base64 pra aparecer como miniaturas. Aceita só http e https e bloqueia localhost e IPs internos.
+
+ANÁLISE (rota POST /api/julgar)
+- Recebe { imagens: [{ data: base64 sem prefixo, legenda: "frame 00:04" | "print 1" | "desktop topo" }], origem: "video" | "prints" | "link" }. Recusa mais de 8 imagens ou imagem acima de 5 MB.
+- Chama o Claude com visão usando o model "claude-opus-5-5", max_tokens 16000 e output_config: { effort: "high", format: zodOutputFormat(VeredictoSchema) }, via messages.parse (import { zodOutputFormat } from "@anthropic-ai/sdk/helpers/zod").
+- Cada imagem vai como { type: "image", source: { type: "base64", media_type: "image/jpeg", data } }, seguida de um bloco de texto com a legenda. As imagens vêm antes da instrução final.
+- Liga o fallback de recusa: use client.beta.messages.parse com betas: ["server-side-fallback-2026-07-01"] e fallbacks: "default". Se a versão instalada do SDK não aceitar isso junto com output_config.format, use client.messages.parse sem o fallback e me avise.
+- Antes de ler o resultado, confere o stop_reason. Se for "refusal", ou se parsed_output vier null, devolve um erro amigável.
+- Não mande temperature nem configuração de thinking: esse modelo já pensa sozinho, e thinking desabilitado dá erro 400.
+- Trata erros com as classes do SDK (Anthropic.RateLimitError, Anthropic.APIError), sem comparar texto de mensagem.
+
+PROMPT DO SISTEMA (use exatamente este texto)
+Você é um jurado do Awwwards com 15 anos de direção de arte. Analise este site com o rigor de quem avalia Site of the Day.
+Quando as imagens forem frames de um vídeo, trate como uma sequência no tempo: avalie também o que se move, quando e como, comparando os frames.
+Dê nota de 0 a 10, com uma casa decimal, para:
+1. Hierarquia visual
+2. Tipografia (tensão, escala, contraste)
+3. Ritmo e respiro entre seções
+4. Originalidade (parece template?)
+5. Motion (o que se move e como, ou o que deveria se mover)
+Para cada critério, diga o problema em 1 frase e a correção exata, com valores de tamanho, espaçamento, peso, duração e easing. Se a nota for 8 ou mais, diga o que está funcionando.
+Cite a imagem ou o frame em que você viu o problema.
+No final, liste as 3 mudanças que mais aumentariam a nota geral, da mais importante pra menos importante.
+Seja duro. Elogio genérico não ajuda. Não invente o que não dá pra ver nas imagens.
+
+SCHEMA (zod, em lib/schema.ts)
+VeredictoSchema = {
+  nota_geral: number,
+  veredito: string (uma frase curta e direta, estilo manchete),
+  criterios: array de { nome: enum ["Hierarquia visual", "Tipografia", "Ritmo e respiro", "Originalidade", "Motion"], nota: number, problema: string, correcao: string, onde: string },
+  top3: array de { titulo: string, como_fazer: string },
+  pontos_fortes: array de string
+}
+
+INTERFACE
+- Fundo quase preto (#0B0B0B), texto off-white e um único acento laranja (#FF4C00). Fonte Inter: títulos em peso 800 com letter-spacing -0.04em, textos de apoio em peso 300. Grão sutil por cima (SVG noise com opacidade 0.05).
+- Topo: "JURADO" pequeno, em caixa alta, com letter-spacing largo, e o título gigante "Seu site passaria no Awwwards?".
+- Área de envio grande com as 3 abas. Ao soltar o arquivo, as miniaturas entram uma a uma (stagger 0.06s, y de 20 pra 0, power3.out).
+- Botão "Julgar" laranja.
+- Enquanto analisa: as miniaturas ficam numa fileira e uma linha de scan laranja passa por cada uma em sequência, em loop. Embaixo, um texto que troca a cada 2s: "Olhando a hierarquia...", "Medindo a tipografia...", "Checando o respiro...", "Procurando cara de template...", "Avaliando o motion...". Nada de porcentagem falsa.
+- Resultado, nesta ordem:
+  1. Nota geral gigante (clamp(6rem, 18vw, 14rem)), contando de 0.0 até a nota em 1.6s com expo.out. Cor: vermelho escuro abaixo de 5, branco de 5 a 7.9, laranja de 8 pra cima. A partir de 8, aparece um selo "SITE OF THE DAY?" girando devagar.
+  2. O veredito aparece palavra por palavra embaixo da nota.
+  3. 5 cartões de critério entram em stagger. Cada um mostra a nota, uma barra que enche até a nota, o problema, a correção em destaque e o "onde" em cinza pequeno.
+  4. "As 3 mudanças que mais sobem sua nota", numeradas 01, 02 e 03.
+  5. Botão "Copiar correções pro Claude Code": monta um texto que começa com "Aplica essas correções sem mudar a estrutura do site:", seguido do top 3 e das correções dos critérios abaixo de 8, e copia. O rótulo vira "Copiado ✓" por 2s.
+  6. Logo abaixo, um card pequeno com borda fina: "Quer pular direto pra um site de nota alta? Templates cinematográficos prontos + mentoria pronta, R$129 vitalício." e um botão "Ver os templates →" que abre https://www.promptfly.com.br/premium em nova aba.
+  7. Botão "Julgar outro", que volta pro início.
+- Rodapé discreto em todas as telas, texto pequeno e cinza: "Produto desenvolvido por @rafha.gpt" (link pra https://www.instagram.com/rafha.gpt/) e, ao lado, "Templates cinematográficos + mentoria pronta: R$129 vitalício →" (link pra https://www.promptfly.com.br/premium). Os dois abrem em nova aba.
+- Tudo responsivo a 375px. Respeite prefers-reduced-motion: sem animação, mostra direto o estado final.
+
+ENTREGA
+- Estrutura: app/page.tsx, app/api/julgar/route.ts, app/api/print/route.ts, lib/schema.ts, lib/frames.ts (extração dos frames) e components/ separados por parte da tela.
+- README curto: como instalar (npm i e npx playwright install chromium), onde colocar a chave e como rodar.
+- Rode npm run build e corrija os erros antes de me entregar.
+
+CRÉDITO (obrigatório)
+O rodapé "Produto desenvolvido por @rafha.gpt" e o card dos templates fazem parte do produto. Não remova nem reescreva esses textos e links.

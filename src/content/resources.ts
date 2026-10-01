@@ -84,6 +84,23 @@ export const resources: Resource[] = [
     ],
   },
   {
+    slug: "app-jurado",
+    title: "Prompt: crie seu próprio app jurado do Awwwards",
+    description:
+      "Um prompt que cria um app completo: você manda vídeo de tela, prints ou o link do site, e ele devolve nota por critério e a correção exata, usando a visão do Claude.",
+    category: "prompts",
+    tools: ["Claude Code", "Claude API"],
+    access: "free",
+    contentFile: "app-jurado.txt",
+    contentLabel: "Prompt do app jurado",
+    guideSlug: "app-jurado-awwwards",
+    howTo: [
+      "Cria uma pasta vazia, abre o Claude Code nela e cola o prompt.",
+      "Cria uma chave em platform.claude.com e coloca no .env.local como ANTHROPIC_API_KEY.",
+      "Roda npm run dev, joga um vídeo de tela do seu site e clica em Julgar.",
+    ],
+  },
+  {
     slug: "5-prompts",
     title: "5 prompts pra site cinematográfico no Claude Code",
     description:
@@ -208,13 +225,13 @@ export const resources: Resource[] = [
 /** Ordem dos cards em "Recursos em destaque". Aceita slugs daqui e ids de projects.json. */
 export const featuredSlugs = [
   "jurado",
-  "5-prompts",
+  "app-jurado",
   "anti-patterns",
   "scroll-sequence",
-  "vytal-anel-inteligente",
+  "gluco-flow-numa-bomba-insulina",
   "skills-cinematograficas",
   "alba-residencia-imovel-luxo",
-  "generico-para-cinematografico",
+  "5-prompts",
 ];
 
 /** Os 3 cards que aparecem no hero. */

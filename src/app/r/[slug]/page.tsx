@@ -149,6 +149,7 @@ export default async function RecursoPage({ params }: Props) {
           }
           price={price ? `${price} · pagamento único.` : "Pagamento único, acesso vitalício."}
           perks={[
+            "Mentoria pronta: o método do primeiro site ao primeiro cliente",
             `Os ${premiumTemplates} templates de sites cinematográficos, com o prompt completo`,
             "As skills cinematográficas pro Claude Code",
             "Grupo VIP no Discord",
