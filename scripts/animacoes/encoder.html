@@ -1,0 +1,122 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>Encoder das animações</title>
+<!-- Usado só pelo gerar-videos.mjs: transforma frames em MP4 (H.264) com WebCodecs. -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@500;800&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/mp4-muxer@5/build/mp4-muxer.js"></script>
+</head>
+<body>
+<script>
+  const BG = "#0b0b0b", FG = "#f2efe9", MUTED = "#8b8780", ACCENT = "#ff4c00";
+  const frameUrl = (dir, k) => `/frames/${dir}/${String(k).padStart(4, "0")}.jpg`;
+
+  async function bitmap(url) {
+    const res = await fetch(url);
+    return createImageBitmap(await res.blob());
+  }
+
+  // Quebra o título em linhas que cabem na largura.
+  function linhas(ctx, texto, largura) {
+    const out = [];
+    let atual = "";
+    for (const palavra of texto.split(" ")) {
+      const teste = atual ? `${atual} ${palavra}` : palavra;
+      if (ctx.measureText(teste).width > largura && atual) { out.push(atual); atual = palavra; }
+      else atual = teste;
+    }
+    if (atual) out.push(atual);
+    return out;
+  }
+
+  function desenhar(ctx, bmp, clip, job) {
+    const { width: W, height: H } = job;
+    if (job.layout === "fill") { ctx.drawImage(bmp, 0, 0, W, H); return; }
+
+    // Layout vertical (reel): animação num quadro 16:10 no meio, nome em cima.
+    ctx.fillStyle = BG;
+    ctx.fillRect(0, 0, W, H);
+    const m = 64, fw = W - m * 2, fh = Math.round((fw * 10) / 16), fy = Math.round((H - fh) / 2) + 40;
+
+    ctx.save();
+    ctx.beginPath();
+    ctx.roundRect(m, fy, fw, fh, 28);
+    ctx.clip();
+    ctx.drawImage(bmp, m, fy, fw, fh);
+    ctx.restore();
+
+    ctx.textBaseline = "alphabetic";
+    ctx.font = "800 72px Inter";
+    ctx.fillStyle = FG;
+    const ls = linhas(ctx, clip.title, fw);
+    let y = fy - 56 - (ls.length - 1) * 80;
+    ctx.font = "500 34px Inter";
+    ctx.fillStyle = ACCENT;
+    ctx.fillText(clip.kicker, m, y - 92);
+    ctx.font = "800 72px Inter";
+    ctx.fillStyle = FG;
+    for (const l of ls) { ctx.fillText(l, m, y); y += 80; }
+
+    ctx.font = "500 32px Inter";
+    ctx.fillStyle = MUTED;
+    ctx.fillText("promptfly.com.br/animacoes", m, fy + fh + 96);
+  }
+
+  window.encodeVideo = async (job) => {
+    await document.fonts.load("800 72px Inter");
+    await document.fonts.load("500 34px Inter");
+    const { width, height, fps, bitrate } = job;
+    const muxer = new Mp4Muxer.Muxer({
+      target: new Mp4Muxer.ArrayBufferTarget(),
+      video: { codec: "avc", width, height, frameRate: fps },
+      fastStart: "in-memory",
+    });
+    let falha = null;
+    const encoder = new VideoEncoder({
+      output: (chunk, meta) => muxer.addVideoChunk(chunk, meta),
+      error: (e) => { falha = e; },
+    });
+    encoder.configure({ codec: "avc1.640034", width, height, bitrate, framerate: fps, avc: { format: "avc" } });
+
+    const canvas = new OffscreenCanvas(width, height);
+    const ctx = canvas.getContext("2d");
+    let i = 0;
+    for (const clip of job.clips) {
+      const ida = [...Array(clip.count).keys()];
+      // Vai e volta: o loop emenda sem corte, como alguém rolando pra baixo e pra cima.
+      const ordem = clip.pingpong ? ida.concat(ida.slice(1, -1).reverse()) : ida;
+      for (const k of ordem) {
+        if (falha) throw falha;
+        const bmp = await bitmap(frameUrl(clip.dir, k));
+        desenhar(ctx, bmp, clip, job);
+        bmp.close();
+        const frame = new VideoFrame(canvas, { timestamp: Math.round((i * 1e6) / fps), duration: Math.round(1e6 / fps) });
+        encoder.encode(frame, { keyFrame: i % (fps * 2) === 0 });
+        frame.close();
+        i++;
+        if (encoder.encodeQueueSize > 8) await new Promise((r) => encoder.addEventListener("dequeue", r, { once: true }));
+      }
+    }
+    await encoder.flush();
+    if (falha) throw falha;
+    muxer.finalize();
+    const buffer = muxer.target.buffer;
+    await fetch(`/out/${job.nome}`, { method: "POST", body: buffer });
+    return { frames: i, bytes: buffer.byteLength };
+  };
+
+  window.poster = async ({ nome, dir, frame, width, height }) => {
+    const bmp = await bitmap(frameUrl(dir, frame));
+    const canvas = new OffscreenCanvas(width, height);
+    canvas.getContext("2d").drawImage(bmp, 0, 0, width, height);
+    const blob = await canvas.convertToBlob({ type: "image/jpeg", quality: 0.82 });
+    await fetch(`/out/${nome}`, { method: "POST", body: blob });
+    return true;
+  };
+
+  window.pronto = true;
+</script>
+</body>
+</html>

@@ -4,15 +4,13 @@
  * Cada animação tem:
  * - src/content/animacoes/<slug>.html: o demo, que é também o código entregue
  * - um prompt em src/content/animacoes/prompts.ts (só no servidor)
- * - public/animacoes/<slug>.jpg (sprite de preview) e <slug>-poster.jpg
+ * - public/animacoes/<slug>.mp4 (preview em loop) e <slug>-poster.jpg
  *
- * Os previews são gerados rolando o demo num Chrome headless e juntando
- * PREVIEW_FRAMES frames numa imagem vertical. Mudou o demo, gere de novo.
+ * Os previews são gravados do demo rolando num Chrome headless:
+ * node scripts/animacoes/gerar-videos.mjs <slug>. Mudou o demo, gere de novo.
  *
  * Este arquivo pode ir pro navegador: não tem prompt nem código.
  */
-
-export const PREVIEW_FRAMES = 40;
 
 export type TipoAnimacao =
   | "Scroll-triggered"
