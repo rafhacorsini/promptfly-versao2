@@ -3,6 +3,8 @@ import path from "path";
 import projects from "@/content/projects.json";
 import { resources, featuredSlugs, heroSlugs, type Resource } from "@/content/resources";
 import { toThumb, type Thumb } from "@/lib/media";
+import { animacoes, type Animacao } from "@/content/animacoes";
+import { getAnimacaoConteudo, promptComCodigo } from "@/lib/animacoes";
 
 /**
  * Recurso pronto pra renderizar. Só roda no servidor: lê os arquivos de
@@ -41,8 +43,33 @@ function fromProject(p: (typeof projects)[number]): ResourceView {
   };
 }
 
+// Cada animação da /animacoes também é um recurso (categoria Snippets), com /r/<slug> próprio.
+function fromAnimacao(a: Animacao): ResourceView {
+  const conteudo = a.access === "free" ? getAnimacaoConteudo(a.slug) : null;
+  return {
+    slug: a.slug,
+    title: `Animação: ${a.nome}`,
+    description: `${a.tipo}. ${a.descricao}`,
+    category: "snippets",
+    tools: ["GSAP", "ScrollTrigger"],
+    access: a.access,
+    content: conteudo ? promptComCodigo(conteudo) : undefined,
+    contentLabel: "Prompt + código",
+    guideSlug: "nomes-das-animacoes-de-scroll",
+    href: `/animacoes#${a.slug}`,
+    howTo: conteudo
+      ? [
+          "Copia o prompt com o código e cola no Claude Code, no ChatGPT ou no Gemini.",
+          "Pede pra adaptar textos, imagens e cores ao seu projeto.",
+          "Testa no celular e no desktop antes de entregar.",
+        ]
+      : undefined,
+    thumb: { src: `/animacoes/${a.slug}-poster.jpg`, isVideo: false },
+  };
+}
+
 export function getAllResources(): ResourceView[] {
-  return [...resources.map(fromResource), ...projects.map(fromProject)];
+  return [...resources.map(fromResource), ...projects.map(fromProject), ...animacoes.map(fromAnimacao)];
 }
 
 export function getResource(slug: string): ResourceView | undefined {

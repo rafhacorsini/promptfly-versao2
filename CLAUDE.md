@@ -75,6 +75,8 @@ promptfly-docs/
 - `featuredSlugs` e `heroSlugs` definem a ordem dos destaques e os 3 cards do hero.
 - `lib/resources.ts` roda só no servidor (lê arquivos e o `projects.json`, que tem prompts pagos). Nunca importar `projects.json` em client component.
 - **Números da home** ficam em `src/content/site.ts`. Sem dado real, deixar `null`: o item some. O nº de recursos é contado automaticamente.
+- **Biblioteca de Animações (`/animacoes`):** metadados em `src/content/animacoes.ts` (pode ir pro navegador), código de cada demo em `src/content/animacoes/<slug>.html` e prompts em `src/content/animacoes/prompts.ts` (**só servidor**: os Premium não podem ir pro navegador). 5 grátis, 10 liberadas pelo Premium via `/api/animacoes/[slug]`. Cada animação vira recurso "snippets" automaticamente, com `/r/<slug>`.
+- **Previews das animações:** sprites em `public/animacoes/<slug>.jpg` (40 frames) + `<slug>-poster.jpg`, gerados rolando o demo num Chrome headless. Mudou ou criou um demo: `node scripts/animacoes/capture.mjs <slug>` e depois `powershell -File scripts/animacoes/stitch.ps1`.
 - **Regras de copy:** nada de número, depoimento ou logo inventado. Nada de travessão (—) em copy nova. Premium é **pagamento único de R$ 129** (Hotmart, garantia de 7 dias) e inclui a **mentoria pronta** (guias exclusivos com o método do site ao cliente) e as skills. A mentoria individual 1:1 foi descontinuada: `/mentoria` redireciona pro `/premium`.
 
 ---

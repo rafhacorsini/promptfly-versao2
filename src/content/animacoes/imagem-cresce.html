@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Scroll-linked: a imagem cresce junto com a rolagem</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+<style>
+  :root { --bg: #0b0b0b; --fg: #f2efe9; --muted: #8b8780; --accent: #ff4c00; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { background: var(--bg); color: var(--fg); font-family: "Inter", system-ui, sans-serif; -webkit-font-smoothing: antialiased; }
+  body { overflow-x: clip; }
+  img { display: block; width: 100%; height: 100%; object-fit: cover; }
+  .label { font-size: 12px; letter-spacing: .22em; text-transform: uppercase; color: var(--muted); }
+  .title { font-size: clamp(40px, 8vw, 104px); font-weight: 800; letter-spacing: -.045em; line-height: .95; }
+
+  /* Barra de progresso da página inteira, também ligada ao scroll */
+  .progress { position: fixed; top: 0; left: 0; right: 0; height: 3px; background: var(--accent); transform-origin: 0 50%; transform: scaleX(0); z-index: 10; }
+
+  .intro { min-height: 60vh; display: flex; flex-direction: column; justify-content: flex-end; gap: 20px; padding: 0 6vw 8vh; }
+
+  /* A seção é alta (300vh) e a "câmera" fica presa com sticky enquanto ela passa */
+  .stage { height: 300vh; }
+  .pin { position: sticky; top: 0; height: 100vh; overflow: hidden; }
+  .media { position: absolute; inset: 0; transform: scale(.5); border-radius: 28px; overflow: hidden; will-change: transform; }
+  .pct { position: absolute; right: 6vw; bottom: 5vh; z-index: 2; font-size: clamp(28px, 5vw, 64px); font-weight: 800; letter-spacing: -.04em; font-variant-numeric: tabular-nums; }
+
+  .outro { min-height: 60vh; display: grid; place-items: center; color: var(--muted); }
+</style>
+</head>
+<body>
+
+<div class="progress"></div>
+
+<header class="intro">
+  <p class="label">Scroll-linked</p>
+  <h1 class="title">A imagem cresce<br>junto com a rolagem.</h1>
+</header>
+
+<section class="stage">
+  <div class="pin">
+    <div class="media"><img src="https://res.cloudinary.com/dwmrunhxa/image/upload/f_auto,q_auto,w_900/v1790119060/ChatGPT_Image_22_de_set._de_2026_20_12_14_rpt0m1.png" alt=""></div>
+    <p class="pct">0%</p>
+  </div>
+</section>
+
+<footer class="outro"><p>Volte pra cima: a animação desfaz junto.</p></footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script>
+  gsap.registerPlugin(ScrollTrigger);
+  const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const pct = document.querySelector(".pct");
+
+  if (reduce) {
+    gsap.set(".media", { scale: 1, borderRadius: 0 });
+  } else {
+    gsap.to(".progress", {
+      scaleX: 1,
+      ease: "none",
+      scrollTrigger: { trigger: document.body, start: "top top", end: "bottom bottom", scrub: 0.3 },
+    });
+
+    // scrub: o progresso da animação É o progresso do scroll.
+    // Só transform (scale): nada de width/height, que força relayout a cada frame.
+    const tl = gsap.timeline({
+      scrollTrigger: {
+        trigger: ".stage",
+        start: "top top",
+        end: "bottom bottom",
+        scrub: 0.6,
+        onUpdate: (self) => { pct.textContent = Math.round(self.progress * 100) + "%"; },
+      },
+    });
+    tl.to(".media", { scale: 1, borderRadius: 0, ease: "none" })
+      .fromTo(".media img", { scale: 1.35 }, { scale: 1, ease: "none" }, 0);
+  }
+</script>
+</body>
+</html>

@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Parallax: três camadas, três velocidades</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+<style>
+  :root { --bg: #0b0b0b; --fg: #f2efe9; --muted: #8b8780; --accent: #ff4c00; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { background: var(--bg); color: var(--fg); font-family: "Inter", system-ui, sans-serif; -webkit-font-smoothing: antialiased; }
+  body { overflow-x: clip; }
+  img { display: block; width: 100%; height: 100%; object-fit: cover; }
+  .label { font-size: 12px; letter-spacing: .22em; text-transform: uppercase; color: var(--muted); }
+  .title { font-size: clamp(40px, 8vw, 104px); font-weight: 800; letter-spacing: -.045em; line-height: .95; }
+
+  .intro { min-height: 60vh; display: flex; flex-direction: column; justify-content: flex-end; gap: 20px; padding: 0 6vw 8vh; }
+
+  .scene { position: relative; height: 180vh; overflow: hidden; }
+  /* Fundo maior que a seção: sobra espaço pra ele andar sem mostrar borda */
+  .back { position: absolute; left: 0; right: 0; top: -15%; height: 130%; }
+  .back::after { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(11,11,11,.15), rgba(11,11,11,.8)); }
+  .mid { position: absolute; left: 6vw; top: 38%; z-index: 2; font-size: clamp(56px, 14vw, 200px); font-weight: 800; letter-spacing: -.06em; line-height: .9; }
+  .front { position: absolute; z-index: 3; border-radius: 14px; overflow: hidden; box-shadow: 0 30px 60px rgba(0,0,0,.45); }
+  .f1 { width: 24vw; aspect-ratio: 3 / 4; right: 8vw; top: 46%; }
+  .f2 { width: 18vw; aspect-ratio: 3 / 4; left: 12vw; top: 74%; }
+
+  .outro { min-height: 60vh; display: grid; place-items: center; color: var(--muted); }
+  @media (max-width: 640px) { .f1 { width: 40vw; } .f2 { width: 32vw; } }
+</style>
+</head>
+<body>
+
+<header class="intro">
+  <p class="label">Parallax</p>
+  <h1 class="title">Três camadas.<br>Três velocidades.</h1>
+</header>
+
+<section class="scene">
+  <div class="back"><img src="https://res.cloudinary.com/dwmrunhxa/image/upload/f_auto,q_auto,w_900/v1790119058/ChatGPT_Image_22_de_set._de_2026_20_12_56_b7pw2v.png" alt=""></div>
+  <h2 class="mid">Profun<br>didade</h2>
+  <div class="front f1"><img src="https://res.cloudinary.com/dwmrunhxa/image/upload/f_auto,q_auto,w_900/v1790119053/ChatGPT_Image_22_de_set._de_2026_20_14_56_vppze1.png" alt=""></div>
+  <div class="front f2"><img src="https://res.cloudinary.com/dwmrunhxa/image/upload/f_auto,q_auto,w_900/v1790119051/ChatGPT_Image_22_de_set._de_2026_20_15_43_cgaxnw.png" alt=""></div>
+</section>
+
+<footer class="outro"><p>O fundo anda devagar, o texto no meio, as fotos rápido.</p></footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script>
+  gsap.registerPlugin(ScrollTrigger);
+  const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  if (!reduce) {
+    // Todas as camadas usam o mesmo trecho de scroll (a cena inteira passando
+    // pela tela). O que muda é a distância: quanto mais "perto", mais anda.
+    const range = () => ({ trigger: ".scene", start: "top bottom", end: "bottom top", scrub: true });
+
+    gsap.fromTo(".back", { yPercent: -8 }, { yPercent: 8, ease: "none", scrollTrigger: range() });
+    gsap.fromTo(".mid", { yPercent: 60 }, { yPercent: -60, ease: "none", scrollTrigger: range() });
+    gsap.fromTo(".f1", { yPercent: 80 }, { yPercent: -120, ease: "none", scrollTrigger: range() });
+    gsap.fromTo(".f2", { yPercent: 120 }, { yPercent: -200, ease: "none", scrollTrigger: range() });
+  }
+</script>
+</body>
+</html>

@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Scroll snap: cada rolagem encaixa uma cena</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+<style>
+  :root { --bg: #0b0b0b; --fg: #f2efe9; --muted: #b9b4ab; --accent: #ff4c00; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  /* O encaixe é CSS puro: o navegador termina cada rolagem no início de uma seção */
+  html { scroll-snap-type: y mandatory; }
+  html, body { background: var(--bg); color: var(--fg); font-family: "Inter", system-ui, sans-serif; -webkit-font-smoothing: antialiased; }
+  img { display: block; width: 100%; height: 100%; object-fit: cover; }
+
+  .snap { position: relative; height: 100vh; scroll-snap-align: start; overflow: hidden; display: flex; align-items: flex-end; padding: 0 6vw 10vh; }
+  .bg { position: absolute; inset: 0; }
+  .bg::after { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(11,11,11,0) 30%, rgba(11,11,11,.85)); }
+  .txt { position: relative; z-index: 2; }
+  .idx { font-size: 13px; font-weight: 600; letter-spacing: .22em; color: var(--accent); }
+  .snap h2 { font-size: clamp(44px, 9vw, 128px); font-weight: 800; letter-spacing: -.05em; line-height: .9; margin: 10px 0 14px; }
+  .snap p { color: var(--muted); max-width: 40ch; line-height: 1.55; }
+
+  .dots { position: fixed; right: 3vw; top: 50%; transform: translateY(-50%); z-index: 10; display: flex; flex-direction: column; gap: 12px; }
+  .dots i { width: 8px; height: 8px; border-radius: 50%; background: rgba(255,255,255,.3); transition: background .3s, transform .3s; }
+  .dots i.on { background: var(--accent); transform: scale(1.5); }
+</style>
+</head>
+<body>
+
+<nav class="dots" aria-hidden="true"><i class="on"></i><i></i><i></i><i></i></nav>
+
+<section class="snap">
+  <div class="bg"><img src="https://res.cloudinary.com/dwmrunhxa/image/upload/f_auto,q_auto,w_900/v1790119063/ChatGPT_Image_22_de_set._de_2026_20_10_55_scraoo.png" alt=""></div>
+  <div class="txt"><p class="idx">CENA 01</p><h2>Chegada</h2><p>Cada rolagem termina exatamente no começo de uma cena.</p></div>
+</section>
+<section class="snap">
+  <div class="bg"><img src="https://res.cloudinary.com/dwmrunhxa/image/upload/f_auto,q_auto,w_900/v1790119058/ChatGPT_Image_22_de_set._de_2026_20_12_56_b7pw2v.png" alt=""></div>
+  <div class="txt"><p class="idx">CENA 02</p><h2>Detalhe</h2><p>Nada fica pela metade na tela. O texto entra depois do encaixe.</p></div>
+</section>
+<section class="snap">
+  <div class="bg"><img src="https://res.cloudinary.com/dwmrunhxa/image/upload/f_auto,q_auto,w_900/v1790119053/ChatGPT_Image_22_de_set._de_2026_20_14_56_vppze1.png" alt=""></div>
+  <div class="txt"><p class="idx">CENA 03</p><h2>Movimento</h2><p>A foto faz um zoom-out sutil enquanto a cena chega.</p></div>
+</section>
+<section class="snap">
+  <div class="bg"><img src="https://res.cloudinary.com/dwmrunhxa/image/upload/f_auto,q_auto,w_900/v1790119049/ChatGPT_Image_22_de_set._de_2026_20_16_25_aizr8c.png" alt=""></div>
+  <div class="txt"><p class="idx">CENA 04</p><h2>Final</h2><p>Os pontos na lateral mostram em que cena você está.</p></div>
+</section>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script>
+  gsap.registerPlugin(ScrollTrigger);
+  const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const sections = gsap.utils.toArray(".snap");
+  const dots = gsap.utils.toArray(".dots i");
+
+  sections.forEach((section, i) => {
+    // Indicador lateral: acende o ponto da cena que ocupa o centro da tela.
+    ScrollTrigger.create({
+      trigger: section,
+      start: "top center",
+      end: "bottom center",
+      onToggle: (self) => { if (self.isActive) dots.forEach((d, j) => d.classList.toggle("on", j === i)); },
+    });
+
+    if (reduce) return;
+
+    // O texto entra quando a cena encaixa e sai se você voltar.
+    gsap.fromTo(section.querySelectorAll(".txt > *"),
+      { y: 50, opacity: 0 },
+      { y: 0, opacity: 1, duration: 0.9, ease: "power3.out", stagger: 0.08,
+        scrollTrigger: { trigger: section, start: "top 60%", toggleActions: "play none none reverse" } });
+
+    // Zoom-out da foto ligado ao scroll enquanto a cena sobe.
+    gsap.fromTo(section.querySelector(".bg img"),
+      { scale: 1.15 },
+      { scale: 1, ease: "none", scrollTrigger: { trigger: section, start: "top bottom", end: "top top", scrub: true } });
+  });
+</script>
+</body>
+</html>

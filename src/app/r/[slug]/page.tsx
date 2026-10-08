@@ -5,6 +5,8 @@ import CopyPromptBlock from "@/components/CopyPromptBlock";
 import TemplatePromptButton from "@/components/TemplatePromptButton";
 import PremiumOffer from "@/components/PremiumOffer";
 import GradientButton from "@/components/GradientButton";
+import AnimacaoPreview from "@/components/AnimacaoPreview";
+import { getAnimacao } from "@/content/animacoes";
 import { CATEGORIES } from "@/content/resources";
 import { site } from "@/content/site";
 import { getAllResources, getResource, getPremiumTemplateCount } from "@/lib/resources";
@@ -45,6 +47,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 }
 
 function copyButtonLabel(contentLabel?: string) {
+  if (contentLabel === "Prompt + código") return "Copiar prompt + código";
   if (contentLabel?.endsWith(".md")) return "Copiar arquivo";
   if (contentLabel?.endsWith(".tsx")) return "Copiar código";
   return "Copiar prompt";
@@ -76,7 +79,9 @@ export default async function RecursoPage({ params }: Props) {
         <h1 className={styles.title}>{r.title}</h1>
         <p className={styles.lead}>{r.description}</p>
 
-        {r.thumb && (
+        {getAnimacao(r.slug) ? (
+          <AnimacaoPreview slug={r.slug} label={r.title} />
+        ) : r.thumb && (
           <div className={styles.preview}>
             {r.thumb.isVideo ? (
               <video src={r.thumb.src} autoPlay muted loop playsInline />
@@ -151,6 +156,7 @@ export default async function RecursoPage({ params }: Props) {
           perks={[
             "Mentoria pronta: o método do primeiro site ao primeiro cliente",
             `Os ${premiumTemplates} templates de sites cinematográficos, com o prompt completo`,
+            "As 10 animações de scroll Premium, com prompt e código",
             "As skills cinematográficas pro Claude Code",
             "Grupo VIP no Discord",
             "Todo template novo incluído, sem pagar de novo",

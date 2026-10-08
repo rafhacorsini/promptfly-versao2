@@ -1,0 +1,121 @@
+---
+title: "Pare de pedir uma animação legal: os 6 nomes que fazem a IA acertar o scroll"
+description: "Scroll-triggered, scroll-linked, parallax, sticky, scroll snap e horizontal scroll. O que cada um faz, quando usar e a frase exata pra pedir pra IA, com preview de cada animação."
+date: "2026-10-08"
+tags: ["grátis", "animação", "gsap"]
+readTime: "5 min"
+category: "tecnicas"
+premium: false
+---
+
+Quando você pede "faz algo bacana quando eu rolar a página", a IA chuta. Às vezes acerta, quase sempre entrega um fade-up igual em tudo.
+
+Quando você dá o nome da animação, ela sabe exatamente o que construir. São 6 nomes. Cada um abaixo tem o preview rodando, o que ele faz e a frase pronta pra colar no seu pedido.
+
+## 1. Scroll-triggered
+
+<AnimacaoPreview slug="reveal-ao-entrar" label="Scroll-triggered" />
+
+**O que é:** a animação **dispara** quando o elemento entra na tela e roda no tempo dela. Não importa se você rola rápido ou devagar: começou, vai até o fim.
+
+**Quando usar:** entrada de títulos, cards e seções. É o mais comum e o mais fácil de errar, porque vira o mesmo fade-up em tudo.
+
+> Usa scroll-triggered nos cards: cada um entra de baixo (y 60 → 0, opacity 0 → 1) quando chega a 88% da tela, com stagger de 0.08s e power3.out.
+
+## 2. Scroll-linked
+
+<AnimacaoPreview slug="imagem-cresce" label="Scroll-linked" />
+
+**O que é:** a animação **acompanha** a rolagem, quadro a quadro. Parou de rolar, ela para. Voltou, ela desfaz. No GSAP, isso é o `scrub`.
+
+**Quando usar:** quando o movimento conta uma história: produto girando, imagem abrindo, número subindo, hero virando card.
+
+> Usa scroll-linked com a seção presa: a imagem começa em scale 0.5 com cantos de 28px e chega à tela cheia acompanhando a rolagem (scrub 0.6).
+
+## 3. Parallax
+
+<AnimacaoPreview slug="parallax-camadas" label="Parallax" />
+
+**O que é:** camadas andando em **velocidades diferentes** no mesmo trecho de scroll. O que está "perto" anda mais, o que está "longe" anda menos. É isso que cria profundidade.
+
+**Quando usar:** heros com foto, seções com texto grande sobre imagem, composições com várias fotos. Sutil funciona melhor: parallax exagerado dá enjoo.
+
+> Usa parallax com 3 camadas no mesmo trecho de scroll: o fundo anda 16%, o título 120% e as fotos da frente até 320%.
+
+## 4. Sticky
+
+<AnimacaoPreview slug="sticky-etapas" label="Sticky" />
+
+**O que é:** um elemento **fica parado** enquanto o resto da página continua rolando. Pode ser CSS puro (`position: sticky`) ou um pin do GSAP, quando você precisa animar algo enquanto ele está preso.
+
+**Quando usar:** título de uma seção de etapas, imagem ao lado de textos, qualquer coisa que a pessoa precisa ver enquanto lê o resto.
+
+> Usa sticky no título da esquerda enquanto as etapas da direita passam; a etapa que cruza 55% da tela fica ativa e atualiza o contador.
+
+**Pega comum:** `overflow: hidden` em qualquer elemento acima quebra o sticky. No body, use `overflow-x: clip`.
+
+## 5. Scroll snap
+
+<AnimacaoPreview slug="scroll-snap-secoes" label="Scroll snap" />
+
+**O que é:** a rolagem **encaixa**. Cada scroll termina exatamente no começo de uma seção ou de um card, nunca pela metade. É CSS puro: `scroll-snap-type` no container e `scroll-snap-align` nos filhos.
+
+**Quando usar:** apresentações em cenas de tela cheia, carrosséis de cards, portfólios. Evite em páginas longas de texto: travar a rolagem de quem quer ler irrita.
+
+> Usa scroll snap (scroll-snap-type: y mandatory) em seções de 100vh; o texto de cada cena entra só depois do encaixe.
+
+## 6. Horizontal scroll
+
+<AnimacaoPreview slug="scroll-horizontal" label="Horizontal scroll" />
+
+**O que é:** a seção trava e a rolagem **vertical vira deslocamento lateral**. Você rola pra baixo, a galeria anda pro lado. Quando acaba, a página volta ao normal.
+
+**Quando usar:** galerias de projetos, linha do tempo, sequência de produtos.
+
+> Usa horizontal scroll: prende a seção e converte a rolagem vertical em translateX da fileira, com o curso do pin igual à largura que sobra.
+
+## A confusão mais comum: triggered ou linked?
+
+Se a animação tem que **terminar sozinha** depois de começar, é **scroll-triggered**. Se ela tem que **obedecer o dedo** da pessoa, avançando e voltando junto, é **scroll-linked**.
+
+Pedir uma quando você queria a outra é o motivo número um de "não era isso que eu imaginei".
+
+## Juntando tudo num pedido
+
+Um pedido bom nomeia a animação de cada seção e fecha com as regras de performance:
+
+<CopyPromptBlock guia="nomes-das-animacoes-de-scroll" label="Exemplo de pedido">
+
+```text
+Anime o site com GSAP + ScrollTrigger, seção por seção:
+
+- Hero: scroll-linked com a seção presa. A foto em tela cheia fecha num card
+  central via clip-path enquanto o título sobe e some.
+- Fundo do hero: parallax. A imagem anda 15% mais devagar que o resto.
+- Serviços: sticky no título da esquerda enquanto os cards passam à direita.
+- Projetos: scroll-triggered. Cada card entra de baixo quando chega a 85% da
+  tela, com stagger de 0.08s e power3.out.
+- Galeria: horizontal scroll. Prende a seção e converte a rolagem vertical em
+  translateX da fileira.
+
+Regras: anima só transform, opacity e clip-path. Respeita
+prefers-reduced-motion. Sincroniza o Lenis com o ScrollTrigger.
+```
+
+</CopyPromptBlock>
+
+## O código pronto de cada uma
+
+Montei a **Biblioteca de Animações**: 15 animações de scroll com preview, a frase pra pedir, o prompt completo e o código pronto pra copiar. As 5 primeiras deste guia são grátis. As outras 10 (cards empilhados, cortina entre seções, hero que vira card, texto que acende palavra por palavra e mais) estão no Premium.
+
+<GradientButton href="/animacoes" variant="dark">Abrir a Biblioteca de Animações →</GradientButton>
+
+<PremiumOffer
+  guia="nomes-das-animacoes-de-scroll"
+  title="As 10 animações Premium e todo o resto"
+  price="R$ 129, pagamento único e acesso vitalício."
+  perks="As 10 animações Premium com prompt e código | Mentoria pronta: o método do primeiro site ao primeiro cliente | Os prompts completos de todos os templates cinematográficos | As skills cinematográficas pro Claude Code | Grupo VIP no Discord | Pagamento via Hotmart, garantia de 7 dias"
+  ctaLabel="Quero o Premium"
+/>
+
+Bastidores e animações novas no **[@rafha.gpt](https://www.instagram.com/rafha.gpt/)** →

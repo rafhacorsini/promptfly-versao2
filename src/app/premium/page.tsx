@@ -44,7 +44,7 @@ const features = [
   {
     icon: LayoutTemplate,
     title: "Biblioteca completa",
-    text: "Todos os templates e prompts do catálogo, sem exceção: heroes, landing pages inteiras e prompts técnicos, mais as skills cinematográficas pro Claude Code. Copie, adapte e publique.",
+    text: "Todos os templates e prompts do catálogo, sem exceção: heroes, landing pages inteiras e prompts técnicos, mais as skills cinematográficas pro Claude Code e as animações de scroll Premium. Copie, adapte e publique.",
   },
   {
     icon: InfinityIcon,

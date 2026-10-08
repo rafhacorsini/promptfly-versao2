@@ -1,0 +1,40 @@
+.preview {
+  position: relative;
+  aspect-ratio: 16 / 10;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  background: var(--color-title) var(--poster) center / cover no-repeat;
+}
+
+/* A sprite tem os frames empilhados na vertical. background-size em
+   (frames x 100%) faz cada frame ocupar o card inteiro; steps(n, jump-none)
+   para exatamente em cada um, de 0% a 100%. alternate = vai e volta,
+   como alguém rolando pra baixo e pra cima. */
+.preview::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: var(--sprite);
+  background-repeat: no-repeat;
+  background-size: 100% calc(var(--frames) * 100%);
+  background-position: 0 0;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.preview[data-playing="true"]::after {
+  opacity: 1;
+  animation: play calc(var(--frames) * 0.11s) steps(var(--frames), jump-none) infinite alternate;
+}
+
+@keyframes play {
+  from { background-position: 0 0%; }
+  to { background-position: 0 100%; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .preview[data-playing="true"]::after {
+    animation: none;
+    opacity: 0;
+  }
+}

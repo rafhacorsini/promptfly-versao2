@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>O hero em tela cheia vira um card</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+<style>
+  :root { --bg: #0b0b0b; --fg: #f2efe9; --muted: #8b8780; --accent: #ff4c00; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { background: var(--bg); color: var(--fg); font-family: "Inter", system-ui, sans-serif; -webkit-font-smoothing: antialiased; }
+  body { overflow-x: clip; }
+  img { display: block; width: 100%; height: 100%; object-fit: cover; }
+  .label { font-size: 12px; letter-spacing: .22em; text-transform: uppercase; color: rgba(242,239,233,.75); }
+  .title { font-size: clamp(44px, 9vw, 128px); font-weight: 800; letter-spacing: -.05em; line-height: .9; }
+
+  .hero { height: 300vh; }
+  .pin { position: sticky; top: 0; height: 100vh; overflow: hidden; }
+  .media { position: absolute; inset: 0; clip-path: inset(0% 0% 0% 0% round 0px); will-change: clip-path; }
+  .media::after { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(11,11,11,0) 40%, rgba(11,11,11,.75)); }
+  .copy { position: absolute; left: 6vw; bottom: 8vh; z-index: 2; }
+  .copy .label { margin-bottom: 14px; }
+  .side { position: absolute; top: 50%; transform: translateY(-50%); max-width: 22ch; color: var(--muted); font-size: clamp(13px, 1.3vw, 17px); line-height: 1.55; opacity: 0; }
+  .side.left { left: 6vw; }
+  .side.right { right: 6vw; text-align: right; }
+
+  .outro { min-height: 70vh; display: grid; place-items: center; color: var(--muted); }
+  @media (max-width: 700px) { .side { display: none; } }
+</style>
+</head>
+<body>
+
+<section class="hero">
+  <div class="pin">
+    <div class="media"><img src="https://res.cloudinary.com/dwmrunhxa/image/upload/f_auto,q_auto,w_900/v1790119049/ChatGPT_Image_22_de_set._de_2026_20_16_25_aizr8c.png" alt=""></div>
+    <div class="copy"><p class="label">Coleção 2026</p><h1 class="title">O hero vira<br>um card.</h1></div>
+    <p class="side left">Role devagar. A foto encolhe até virar um card no meio da tela.</p>
+    <p class="side right">Nada some. A cena só muda de escala.</p>
+  </div>
+</section>
+
+<footer class="outro"><p>A próxima seção começa com o card já no lugar.</p></footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script>
+  gsap.registerPlugin(ScrollTrigger);
+  const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const mm = gsap.matchMedia();
+
+  // O tamanho final do card muda por tela: no celular ele fica mais alto que largo.
+  mm.add({ desktop: "(min-width: 701px)", mobile: "(max-width: 700px)" }, (ctx) => {
+    const card = ctx.conditions.desktop
+      ? "inset(22% 34% 22% 34% round 24px)"
+      : "inset(24% 12% 24% 12% round 20px)";
+
+    if (reduce) {
+      gsap.set(".media", { clipPath: card });
+      gsap.set(".side", { opacity: 1 });
+      return;
+    }
+
+    const tl = gsap.timeline({
+      scrollTrigger: { trigger: ".hero", start: "top top", end: "bottom bottom", scrub: 0.6 },
+    });
+    tl.fromTo(".media", { clipPath: "inset(0% 0% 0% 0% round 0px)" }, { clipPath: card, ease: "none" }, 0)
+      // A foto dentro aumenta enquanto o card fecha: o recorte parece aproximar.
+      // O yPercent desce a foto pra o rosto (no terço de cima) terminar no centro do card.
+      .fromTo(".media img", { scale: 1, yPercent: 0 }, { scale: 1.2, yPercent: 16, ease: "none" }, 0)
+      .to(".copy", { y: -80, opacity: 0, ease: "none", duration: 0.4 }, 0)
+      .to(".side", { opacity: 1, ease: "none", duration: 0.25, stagger: 0.05 }, 0.65);
+  });
+</script>
+</body>
+</html>

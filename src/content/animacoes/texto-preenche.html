@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Texto que acende palavra por palavra com o scroll</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root { --bg: #0b0b0b; --fg: #f2efe9; --muted: #8b8780; --accent: #ff4c00; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { background: var(--bg); color: var(--fg); font-family: "Inter", system-ui, sans-serif; -webkit-font-smoothing: antialiased; }
+  body { overflow-x: clip; }
+  .label { font-size: 12px; letter-spacing: .22em; text-transform: uppercase; color: var(--muted); }
+  .title { font-size: clamp(40px, 8vw, 104px); font-weight: 800; letter-spacing: -.045em; line-height: .95; }
+
+  .intro { min-height: 55vh; display: flex; flex-direction: column; justify-content: flex-end; gap: 20px; padding: 0 6vw 8vh; }
+
+  .fill { height: 260vh; }
+  .pin { position: sticky; top: 0; height: 100vh; display: flex; align-items: center; padding: 0 6vw; }
+  .para { font-size: clamp(30px, 5.2vw, 72px); font-weight: 700; letter-spacing: -.035em; line-height: 1.08; max-width: 20ch; }
+  .w { opacity: .14; }
+  .w.accent { color: var(--accent); }
+
+  .outro { min-height: 60vh; display: grid; place-items: center; color: var(--muted); }
+</style>
+</head>
+<body>
+
+<header class="intro">
+  <p class="label">Text fill</p>
+  <h1 class="title">O texto acende<br>no seu ritmo.</h1>
+</header>
+
+<section class="fill">
+  <div class="pin">
+    <p class="para" data-accent="conduz.">Um site cinematográfico não grita. Ele conduz. Cada palavra aparece quando você chega nela, no ritmo da sua rolagem.</p>
+  </div>
+</section>
+
+<footer class="outro"><p>Volte: as palavras apagam na ordem inversa.</p></footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script>
+  gsap.registerPlugin(ScrollTrigger);
+  const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const para = document.querySelector(".para");
+  const accent = para.dataset.accent;
+
+  // Quebra o parágrafo em <span> por palavra (sem innerHTML: o texto continua texto).
+  const words = para.textContent.trim().split(/\s+/);
+  para.textContent = "";
+  words.forEach((word, i) => {
+    const span = document.createElement("span");
+    span.className = word === accent ? "w accent" : "w";
+    span.textContent = word;
+    para.append(span);
+    if (i < words.length - 1) para.append(" ");
+  });
+
+  if (reduce) {
+    gsap.set(".w", { opacity: 1 });
+  } else {
+    // Uma timeline com stagger, toda ligada ao scroll: cada palavra
+    // ocupa uma fatia do trecho e acende quando a rolagem chega nela.
+    gsap.timeline({
+      scrollTrigger: { trigger: ".fill", start: "top top", end: "bottom bottom", scrub: 0.5 },
+    }).to(".w", { opacity: 1, ease: "none", stagger: 0.1 });
+  }
+</script>
+</body>
+</html>

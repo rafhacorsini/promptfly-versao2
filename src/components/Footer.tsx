@@ -4,6 +4,7 @@ import styles from "./Footer.module.css";
 const navigation = [
   { label: "Biblioteca", href: "/#biblioteca" },
   { label: "Como funciona", href: "/#como-funciona" },
+  { label: "Animações", href: "/animacoes" },
   { label: "Premium", href: "/#premium" },
   { label: "FAQ", href: "/#faq" },
 ];

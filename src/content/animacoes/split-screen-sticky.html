@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Split screen: a imagem fica e troca, o texto passa</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+<style>
+  :root { --bg: #0b0b0b; --fg: #f2efe9; --muted: #8b8780; --accent: #ff4c00; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { background: var(--bg); color: var(--fg); font-family: "Inter", system-ui, sans-serif; -webkit-font-smoothing: antialiased; }
+  body { overflow-x: clip; }
+  img { display: block; width: 100%; height: 100%; object-fit: cover; }
+  .label { font-size: 12px; letter-spacing: .22em; text-transform: uppercase; color: var(--muted); }
+
+  .split { display: grid; grid-template-columns: 1fr 1fr; }
+  .pin { position: sticky; top: 0; height: 100vh; overflow: hidden; }
+  /* As 4 imagens ficam empilhadas; só a primeira aparece no início. */
+  .pin img { position: absolute; inset: 0; opacity: 0; will-change: opacity, transform; }
+  .pin img:first-child { opacity: 1; }
+  .idx { position: absolute; left: 24px; bottom: 20px; z-index: 2; font-size: clamp(28px, 4vw, 56px); font-weight: 800; letter-spacing: -.04em; font-variant-numeric: tabular-nums; }
+  .idx small { font-size: .45em; color: rgba(242,239,233,.7); }
+
+  .t { min-height: 100vh; display: flex; flex-direction: column; justify-content: center; gap: 14px; padding: 0 6vw; }
+  .t h3 { font-size: clamp(32px, 4.5vw, 64px); font-weight: 800; letter-spacing: -.04em; line-height: 1; }
+  .t p:not(.label) { color: var(--muted); max-width: 38ch; line-height: 1.6; }
+
+  .outro { min-height: 60vh; display: grid; place-items: center; color: var(--muted); }
+  @media (max-width: 700px) {
+    .split { grid-template-columns: 1fr; }
+    .visual { position: sticky; top: 0; z-index: 1; height: 50vh; }
+    .pin { height: 50vh; }
+    .t { min-height: 80vh; position: relative; z-index: 2; background: var(--bg); }
+  }
+</style>
+</head>
+<body>
+
+<section class="split">
+  <div class="visual">
+    <div class="pin">
+      <img src="https://res.cloudinary.com/dwmrunhxa/image/upload/f_auto,q_auto,w_900/v1790119063/ChatGPT_Image_22_de_set._de_2026_20_10_55_scraoo.png" alt="">
+      <img src="https://res.cloudinary.com/dwmrunhxa/image/upload/f_auto,q_auto,w_900/v1790119053/ChatGPT_Image_22_de_set._de_2026_20_14_56_vppze1.png" alt="">
+      <img src="https://res.cloudinary.com/dwmrunhxa/image/upload/f_auto,q_auto,w_900/v1790119051/ChatGPT_Image_22_de_set._de_2026_20_15_43_cgaxnw.png" alt="">
+      <img src="https://res.cloudinary.com/dwmrunhxa/image/upload/f_auto,q_auto,w_900/v1790119108/ChatGPT_Image_22_de_set._de_2026_20_18_01_m7qy61.png" alt="">
+      <p class="idx"><b>01</b><small> / 04</small></p>
+    </div>
+  </div>
+  <div class="texts">
+    <article class="t" data-n="01"><p class="label">Capítulo 01</p><h3>A casa</h3><p>A imagem da esquerda fica presa enquanto este texto passa.</p></article>
+    <article class="t" data-n="02"><p class="label">Capítulo 02</p><h3>A luz</h3><p>Quando o próximo bloco chega, a imagem troca por cross-fade ligado ao scroll.</p></article>
+    <article class="t" data-n="03"><p class="label">Capítulo 03</p><h3>O espaço</h3><p>A troca acompanha a rolagem: rola devagar, troca devagar.</p></article>
+    <article class="t" data-n="04"><p class="label">Capítulo 04</p><h3>A chegada</h3><p>O número no canto mostra em que capítulo você está.</p></article>
+  </div>
+</section>
+
+<footer class="outro"><p>Fim dos capítulos.</p></footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script>
+  gsap.registerPlugin(ScrollTrigger);
+  const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const imgs = gsap.utils.toArray(".pin img");
+  const texts = gsap.utils.toArray(".t");
+  const idx = document.querySelector(".idx b");
+
+  texts.forEach((text, i) => {
+    // Contador do capítulo ativo.
+    ScrollTrigger.create({
+      trigger: text,
+      start: "top 50%",
+      end: "bottom 50%",
+      onToggle: (self) => { if (self.isActive) idx.textContent = text.dataset.n; },
+    });
+
+    if (i === 0) return;
+    const img = imgs[i];
+    if (reduce) {
+      // Sem animação: troca seca no mesmo ponto.
+      ScrollTrigger.create({ trigger: text, start: "top 50%", onToggle: (self) => gsap.set(img, { opacity: self.isActive || self.progress > 0 ? 1 : 0 }) });
+      return;
+    }
+    // Cross-fade ligado ao scroll: a nova imagem aparece por cima da anterior
+    // enquanto o bloco de texto sobe de 80% até 30% da tela.
+    gsap.fromTo(img,
+      { opacity: 0, scale: 1.08 },
+      { opacity: 1, scale: 1, ease: "none", scrollTrigger: { trigger: text, start: "top 80%", end: "top 30%", scrub: true } });
+  });
+</script>
+</body>
+</html>

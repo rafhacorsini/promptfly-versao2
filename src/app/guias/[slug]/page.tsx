@@ -29,6 +29,7 @@ import AnchorCTA from "@/components/AnchorCTA";
 import BeforeAfter from "@/components/BeforeAfter";
 import ResourcePrompt from "@/components/ResourcePrompt";
 import GuideVideo from "@/components/GuideVideo";
+import AnimacaoPreview from "@/components/AnimacaoPreview";
 import styles from "./page.module.css";
 
 const BASE = "https://promptfly.com.br";
@@ -37,7 +38,7 @@ const mdxComponents = {
   TemplateCTAInline, GuideCarousel, SkillsCTABanner, VipGroupBanner, AnimationCard,
   AnimationPromo, PremiumPromo, TemplatePromptButton, PromptPreviewBlock, GradientButton,
   Checklist, PromptCarousel, CopyPromptBlock, ProjectShowcase, PremiumOffer, AnchorCTA,
-  BeforeAfter, ResourcePrompt, GuideVideo,
+  BeforeAfter, ResourcePrompt, GuideVideo, AnimacaoPreview,
 };
 
 interface Props {

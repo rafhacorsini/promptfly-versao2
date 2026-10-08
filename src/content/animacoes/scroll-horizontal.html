@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Horizontal scroll: a rolagem vertical vira deslocamento lateral</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+<style>
+  :root { --bg: #0b0b0b; --fg: #f2efe9; --muted: #8b8780; --accent: #ff4c00; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { background: var(--bg); color: var(--fg); font-family: "Inter", system-ui, sans-serif; -webkit-font-smoothing: antialiased; }
+  body { overflow-x: clip; }
+  img { display: block; width: 100%; height: 100%; object-fit: cover; }
+  .label { font-size: 12px; letter-spacing: .22em; text-transform: uppercase; color: var(--muted); }
+  .title { font-size: clamp(40px, 8vw, 104px); font-weight: 800; letter-spacing: -.045em; line-height: .95; }
+
+  .intro { min-height: 55vh; display: flex; flex-direction: column; justify-content: flex-end; gap: 20px; padding: 0 6vw 8vh; }
+
+  .h { height: 100vh; overflow: hidden; }
+  .track { display: flex; align-items: center; gap: 2.5vw; height: 100%; padding: 0 6vw; width: max-content; will-change: transform; }
+  .lead { flex: none; width: 34vw; }
+  .lead h2 { font-size: clamp(36px, 6vw, 84px); font-weight: 800; letter-spacing: -.045em; line-height: .95; margin-top: 14px; }
+  .panel { flex: none; position: relative; width: 56vw; height: 68vh; border-radius: 16px; overflow: hidden; }
+  .panel figcaption { position: absolute; left: 20px; bottom: 18px; font-weight: 600; font-size: 15px; }
+  .panel figcaption span { color: var(--accent); margin-right: 8px; }
+
+  .outro { min-height: 60vh; display: grid; place-items: center; color: var(--muted); }
+  @media (max-width: 640px) { .lead { width: 70vw; } .panel { width: 80vw; height: 60vh; } }
+</style>
+</head>
+<body>
+
+<header class="intro">
+  <p class="label">Horizontal scroll</p>
+  <h1 class="title">Você rola pra baixo.<br>A galeria anda pro lado.</h1>
+</header>
+
+<section class="h">
+  <div class="track">
+    <div class="lead"><p class="label">Galeria</p><h2>Quatro<br>projetos.</h2></div>
+    <figure class="panel"><img src="https://res.cloudinary.com/dwmrunhxa/image/upload/f_auto,q_auto,w_900/v1790119063/ChatGPT_Image_22_de_set._de_2026_20_10_55_scraoo.png" alt=""><figcaption><span>01</span>Casa de praia</figcaption></figure>
+    <figure class="panel"><img src="https://res.cloudinary.com/dwmrunhxa/image/upload/f_auto,q_auto,w_900/v1790119058/ChatGPT_Image_22_de_set._de_2026_20_12_56_b7pw2v.png" alt=""><figcaption><span>02</span>Arquitetura</figcaption></figure>
+    <figure class="panel"><img src="https://res.cloudinary.com/dwmrunhxa/image/upload/f_auto,q_auto,w_900/v1790119053/ChatGPT_Image_22_de_set._de_2026_20_14_56_vppze1.png" alt=""><figcaption><span>03</span>Hotel</figcaption></figure>
+    <figure class="panel"><img src="https://res.cloudinary.com/dwmrunhxa/image/upload/f_auto,q_auto,w_900/v1790119051/ChatGPT_Image_22_de_set._de_2026_20_15_43_cgaxnw.png" alt=""><figcaption><span>04</span>Galeria</figcaption></figure>
+  </div>
+</section>
+
+<footer class="outro"><p>Acabou a galeria, a página volta a rolar normal.</p></footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script>
+  gsap.registerPlugin(ScrollTrigger);
+  const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  if (!reduce) {
+    const track = document.querySelector(".track");
+    // Quanto a fileira precisa andar pra mostrar o último painel.
+    const distance = () => track.scrollWidth - window.innerWidth;
+
+    // A seção trava (pin) e o scroll vertical vira o x da fileira.
+    // O curso do pin é igual à distância: 1px de scroll = 1px de deslocamento.
+    gsap.to(track, {
+      x: () => -distance(),
+      ease: "none",
+      scrollTrigger: {
+        trigger: ".h",
+        start: "top top",
+        end: () => "+=" + distance(),
+        pin: true,
+        scrub: 0.6,
+        invalidateOnRefresh: true,
+      },
+    });
+  } else {
+    // Sem animação: vira um carrossel com scroll lateral nativo.
+    document.querySelector(".h").style.overflowX = "auto";
+  }
+</script>
+</body>
+</html>

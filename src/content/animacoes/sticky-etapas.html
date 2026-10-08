@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sticky: o título fica, o conteúdo passa</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+<style>
+  :root { --bg: #0b0b0b; --fg: #f2efe9; --muted: #8b8780; --accent: #ff4c00; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { background: var(--bg); color: var(--fg); font-family: "Inter", system-ui, sans-serif; -webkit-font-smoothing: antialiased; }
+  /* clip, e não hidden: overflow hidden em qualquer ancestral quebra o position: sticky */
+  body { overflow-x: clip; }
+  img { display: block; width: 100%; height: 100%; object-fit: cover; }
+  .label { font-size: 12px; letter-spacing: .22em; text-transform: uppercase; color: var(--muted); }
+  .title { font-size: clamp(40px, 8vw, 104px); font-weight: 800; letter-spacing: -.045em; line-height: .95; }
+
+  .intro { min-height: 55vh; display: flex; flex-direction: column; justify-content: flex-end; gap: 20px; padding: 0 6vw 8vh; }
+
+  .wrap { display: grid; grid-template-columns: 1fr 1.1fr; gap: 6vw; padding: 0 6vw; }
+  .sticky { position: sticky; top: 12vh; }
+  .sticky h2 { font-size: clamp(36px, 6vw, 80px); font-weight: 800; letter-spacing: -.045em; line-height: .95; margin: 16px 0 28px; }
+  .count { font-size: clamp(48px, 8vw, 120px); font-weight: 800; letter-spacing: -.05em; line-height: 1; color: var(--accent); font-variant-numeric: tabular-nums; }
+  .count small { font-size: .3em; color: var(--muted); letter-spacing: 0; }
+
+  .step { min-height: 90vh; padding: 8vh 0; opacity: .2; transition: opacity .5s ease; }
+  .step.is-active, .reduce .step { opacity: 1; }
+  .step .n { color: var(--accent); font-weight: 600; font-size: 14px; }
+  .step h3 { font-size: clamp(24px, 3vw, 40px); font-weight: 700; letter-spacing: -.03em; margin: 8px 0 10px; }
+  .step p { color: var(--muted); max-width: 42ch; line-height: 1.6; margin-bottom: 24px; }
+  .step .ph { aspect-ratio: 16 / 10; border-radius: 14px; overflow: hidden; }
+
+  .outro { min-height: 60vh; display: grid; place-items: center; color: var(--muted); }
+
+  @media (max-width: 700px) {
+    .wrap { grid-template-columns: 1fr; }
+    .sticky { top: 0; z-index: 2; background: var(--bg); padding: 16px 0; }
+    .sticky h2 { font-size: 32px; margin: 8px 0; }
+    .count { font-size: 40px; }
+  }
+</style>
+</head>
+<body>
+
+<header class="intro">
+  <p class="label">Sticky</p>
+  <h1 class="title">O título fica.<br>O conteúdo passa.</h1>
+</header>
+
+<section class="wrap">
+  <div>
+    <div class="sticky">
+      <p class="label">Processo</p>
+      <h2>Como a gente<br>trabalha</h2>
+      <p class="count"><b>01</b><small> / 04</small></p>
+    </div>
+  </div>
+  <div>
+    <article class="step" data-n="01"><span class="n">01</span><h3>Diagnóstico</h3><p>Entender o negócio antes de abrir o editor. O que o site precisa fazer e pra quem.</p><div class="ph"><img src="https://res.cloudinary.com/dwmrunhxa/image/upload/f_auto,q_auto,w_900/v1790119049/ChatGPT_Image_22_de_set._de_2026_20_16_25_aizr8c.png" alt=""></div></article>
+    <article class="step" data-n="02"><span class="n">02</span><h3>Direção de arte</h3><p>Tipografia, ritmo e uma referência clara. A IA executa melhor com direção.</p><div class="ph"><img src="https://res.cloudinary.com/dwmrunhxa/image/upload/f_auto,q_auto,w_900/v1789675845/ChatGPT_Image_17_de_set._de_2026_17_10_20_lrrolk.png" alt=""></div></article>
+    <article class="step" data-n="03"><span class="n">03</span><h3>Motion</h3><p>Cada animação com nome: scroll-triggered, scroll-linked, parallax, sticky.</p><div class="ph"><img src="https://res.cloudinary.com/dwmrunhxa/image/upload/f_auto,q_auto,w_900/v1790119055/ChatGPT_Image_22_de_set._de_2026_20_13_45_ic0oaq.png" alt=""></div></article>
+    <article class="step" data-n="04"><span class="n">04</span><h3>Entrega</h3><p>Build sem erro, testado no celular e no desktop, publicado no domínio do cliente.</p><div class="ph"><img src="https://res.cloudinary.com/dwmrunhxa/image/upload/f_auto,q_auto,w_900/v1790119108/ChatGPT_Image_22_de_set._de_2026_20_18_01_m7qy61.png" alt=""></div></article>
+  </div>
+</section>
+
+<footer class="outro"><p>O sticky é CSS puro. O GSAP só marca qual etapa está ativa.</p></footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script>
+  gsap.registerPlugin(ScrollTrigger);
+  const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  if (reduce) document.documentElement.classList.add("reduce");
+
+  const steps = gsap.utils.toArray(".step");
+  const num = document.querySelector(".count b");
+  steps[0].classList.add("is-active");
+
+  // A etapa fica ativa enquanto cruza a linha de 55% da tela.
+  steps.forEach((step) => {
+    ScrollTrigger.create({
+      trigger: step,
+      start: "top 55%",
+      end: "bottom 55%",
+      onToggle: (self) => {
+        if (!self.isActive) return;
+        steps.forEach((s) => s.classList.toggle("is-active", s === step));
+        num.textContent = step.dataset.n;
+      },
+    });
+  });
+</script>
+</body>
+</html>

@@ -101,6 +101,16 @@ export const resources: Resource[] = [
     ],
   },
   {
+    slug: "animacoes",
+    title: "Os 6 nomes de animação de scroll que fazem a IA acertar",
+    description:
+      "Scroll-triggered, scroll-linked, parallax, sticky, scroll snap e horizontal scroll: o que cada um faz e a frase exata pra pedir, com preview de cada animação.",
+    category: "workflows",
+    tools: ["Claude Code", "ChatGPT", "Gemini"],
+    access: "free",
+    guideSlug: "nomes-das-animacoes-de-scroll",
+  },
+  {
     slug: "5-prompts",
     title: "5 prompts pra site cinematográfico no Claude Code",
     description:

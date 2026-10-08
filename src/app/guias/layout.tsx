@@ -12,6 +12,7 @@ export default function GuiasLayout({ children }: { children: React.ReactNode })
         </Link>
         <nav className={styles.nav}>
           <Link href="/guias" className={styles.navLink}>Guias</Link>
+          <Link href="/animacoes" className={styles.navLink}>Animações</Link>
           <Link href="/premium" className={styles.cta}>
             Assinar Premium →
           </Link>

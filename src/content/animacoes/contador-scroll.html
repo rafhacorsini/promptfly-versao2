@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Números que sobem com a rolagem</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+<style>
+  :root { --bg: #0b0b0b; --fg: #f2efe9; --muted: #8b8780; --line: rgba(255,255,255,.12); --accent: #ff4c00; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { background: var(--bg); color: var(--fg); font-family: "Inter", system-ui, sans-serif; -webkit-font-smoothing: antialiased; }
+  body { overflow-x: clip; }
+  .label { font-size: 12px; letter-spacing: .22em; text-transform: uppercase; color: var(--muted); }
+
+  .stats { height: 280vh; }
+  .pin { position: sticky; top: 0; height: 100vh; display: flex; flex-direction: column; justify-content: center; gap: 5vh; padding: 0 6vw; }
+  .pin h2 { font-size: clamp(36px, 6.5vw, 92px); font-weight: 800; letter-spacing: -.045em; line-height: .95; margin-top: 12px; }
+  .cols { display: grid; grid-template-columns: repeat(3, 1fr); gap: 4vw; }
+  .num { font-size: clamp(48px, 9vw, 140px); font-weight: 800; letter-spacing: -.05em; line-height: 1; font-variant-numeric: tabular-nums; }
+  .num small { font-size: .4em; color: var(--accent); margin-left: 4px; }
+  .cap { color: var(--muted); margin-top: 8px; font-size: 15px; }
+  .bar { height: 3px; background: var(--line); margin-top: 16px; }
+  .bar i { display: block; height: 100%; background: var(--accent); transform-origin: 0 50%; transform: scaleX(0); }
+  .note { font-size: 12px; color: var(--muted); }
+
+  .outro { min-height: 60vh; display: grid; place-items: center; color: var(--muted); }
+  @media (max-width: 640px) { .cols { grid-template-columns: 1fr; gap: 3vh; } }
+</style>
+</head>
+<body>
+
+<section class="stats">
+  <div class="pin">
+    <div><p class="label">Resultados</p><h2>Números que sobem<br>com a rolagem.</h2></div>
+    <div class="cols">
+      <div class="stat"><p class="num"><b data-to="128">0</b><small>+</small></p><p class="cap">projetos entregues</p><div class="bar"><i data-w="0.82"></i></div></div>
+      <div class="stat"><p class="num"><b data-to="4.9">0</b><small>/5</small></p><p class="cap">nota média dos clientes</p><div class="bar"><i data-w="0.98"></i></div></div>
+      <div class="stat"><p class="num"><b data-to="21">0</b><small>dias</small></p><p class="cap">prazo médio de entrega</p><div class="bar"><i data-w="0.45"></i></div></div>
+    </div>
+    <!-- Números de exemplo: troque pelos dados reais do cliente antes de publicar. -->
+    <p class="note">Números de exemplo. Troque pelos dados reais do cliente.</p>
+  </div>
+</section>
+
+<footer class="outro"><p>Volte: os números descem junto.</p></footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script>
+  gsap.registerPlugin(ScrollTrigger);
+  const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const format = (value, decimals) => value.toFixed(decimals).replace(".", ",");
+
+  const tl = reduce ? null : gsap.timeline({
+    scrollTrigger: { trigger: ".stats", start: "top top", end: "bottom bottom", scrub: 0.6 },
+  });
+
+  document.querySelectorAll(".stat").forEach((stat) => {
+    const el = stat.querySelector("b");
+    const bar = stat.querySelector(".bar i");
+    const target = parseFloat(el.dataset.to);
+    const decimals = (el.dataset.to.split(".")[1] || "").length;
+
+    if (reduce) {
+      el.textContent = format(target, decimals);
+      gsap.set(bar, { scaleX: parseFloat(bar.dataset.w) });
+      return;
+    }
+
+    // O número é uma variável comum animada pelo GSAP; o texto só é reescrito no onUpdate.
+    const counter = { value: 0 };
+    tl.to(counter, { value: target, ease: "none", onUpdate: () => { el.textContent = format(counter.value, decimals); } }, 0)
+      .to(bar, { scaleX: parseFloat(bar.dataset.w), ease: "none" }, 0);
+  });
+</script>
+</body>
+</html>

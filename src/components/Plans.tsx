@@ -12,6 +12,7 @@ export default function Plans({
 }) {
   const freeItems = [
     "Os prompts, snippets e arquivos de contexto dos reels",
+    "5 animações de scroll com prompt e código",
     "O template Alba Residência completo",
     "Os guias passo a passo",
     "Sem cadastro: abriu, copiou",
@@ -21,6 +22,7 @@ export default function Plans({
     "Tudo que é grátis",
     "Mentoria pronta: o método do primeiro site ao primeiro cliente",
     `Os ${premiumTemplates} templates de sites cinematográficos, com o prompt completo`,
+    "As 10 animações de scroll Premium, com prompt e código",
     "As skills cinematográficas pro Claude Code",
     "Grupo VIP no Discord",
     "Todo template novo que entrar já é seu, sem pagar de novo",
