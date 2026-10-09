@@ -56,9 +56,9 @@ INTERFACE
   3. 5 cartões de critério entram em stagger. Cada um mostra a nota, uma barra que enche até a nota, o problema, a correção em destaque e o "onde" em cinza pequeno.
   4. "As 3 mudanças que mais sobem sua nota", numeradas 01, 02 e 03.
   5. Botão "Copiar correções pro Claude Code": monta um texto que começa com "Aplica essas correções sem mudar a estrutura do site:", seguido do top 3 e das correções dos critérios abaixo de 8, e copia. O rótulo vira "Copiado ✓" por 2s.
-  6. Logo abaixo, um card pequeno com borda fina: "Quer pular direto pra um site de nota alta? Templates cinematográficos prontos + mentoria pronta, R$129 vitalício." e um botão "Ver os templates →" que abre https://www.promptfly.com.br/premium em nova aba.
+  6. Logo abaixo, um card pequeno com borda fina: "Quer pular direto pra um site de nota alta? Templates cinematográficos prontos + mentoria pronta, R$ 129,90 vitalício." e um botão "Ver os templates →" que abre https://www.promptfly.com.br/premium em nova aba.
   7. Botão "Julgar outro", que volta pro início.
-- Rodapé discreto em todas as telas, texto pequeno e cinza: "Produto desenvolvido por @rafha.gpt" (link pra https://www.instagram.com/rafha.gpt/) e, ao lado, "Templates cinematográficos + mentoria pronta: R$129 vitalício →" (link pra https://www.promptfly.com.br/premium). Os dois abrem em nova aba.
+- Rodapé discreto em todas as telas, texto pequeno e cinza: "Produto desenvolvido por @rafha.gpt" (link pra https://www.instagram.com/rafha.gpt/) e, ao lado, "Templates cinematográficos + mentoria pronta: R$ 129,90 vitalício →" (link pra https://www.promptfly.com.br/premium). Os dois abrem em nova aba.
 - Tudo responsivo a 375px. Respeite prefers-reduced-motion: sem animação, mostra direto o estado final.
 
 ENTREGA

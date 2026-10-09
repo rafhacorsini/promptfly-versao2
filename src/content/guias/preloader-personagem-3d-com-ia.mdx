@@ -1,0 +1,133 @@
+---
+title: "Como eu fiz um preloader com um personagem 3D de mim mesmo (imagem, vídeo e código)"
+description: "ChatGPT pro personagem, Google AI Studio pro vídeo e Claude Code pro código. Os prompts de cada etapa e o template completo do preloader, grátis."
+date: "2026-10-09"
+tags: ["grátis", "preloader", "vídeo com ia"]
+readTime: "5 min"
+category: "workflows"
+premium: false
+---
+
+Esse é o preloader do meu portfólio: um personagem 3D meu animado no centro da tela, um contador gigante indo até 100% e, no final, a tela sobe como uma cortina e a hero entra item por item.
+
+<GuideVideo src="/templates/preloader/preview.mp4" />
+
+Foram 3 ferramentas: o **ChatGPT** pra criar o personagem, o **Google AI Studio** pra animar e o **Claude Code** pra montar o código. Abaixo estão os prompts de cada etapa e, no final, o template completo pra copiar.
+
+## Passo 1: o personagem
+
+No ChatGPT, mandei uma imagem de referência no estilo que eu queria junto com uma foto minha e pedi pra adaptar.
+
+<CopyPromptBlock guia="preloader-personagem-3d-com-ia" label="Prompt do personagem">
+
+```text
+Transforme a pessoa da foto anexada num personagem 3D low-poly, no mesmo
+estilo da imagem de referência: formas facetadas, cores chapadas e
+iluminação suave de estúdio.
+Mantenha o que faz a pessoa ser reconhecível: formato do rosto, cabelo,
+barba, óculos e roupas.
+Corpo inteiro, de pé, pose relaxada, olhando levemente pra câmera.
+Fundo branco puro, sem sombra no chão, sem texto.
+```
+
+</CopyPromptBlock>
+
+Mande as duas imagens na mesma mensagem: a referência de estilo e a sua foto. Se o rosto não ficar parecido, peça ajustes pontuais ("barba mais curta", "óculos mais grossos") em vez de gerar tudo de novo.
+
+## Passo 2: a pose final
+
+Depois gerei uma segunda imagem do mesmo personagem na pose em que o vídeo termina. No meu caso, bebendo café.
+
+<CopyPromptBlock guia="preloader-personagem-3d-com-ia" label="Prompt da pose final">
+
+```text
+Mesmo personagem da imagem anterior, mesmo estilo 3D low-poly e a mesma
+roupa.
+Agora ele está [DESCREVA A POSE: segurando um copo de café / acenando /
+sentado com um notebook].
+Corpo inteiro, fundo branco puro, sem sombra, sem texto.
+```
+
+</CopyPromptBlock>
+
+**Por que fundo branco nas duas:** é isso que deixa o vídeo "sumir" no fundo do site. Explico no passo 4.
+
+## Passo 3: o vídeo
+
+No Google AI Studio, usei as imagens como base e um prompt bem simples:
+
+<CopyPromptBlock guia="preloader-personagem-3d-com-ia" label="Prompt do vídeo">
+
+```text
+Smooth, natural, silent animation. The character gently raises the coffee
+cup, takes a sip, then lowers it slightly. Subtle body and head movements,
+maintaining the same appearance, pose, and low-poly 3D style. Static camera,
+white background, no sound.
+```
+
+</CopyPromptBlock>
+
+Troque a ação pelo que o seu personagem faz. Duas coisas não mudam:
+
+- **Câmera parada.** Se a câmera mexer, o loop fica com um corte visível.
+- **Fundo branco.** Se vier cinza ou com textura, aparece um retângulo no meio do site.
+
+Depois, hospede o vídeo (Cloudinary ou a pasta do próprio projeto) e guarde o link.
+
+## Passo 4: o código
+
+Aqui entra o Claude Code. São três detalhes que fazem esse preloader parecer caro:
+
+**1. O vídeo se funde com a página.** O fundo do vídeo nunca é branco perfeito. Com `mix-blend-mode: multiply`, o branco do vídeo some no branco da página. Um `filter: brightness(1.025)` empurra o fundo levemente acinzentado pra branco puro.
+
+**2. O contador é honesto.** Ele não é uma animação de enfeite: espera a imagem, o vídeo e as fontes carregarem de verdade. Enquanto isso, trava em 92%. Se a internet estiver lenta, libera em no máximo 9 segundos pra não prender ninguém.
+
+**3. A saída é uma cena.** O contador sai, a tela sobe como uma cortina com o vídeo descendo um pouco por dentro (parallax) e a hero entra em sequência: personagem, título linha por linha e os itens do menu.
+
+Se quiser montar do zero, peça assim:
+
+<CopyPromptBlock guia="preloader-personagem-3d-com-ia" label="Pedido resumido">
+
+```text
+Cria um preloader em tela cheia com fundo branco. No centro, o vídeo
+[LINK DO VÍDEO] em loop, mudo, com mix-blend-mode: multiply pra o fundo do
+vídeo sumir no fundo da página. No canto inferior direito, um contador
+gigante de 0 a 100%.
+
+O contador espera os assets reais (imagem da hero, vídeo e fontes): trava
+em 92% até carregarem e libera em no máximo 9 segundos. Mínimo de 3,6s de
+0 a 100, com easing.
+
+No 100%: o contador sai, o loader sobe como uma cortina (yPercent -100,
+power4.inOut, 1.15s) com o vídeo descendo um pouco por dentro, e a hero
+entra: o personagem subindo, o título linha por linha com máscara e os
+itens do menu um por um com stagger.
+
+Use GSAP. Respeite prefers-reduced-motion.
+```
+
+</CopyPromptBlock>
+
+## Ou copia o template completo, grátis
+
+O prompt abaixo tem o código inteiro do meu preloader: HTML, CSS e JavaScript, com a explicação de cada parte e o que trocar pra usar o seu personagem.
+
+<TemplatePromptButton projectId="preloader-personagem-3d" label="Copiar o prompt completo do preloader" />
+
+Cole no Claude Code, troque o link do vídeo e da imagem pelos seus e ajuste o nome e os textos.
+
+## Quer o resto da biblioteca?
+
+Esse preloader é um dos templates grátis. No Premium estão os prompts completos de todos os sites cinematográficos, as animações de scroll com código, as skills pro Claude Code e a mentoria pronta: o método do primeiro site ao primeiro cliente.
+
+<PremiumOffer
+  guia="preloader-personagem-3d-com-ia"
+  title="Todos os templates, animações e a mentoria pronta"
+  price="R$ 129,90, pagamento único e acesso vitalício."
+  perks="Mentoria pronta: o método do primeiro site ao primeiro cliente | Os prompts completos de todos os templates cinematográficos | As 10 animações de scroll Premium, com prompt e código | As skills cinematográficas pro Claude Code | Grupo VIP no Discord | Pagamento via Hotmart, garantia de 7 dias"
+  ctaLabel="Quero o Premium"
+  secondaryLabel="Ver os templates grátis"
+  secondaryHref="/projetos"
+/>
+
+Bastidores e templates novos no **[@rafha.gpt](https://www.instagram.com/rafha.gpt/)** →

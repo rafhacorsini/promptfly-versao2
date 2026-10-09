@@ -33,7 +33,7 @@ const links = [
     label: "Promptfly Premium",
     description: "Mentoria pronta + todos os templates cinematográficos. Pagamento único.",
     href: "https://promptfly.com.br/premium",
-    tag: "R$ 129 vitalício",
+    tag: "R$ 129,90 vitalício",
     tagStyle: "accent",
   },
   {

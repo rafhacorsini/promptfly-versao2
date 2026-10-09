@@ -101,6 +101,16 @@ export const resources: Resource[] = [
     ],
   },
   {
+    slug: "preloader",
+    title: "Como eu fiz um preloader com um personagem 3D de mim mesmo",
+    description:
+      "ChatGPT pro personagem, Google AI Studio pro vídeo e Claude Code pro código. Os prompts de cada etapa e o template completo, grátis.",
+    category: "workflows",
+    tools: ["ChatGPT", "Google AI Studio", "Claude Code"],
+    access: "free",
+    guideSlug: "preloader-personagem-3d-com-ia",
+  },
+  {
     slug: "animacoes",
     title: "Os 6 nomes de animação de scroll que fazem a IA acertar",
     description:
@@ -181,7 +191,7 @@ export const resources: Resource[] = [
     guideSlug: "2-prompts-good-burguer-nao-parece-ia",
   },
   {
-    slug: "animacoes",
+    slug: "3-animacoes",
     title: "3 animações: galeria 3D, mouse reveal e text reveal",
     description:
       "Os três efeitos que aparecem em quase todos os meus projetos, com preview ao vivo, prompt e código.",
