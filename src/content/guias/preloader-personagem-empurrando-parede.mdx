@@ -1,0 +1,135 @@
+---
+title: "Preloader com personagem empurrando uma parede (imagem, vídeo e código)"
+description: "O prompt da imagem no ChatGPT, o prompt do vídeo no Google Flow e o template completo do preloader em que o personagem empurra uma parede preta e revela o seu nome. Grátis."
+date: "2026-10-13"
+tags: ["grátis", "preloader", "vídeo com ia"]
+readTime: "5 min"
+category: "workflows"
+premium: false
+---
+
+Um preloader em que o personagem empurra uma parede preta que cobre a tela. A cada empurrão a parede avança e revela o seu nome gigante por trás. Quando tudo carrega, o último empurrão tira a parede e o personagem da tela, e a hero entra item por item.
+
+<GuideVideo src="/templates/preloader-parede/preview.mp4" />
+
+São 3 etapas: uma **imagem** do personagem no ChatGPT, um **vídeo** dele empurrando no Google Flow e o **código** no Claude Code. Abaixo estão os prompts de cada uma, simples, e no final o template completo pra copiar.
+
+## Passo 1: a imagem do personagem
+
+No ChatGPT, mande uma foto sua e peça o personagem já na pose de empurrar. A pose importa: de lado, inclinado pra frente, com as duas mãos abertas à direita, como se tivesse uma parede ali.
+
+<CopyPromptBlock guia="preloader-personagem-empurrando-parede" label="Prompt da imagem">
+
+```text
+Transforme a pessoa da foto anexada num personagem ilustrado em estilo
+quadrinho: contorno preto grosso, cores chapadas e textura de retícula
+(halftone) nas sombras.
+Mantenha o que faz a pessoa ser reconhecível: formato do rosto, cabelo,
+barba e roupas.
+Pose: de perfil, olhando pra direita, inclinado pra frente com as duas mãos
+abertas e esticadas, empurrando uma parede invisível. Pernas afastadas, uma
+na frente da outra, com esforço no rosto e um pequeno sopro saindo da boca.
+Corpo inteiro, fundo branco puro, sem sombra no chão, sem texto.
+```
+
+</CopyPromptBlock>
+
+Se quiser outro estilo (3D, flat, realista), troque só a primeira frase. O resto não muda.
+
+## Passo 2: o vídeo
+
+No Google Flow, use a imagem do passo 1 como primeiro quadro e peça um vídeo curto do personagem empurrando.
+
+<CopyPromptBlock guia="preloader-personagem-empurrando-parede" label="Prompt do vídeo">
+
+```text
+The character pushes against an invisible wall with both hands, taking slow,
+heavy steps forward in place. His legs alternate with each step, his body
+leans into the push, and his whole body strains with effort. Keep the same
+appearance and illustration style. Static camera, character centered in the
+frame, pure white background, no shadows, no sound.
+```
+
+</CopyPromptBlock>
+
+Três coisas que não mudam:
+
+- **Câmera parada.** O personagem anda no lugar. Quem se move na tela é a parede.
+- **Fundo branco puro.** É isso que permite tirar o fundo depois.
+- **Personagem centralizado, com folga em volta.** O código recorta um quadrado em volta dele, então ele não pode estar colado na borda do vídeo.
+
+Se o personagem sair "parado" no vídeo, peça de novo reforçando os passos: "legs clearly stepping, alternating, one foot lifts at a time".
+
+Depois, hospede o vídeo (Cloudinary funciona) e guarde o link.
+
+## Passo 3: como o fundo some (sem frames, sem editar nada)
+
+Você não precisa transformar o vídeo em frames nem usar um vídeo com transparência. O código faz isso sozinho:
+
+1. O vídeo toca escondido na página.
+2. A cada quadro, ele é desenhado num `<canvas>`.
+3. O fundo branco é apagado na hora: o código começa pelas bordas e apaga só o branco que está ligado a elas. O branco de dentro do desenho (tênis, olhos) fica, porque está cercado pelo contorno preto.
+4. O contorno é suavizado pra não ficar serrilhado.
+
+O resultado é o personagem sem fundo em cima da parede preta, e a borda da parede acompanha as mãos dele.
+
+## Passo 4: o código
+
+Aqui entra o Claude Code. Três detalhes fazem esse preloader funcionar:
+
+**1. As mãos encostam na parede.** O personagem é posicionado pelo CSS pra que as mãos fiquem exatamente na borda da parede. Quando a parede anda, ele anda junto.
+
+**2. Os empurrões são em etapas.** A parede não desliza liso: arranca, pausa, arranca de novo. É o que dá a sensação de esforço. O último empurrão só vem depois que a imagem da hero e as fontes carregaram de verdade, ou depois de 9 segundos, pra ninguém ficar preso.
+
+**3. A saída é uma cena.** Parede e personagem saem juntos da tela, a tela branca com o nome desce e a hero entra em sequência.
+
+Se quiser montar do zero, peça assim:
+
+<CopyPromptBlock guia="preloader-personagem-empurrando-parede" label="Pedido resumido">
+
+```text
+Cria um preloader em tela cheia. Atrás de tudo, o meu nome gigante em
+vermelho, em duas linhas. Por cima, uma parede preta cobrindo a tela inteira.
+Na borda esquerda da parede, um personagem empurrando ela.
+
+O personagem vem de um vídeo [LINK DO VÍDEO] (mp4, 1920x1080, fundo branco).
+O vídeo toca escondido, cada quadro é desenhado num canvas e o fundo branco
+é removido na hora com flood fill a partir das bordas. As mãos do personagem
+têm que encostar na borda da parede o tempo todo.
+
+A parede avança em etapas, com pausas entre elas, revelando o nome. Quando a
+imagem da hero [LINK DA IMAGEM] e as fontes carregarem (no máximo 9 segundos),
+vem o último empurrão: parede e personagem saem da tela juntos, a tela branca
+com o nome desce e a hero entra: personagem subindo, título linha por linha
+com máscara e itens do menu um por um com stagger.
+
+Use GSAP. Respeite prefers-reduced-motion.
+```
+
+</CopyPromptBlock>
+
+## Ou copia o template completo, grátis
+
+O prompt abaixo tem o código inteiro: HTML, CSS e JavaScript, com a explicação de cada parte e o que trocar pra usar o seu personagem.
+
+<TemplatePromptButton projectId="preloader-parede-empurrada" label="Copiar o prompt completo do preloader" />
+
+Cole no Claude Code, troque o link do vídeo e da imagem pelos seus e ajuste o nome e os textos. Se o personagem ficar desalinhado da parede, é só o `CROP` no `main.js`: o prompt explica como ajustar.
+
+Quer outro estilo de preloader? O [preloader do contador com cortina](/guias/preloader-personagem-3d-com-ia) também é grátis.
+
+## Quer o resto da biblioteca?
+
+Esse preloader é um dos templates grátis. No Premium estão os prompts completos de todos os sites cinematográficos, as animações de scroll com código, as skills pro Claude Code e a mentoria pronta: o método do primeiro site ao primeiro cliente.
+
+<PremiumOffer
+  guia="preloader-personagem-empurrando-parede"
+  title="Todos os templates, animações e a mentoria pronta"
+  price="R$ 129,90, pagamento único e acesso vitalício."
+  perks="Mentoria pronta: o método do primeiro site ao primeiro cliente | Os prompts completos de todos os templates cinematográficos | As 10 animações de scroll Premium, com prompt e código | As skills cinematográficas pro Claude Code | Grupo VIP no Discord | Pagamento via Hotmart, garantia de 7 dias"
+  ctaLabel="Quero o Premium"
+  secondaryLabel="Ver os templates grátis"
+  secondaryHref="/projetos"
+/>
+
+Bastidores e templates novos no **[@rafha.gpt](https://www.instagram.com/rafha.gpt/)** →

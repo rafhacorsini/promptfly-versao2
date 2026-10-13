@@ -111,6 +111,16 @@ export const resources: Resource[] = [
     guideSlug: "preloader-personagem-3d-com-ia",
   },
   {
+    slug: "preloader-parede",
+    title: "Preloader com personagem empurrando uma parede",
+    description:
+      "O prompt da imagem no ChatGPT, o prompt do vídeo no Google Flow e o template completo: o personagem empurra uma parede preta e revela o seu nome. Grátis.",
+    category: "workflows",
+    tools: ["ChatGPT", "Google Flow", "Claude Code"],
+    access: "free",
+    guideSlug: "preloader-personagem-empurrando-parede",
+  },
+  {
     slug: "animacoes",
     title: "Os 6 nomes de animação de scroll que fazem a IA acertar",
     description:
