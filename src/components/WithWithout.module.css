@@ -1,0 +1,105 @@
+.wrap {
+  container-type: inline-size;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin: 1.5rem 0 2rem;
+  font-family: var(--font-primary);
+  line-height: 1.45;
+}
+
+.srOnly {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+}
+
+/* Celular: cada linha é um cartão empilhado. */
+.head {
+  display: none;
+}
+
+.row {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.5rem;
+  padding: 0.9rem;
+  background: #ffffff;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+}
+
+.label {
+  font-size: 0.75rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-title);
+}
+
+.cell {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+  padding: 0.65rem 0.75rem;
+  font-size: 0.92rem;
+  border-radius: 10px;
+  text-wrap: pretty;
+}
+
+.cell svg {
+  flex-shrink: 0;
+  margin-top: 0.15rem;
+}
+
+.sem {
+  color: var(--color-text);
+  background: var(--color-bg);
+}
+
+.sem svg {
+  color: var(--color-accent);
+}
+
+.com {
+  color: #ffffff;
+  background: var(--color-title);
+}
+
+.com svg {
+  color: #ffffff;
+}
+
+/* Desktop: tabela de 3 colunas. */
+@container (min-width: 600px) {
+  .head {
+    display: grid;
+    grid-template-columns: 6.5rem 1fr 1fr;
+    gap: 0.5rem;
+    padding: 0 0.9rem;
+    font-size: 0.78rem;
+    font-weight: 800;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+
+  .headSem {
+    color: var(--color-text);
+  }
+
+  .headCom {
+    color: var(--color-title);
+  }
+
+  .row {
+    grid-template-columns: 6.5rem 1fr 1fr;
+    align-items: stretch;
+  }
+
+  .label {
+    align-self: center;
+  }
+}

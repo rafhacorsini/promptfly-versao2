@@ -1,80 +1,85 @@
 ---
 title: "Os 2 arquivos mais importantes pra quem faz sites com IA"
-description: "DESIGN.md diz o que a IA deve fazer. ANTI_PATTERNS.md diz o que ela nunca pode fazer. Como usar os dois, com exemplos e 3 estilos prontos pra baixar grátis."
+description: "DESIGN.md diz o que a IA deve fazer. ANTI_PATTERNS.md diz o que ela nunca pode fazer. O que são, como usar em 3 passos e 3 estilos prontos pra baixar grátis."
 date: "2026-10-14"
 tags: ["grátis", "design", "claude code"]
-readTime: "6 min"
+readTime: "7 min"
 category: "workflows"
 premium: false
 ---
 
-Quando a IA faz um site feio, quase sempre o problema não é a IA. É que ninguém disse a ela o que é bonito e o que é proibido. Sem regra, ela escolhe o caminho mais comum: hero centralizado, gradiente roxo, três cards iguais, sombra em tudo.
+Se a IA já te entregou um site com cara de "feito por IA", este guia é pra você. São só 2 arquivos, e você não precisa saber programar pra usar.
 
-Dois arquivos resolvem isso. Você coloca na raiz do projeto e a IA lê antes de mexer em qualquer tela.
+<GuideSummary items="A IA faz site feio porque ninguém disse a ela o que é bonito e o que é proibido. | O DESIGN.md diz o que fazer: cores, letras, cantos, espaços e como é cada parte do site. | O ANTI_PATTERNS.md diz o que nunca fazer: os vícios que deixam todo site de IA igual. | Você coloca os dois na pasta do projeto, avisa a IA com uma frase e pede o site. | No fim do guia tem 3 estilos prontos pra baixar grátis." />
+
+## O problema: por que a IA faz site feio
+
+A IA aprendeu olhando milhões de sites. Quando você pede "faz um site bonito" sem dar nenhuma regra, ela entrega a média de todos eles: o caminho mais comum. É por isso que tanto site feito com IA parece igual.
+
+Veja a diferença que os 2 arquivos fazem:
+
+<WithWithout />
+
+## Os 2 arquivos
+
+<TwoFiles />
 
 ## Arquivo 1: DESIGN.md (o que fazer)
 
-É a ficha técnica do visual do seu site. Em vez de pedir "um site bonito", você entrega os valores exatos:
+É a ficha técnica do visual do seu site. Em vez de pedir "faz bonito", você entrega os números exatos, e a IA não precisa adivinhar nada.
 
-- **Cores:** fundo, faixa, texto, link, botão. Cada uma com o seu papel.
-- **Tipografia:** tamanho, peso, altura de linha e espaçamento entre letras do título, do texto e da legenda.
-- **Forma e espaço:** raio dos cartões, distância entre seções, respiro interno.
-- **Componentes:** como é cada peça (navegação, botão, hero, cartão), usando só os tokens.
-- **Faça e não faça:** as regras de uso, como "azul só em botão pequeno de conversão".
-- **Guia pra IA:** imagens, layout e pedidos prontos pra colar.
+Um DESIGN.md completo tem 6 partes:
 
-Um pedaço de um DESIGN.md de verdade fica assim:
+<DesignMdAnatomy />
 
-<CopyPromptBlock guia="os-2-arquivos-mais-importantes-para-sites-com-ia" label="Trecho de um DESIGN.md">
+Na prática, um pedaço dele fica assim:
+
+<CopyPromptBlock guia="os-2-arquivos-mais-importantes-para-sites-com-ia" label="Trecho de um DESIGN.md" buttonLabel="Copiar trecho">
 
 ```text
-## Tokens
-| Token | Valor | Uso |
-| color-canvas | #ffffff | Fundo padrão de todas as seções. |
-| color-band | #f5f5f7 | Faixas de largura total, cartões e rodapé. |
-| color-cta | #0071e3 | Fundo do botão de conversão. Só em botões pequenos. |
-| radius-card | 28px | Cartões e mídias contidas. |
-| spacing-section | 90px | Distância entre seções grandes. |
+color-canvas   #ffffff    fundo de todas as seções
+color-cta      #0071e3    só no botão de comprar
+text-hero      80px, peso 600, linha de 84px
+radius-card    28px, sem sombra
 
-## Faça
-- Escreva o título do hero em 80px, peso 600, linha de 84px e tracking de -1.2px.
-- Dê 28px de raio aos cartões e deixe esses cartões sem sombra.
-
-## Não faça
-- Não use gradiente.
-- Não use a cor do botão como fundo grande de hero.
+Faça: separe as seções grandes por 90px.
+Não faça: não use gradiente.
 ```
 
 </CopyPromptBlock>
 
-Esse formato foi inspirado nas vitrines de produto mais limpas da web: poucas cores, cada uma com função, e regras claras de onde cada coisa entra. A IA lê, entende e para de inventar.
+Cada valor tem nome, número e função. Quando a IA vai criar um botão, ela não escolhe uma cor qualquer: usa a `color-cta`, do tamanho e do jeito que o arquivo manda.
 
 ## Arquivo 2: ANTI_PATTERNS.md (o que nunca fazer)
 
-O DESIGN.md dá a direção. Mas a IA tem vícios, e vício não se corrige só com direção. Você precisa de uma lista de proibições.
+O DESIGN.md dá a direção. Mas a IA tem vícios, e vício não se corrige só com direção: você precisa de uma lista de proibições. É isso que o ANTI_PATTERNS.md faz.
 
-O ANTI_PATTERNS.md é essa lista: tudo que faz um site parecer feito por IA.
+<CopyPromptBlock guia="os-2-arquivos-mais-importantes-para-sites-com-ia" label="Trecho do ANTI_PATTERNS.md" buttonLabel="Copiar trecho">
 
-- Hero centralizado com título médio, subtítulo e dois botões.
-- Grid de três cards iguais com ícone em cima.
-- Gradiente roxo e azul.
-- Sombra grande e borrada em todo cartão.
-- Entrada de elemento rápida demais, sempre com o mesmo fade.
+```text
+## Layout
+- Proibido hero centralizado com título médio, subtítulo, 2 botões e 3 cards.
+- Proibido alinhar tudo ao centro.
 
-A versão completa é grátis e tem uma página só pra copiar: [ANTI_PATTERNS.md completo](/r/anti-patterns).
+## Cor e superfície
+- Proibido gradiente roxo e azul.
+- Proibido sombra grande e borrada em todo card.
 
-## Por que dois arquivos e não um
+## Antes de entregar
+- Revise a tela contra esta lista e diga quais itens você conferiu.
+```
 
-Pense numa obra. O DESIGN.md é a planta: diz o que construir. O ANTI_PATTERNS.md é a lista de erros que o pedreiro já cometeu antes: diz o que não repetir.
+</CopyPromptBlock>
 
-Só com a planta, a IA ainda escorrega nos vícios. Só com a lista de erros, ela sabe o que evitar, mas não sabe aonde ir. Juntos, ela tem direção e freio.
+**A última linha é a mais importante.** Ela obriga a IA a se revisar antes de te entregar, e é aí que ela pega os próprios erros.
+
+A lista completa é grátis e tem uma página só pra copiar: **[ver o ANTI_PATTERNS.md completo →](/r/anti-patterns)**
 
 ## Como usar em 3 passos
 
-1. Salve os dois arquivos na raiz do projeto.
-2. No CLAUDE.md (ou no começo da conversa), escreva:
+<StepCards steps="Coloque os 2 arquivos na pasta::Salve o DESIGN.md e o ANTI_PATTERNS.md na pasta principal do seu projeto, a mesma onde a IA trabalha. | Avise a IA com uma frase::Cole a frase abaixo no CLAUDE.md. No ChatGPT ou no Gemini, cole no começo da conversa junto com os 2 arquivos. | Peça o site normalmente::Agora é só pedir. Se ela errar, mande revisar a tela contra os 2 arquivos." />
 
-<CopyPromptBlock guia="os-2-arquivos-mais-importantes-para-sites-com-ia" label="Linhas pro CLAUDE.md">
+<CopyPromptBlock guia="os-2-arquivos-mais-importantes-para-sites-com-ia" label="Frase pra IA" buttonLabel="Copiar frase">
 
 ```text
 Antes de criar ou alterar qualquer tela, leia DESIGN.md e ANTI_PATTERNS.md.
@@ -84,17 +89,21 @@ Ao entregar, diga quais itens das duas listas você conferiu.
 
 </CopyPromptBlock>
 
-3. Peça o site normalmente. Se a IA quebrar uma regra, mande ela revisar a tela contra os dois arquivos.
+Se a IA errar alguma coisa, não peça "deixa mais bonito". Peça assim: **"revise esta tela contra o DESIGN.md e o ANTI_PATTERNS.md e corrija o que estiver fora"**.
 
 ## Baixe os 3 estilos prontos, grátis
 
-Montei 3 estilos completos pra você não começar do zero. Cada um vem com o DESIGN.md e os mesmos valores em CSS, em tema do Tailwind e em JSON, mais o ANTI_PATTERNS.md.
+Pra você não começar do zero, montei 3 estilos completos. Cada um vem com o DESIGN.md, os mesmos valores em CSS, em Tailwind e em JSON, e o ANTI_PATTERNS.md. Escolha o estilo, coloque o e-mail e o arquivo baixa na hora, aqui mesmo.
 
 <DesignPackDownload />
 
+Dentro do .zip você encontra:
+
+<ZipContents />
+
 ## Quer o resto da biblioteca?
 
-Esses dois arquivos são a base. No Premium estão os prompts completos de todos os sites cinematográficos, as animações de scroll com código, as skills pro Claude Code e a mentoria pronta: o método do primeiro site ao primeiro cliente.
+Esses 2 arquivos são a base. No Premium estão os prompts completos de todos os sites cinematográficos, as animações de scroll com código, as skills pro Claude Code e a mentoria pronta: o método do primeiro site ao primeiro cliente.
 
 <PremiumOffer
   guia="os-2-arquivos-mais-importantes-para-sites-com-ia"

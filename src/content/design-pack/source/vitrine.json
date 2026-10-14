@@ -147,5 +147,6 @@
     "Crie uma seção de destaques com fundo color-band, título em color-ink, um link em color-link e um cartão color-canvas com radius-card, sem sombra, e uma frase em text-heading.",
     "Crie uma seção editorial branca com frase grande à esquerda, parágrafo em text-body com o tracking do token e uma foto grande cortada no lado direito.",
     "Crie uma cápsula de preço flutuante color-canvas com radius-card sobre a imagem, preço em text-small peso 600 e um botão de conversão compacto dentro, sem sombra."
-  ]
+  ],
+  "bestFor": "Produto, app, loja e lançamento."
 }

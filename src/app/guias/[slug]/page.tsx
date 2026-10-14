@@ -30,6 +30,12 @@ import BeforeAfter from "@/components/BeforeAfter";
 import ResourcePrompt from "@/components/ResourcePrompt";
 import GuideVideo from "@/components/GuideVideo";
 import DesignPackDownload from "@/components/DesignPackDownload";
+import TwoFiles from "@/components/TwoFiles";
+import StepCards from "@/components/StepCards";
+import GuideSummary from "@/components/GuideSummary";
+import WithWithout from "@/components/WithWithout";
+import DesignMdAnatomy from "@/components/DesignMdAnatomy";
+import ZipContents from "@/components/ZipContents";
 import AnimacaoPreview from "@/components/AnimacaoPreview";
 import styles from "./page.module.css";
 
@@ -40,6 +46,7 @@ const mdxComponents = {
   AnimationPromo, PremiumPromo, TemplatePromptButton, PromptPreviewBlock, GradientButton,
   Checklist, PromptCarousel, CopyPromptBlock, ProjectShowcase, PremiumOffer, AnchorCTA,
   BeforeAfter, ResourcePrompt, GuideVideo, AnimacaoPreview, DesignPackDownload,
+  TwoFiles, StepCards, GuideSummary, WithWithout, DesignMdAnatomy, ZipContents,
 };
 
 interface Props {

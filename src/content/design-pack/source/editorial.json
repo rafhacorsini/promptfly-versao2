@@ -137,5 +137,6 @@
     "Crie uma tag de seção em text-kicker, maiúscula, entre colchetes, com contorno de 1px em color-line e radius-link, seguida de um título em text-heading.",
     "Crie um botão de conversão com fundo color-cta, texto color-cta-ink e radius-pill, e um link de texto em color-link ao lado.",
     "Crie uma faixa de borda a borda em color-band e uma grade de cartões color-paper com radius-card, sem sombra, cada um com a imagem ocupando o cartão inteiro."
-  ]
+  ],
+  "bestFor": "Portfólio, estúdio, agência e marca pessoal."
 }

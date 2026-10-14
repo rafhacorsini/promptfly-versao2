@@ -10,23 +10,28 @@ const STYLE_FILES = ["DESIGN.md", "tokens.css", "theme.tailwind.css", "tokens.js
 export const STYLE_IDS = ["vitrine", "noite", "editorial"] as const;
 export type StyleId = (typeof STYLE_IDS)[number];
 
+/** Valores dos tokens usados só para desenhar a miniatura do estilo na página. */
+export interface StylePreview {
+  canvas: string;
+  band: string;
+  paper: string;
+  ink: string;
+  muted: string;
+  line: string;
+  cta: string;
+  ctaInk: string;
+  radiusCard: string;
+  radiusPill: string;
+  heroWeight: string;
+}
+
 export interface StyleSummary {
   id: StyleId;
   name: string;
   mode: string;
-  summary: string;
-  /** Valores dos tokens usados só para desenhar a miniatura do estilo na página. */
-  preview: {
-    canvas: string;
-    band: string;
-    ink: string;
-    cta: string;
-    ctaInk: string;
-    radiusCard: string;
-    radiusPill: string;
-    heroWeight: string;
-    heroTracking: string;
-  };
+  tagline: string;
+  bestFor: string;
+  preview: StylePreview;
 }
 
 const readText = (...p: string[]) => fs.readFileSync(path.join(PACK_DIR, ...p), "utf8");
@@ -43,17 +48,20 @@ export function listStyles(): StyleSummary[] {
       id,
       name: s.name,
       mode: s.mode,
-      summary: s.summary,
+      tagline: s.tagline,
+      bestFor: s.bestFor,
       preview: {
         canvas: t["color-canvas"],
         band: t["color-band"],
+        paper: t["color-paper"],
         ink: t["color-ink"],
+        muted: t["color-muted"],
+        line: t["color-line"],
         cta: t["color-cta"],
         ctaInk: t["color-cta-ink"],
         radiusCard: t["radius-card"],
         radiusPill: t["radius-pill"],
         heroWeight: t["text-hero--font-weight"],
-        heroTracking: t["text-hero--letter-spacing"],
       },
     };
   });

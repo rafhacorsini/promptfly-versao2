@@ -1,0 +1,63 @@
+.wrap {
+  container-type: inline-size;
+  font-family: var(--font-primary);
+  line-height: 1.45;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--spacing-md);
+  align-items: start;
+}
+
+@container (min-width: 760px) {
+  .grid {
+    grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+  }
+}
+
+.tree {
+  margin: 0;
+  padding: 1.25rem 1.4rem;
+  overflow-x: auto;
+  font-family: "SF Mono", "Fira Code", ui-monospace, monospace;
+  font-size: 0.85rem;
+  line-height: 1.75;
+  color: #f5f5f5;
+  background: var(--color-title);
+  border-radius: var(--radius-lg);
+}
+
+.list {
+  display: flex;
+  flex-direction: column;
+  background: #ffffff;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+}
+
+.row {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  padding: 0.8rem 1.1rem;
+  border-bottom: 1px dashed rgba(0, 0, 0, 0.12);
+}
+
+.row:last-child {
+  border-bottom: 0;
+}
+
+.file {
+  font-family: "SF Mono", "Fira Code", ui-monospace, monospace;
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: var(--color-title);
+}
+
+.desc {
+  font-size: 0.9rem;
+  color: var(--color-text);
+  text-wrap: pretty;
+}

@@ -68,6 +68,12 @@
   border-radius: 0 !important;
   white-space: pre-wrap;
   word-break: break-word;
+  /* Fora dos guias (onde .article pre não existe) o texto herdaria cor escura no fundo escuro. */
+  padding: 1.25rem 1.5rem;
+  font-family: "SF Mono", "Fira Code", "Fira Mono", monospace;
+  font-size: 0.875rem;
+  line-height: 1.7;
+  color: #e4e4e4;
 }
 
 .error {
