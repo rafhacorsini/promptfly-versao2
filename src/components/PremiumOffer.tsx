@@ -1,6 +1,6 @@
 "use client";
 
-import { track } from "@vercel/analytics";
+import { track } from "@/lib/track";
 import premium from "@/content/premium.json";
 import styles from "./PremiumOffer.module.css";
 

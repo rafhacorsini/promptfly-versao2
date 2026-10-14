@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { grantAccess, revokeAccess } from "@/lib/access";
+import { recordRefund, recordSale } from "@/lib/stats";
 
 // Eventos que LIBERAM acesso
 const GRANT_EVENTS = new Set([
@@ -55,6 +56,11 @@ export async function POST(req: NextRequest) {
   const data = (body.data ?? {}) as {
     buyer?: { email?: string };
     product?: { id?: number | string };
+    purchase?: {
+      transaction?: string;
+      origin?: { sck?: string; src?: string };
+      price?: { value?: number };
+    };
   };
   const email = data.buyer?.email;
   const productId = data.product?.id != null ? String(data.product.id) : undefined;
@@ -73,6 +79,19 @@ export async function POST(req: NextRequest) {
   } catch (err) {
     console.error("Hotmart webhook — erro ao gravar acesso:", err);
     return NextResponse.json({ error: "Erro ao processar." }, { status: 500 });
+  }
+
+  // Vendas por origem (sck/src do link de checkout). Falha aqui nunca derruba o webhook.
+  try {
+    const info = {
+      transaction: data.purchase?.transaction,
+      code: data.purchase?.origin?.sck || data.purchase?.origin?.src,
+      value: data.purchase?.price?.value,
+    };
+    if (GRANT_EVENTS.has(event)) await recordSale(info);
+    else if (event === "PURCHASE_REFUNDED" || event === "PURCHASE_CHARGEBACK") await recordRefund(info);
+  } catch (err) {
+    console.error("Hotmart webhook: erro ao registrar origem da venda:", err);
   }
 
   return NextResponse.json({ ok: true });

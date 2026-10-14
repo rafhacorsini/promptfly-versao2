@@ -84,6 +84,16 @@ export const resources: Resource[] = [
     ],
   },
   {
+    slug: "os-2-arquivos",
+    title: "Os 2 arquivos que impedem a IA de fazer site feio",
+    description:
+      "DESIGN.md diz o que fazer e ANTI_PATTERNS.md diz o que nunca fazer. O guia e 3 estilos prontos com tokens em CSS, Tailwind e JSON, grátis com o seu e-mail.",
+    category: "contexto",
+    tools: ["Claude Code", "ChatGPT", "Gemini"],
+    access: "free",
+    guideSlug: "os-2-arquivos-mais-importantes-para-sites-com-ia",
+  },
+  {
     slug: "app-jurado",
     title: "Prompt: crie seu próprio app jurado do Awwwards",
     description:
@@ -255,6 +265,7 @@ export const resources: Resource[] = [
 /** Ordem dos cards em "Recursos em destaque". Aceita slugs daqui e ids de projects.json. */
 export const featuredSlugs = [
   "jurado",
+  "os-2-arquivos",
   "app-jurado",
   "anti-patterns",
   "scroll-sequence",

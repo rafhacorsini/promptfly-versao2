@@ -1,0 +1,107 @@
+---
+title: "Os 2 arquivos mais importantes pra quem faz sites com IA"
+description: "DESIGN.md diz o que a IA deve fazer. ANTI_PATTERNS.md diz o que ela nunca pode fazer. Como usar os dois, com exemplos e 3 estilos prontos pra baixar grátis."
+date: "2026-10-14"
+tags: ["grátis", "design", "claude code"]
+readTime: "6 min"
+category: "workflows"
+premium: false
+---
+
+Quando a IA faz um site feio, quase sempre o problema não é a IA. É que ninguém disse a ela o que é bonito e o que é proibido. Sem regra, ela escolhe o caminho mais comum: hero centralizado, gradiente roxo, três cards iguais, sombra em tudo.
+
+Dois arquivos resolvem isso. Você coloca na raiz do projeto e a IA lê antes de mexer em qualquer tela.
+
+## Arquivo 1: DESIGN.md (o que fazer)
+
+É a ficha técnica do visual do seu site. Em vez de pedir "um site bonito", você entrega os valores exatos:
+
+- **Cores:** fundo, faixa, texto, link, botão. Cada uma com o seu papel.
+- **Tipografia:** tamanho, peso, altura de linha e espaçamento entre letras do título, do texto e da legenda.
+- **Forma e espaço:** raio dos cartões, distância entre seções, respiro interno.
+- **Faça e não faça:** as regras de uso, como "azul só em botão pequeno de conversão".
+
+Um pedaço de um DESIGN.md de verdade fica assim:
+
+<CopyPromptBlock guia="os-2-arquivos-mais-importantes-para-sites-com-ia" label="Trecho de um DESIGN.md">
+
+```text
+## Tokens
+| Token | Valor | Uso |
+| color-canvas | #ffffff | Fundo padrão de todas as seções. |
+| color-band | #f5f5f7 | Faixas de largura total, cartões e rodapé. |
+| color-cta | #0071e3 | Fundo do botão de conversão. Só em botões pequenos. |
+| radius-card | 28px | Cartões e mídias contidas. |
+| spacing-section | 90px | Distância entre seções grandes. |
+
+## Faça
+- Escreva o título do hero em 80px, peso 600, linha de 84px e tracking de -1.2px.
+- Dê 28px de raio aos cartões e deixe esses cartões sem sombra.
+
+## Não faça
+- Não use gradiente.
+- Não use a cor do botão como fundo grande de hero.
+```
+
+</CopyPromptBlock>
+
+Esse formato foi inspirado nas vitrines de produto mais limpas da web: poucas cores, cada uma com função, e regras claras de onde cada coisa entra. A IA lê, entende e para de inventar.
+
+## Arquivo 2: ANTI_PATTERNS.md (o que nunca fazer)
+
+O DESIGN.md dá a direção. Mas a IA tem vícios, e vício não se corrige só com direção. Você precisa de uma lista de proibições.
+
+O ANTI_PATTERNS.md é essa lista: tudo que faz um site parecer feito por IA.
+
+- Hero centralizado com título médio, subtítulo e dois botões.
+- Grid de três cards iguais com ícone em cima.
+- Gradiente roxo e azul.
+- Sombra grande e borrada em todo cartão.
+- Entrada de elemento rápida demais, sempre com o mesmo fade.
+
+A versão completa é grátis e tem uma página só pra copiar: [ANTI_PATTERNS.md completo](/r/anti-patterns).
+
+## Por que dois arquivos e não um
+
+Pense numa obra. O DESIGN.md é a planta: diz o que construir. O ANTI_PATTERNS.md é a lista de erros que o pedreiro já cometeu antes: diz o que não repetir.
+
+Só com a planta, a IA ainda escorrega nos vícios. Só com a lista de erros, ela sabe o que evitar, mas não sabe aonde ir. Juntos, ela tem direção e freio.
+
+## Como usar em 3 passos
+
+1. Salve os dois arquivos na raiz do projeto.
+2. No CLAUDE.md (ou no começo da conversa), escreva:
+
+<CopyPromptBlock guia="os-2-arquivos-mais-importantes-para-sites-com-ia" label="Linhas pro CLAUDE.md">
+
+```text
+Antes de criar ou alterar qualquer tela, leia DESIGN.md e ANTI_PATTERNS.md.
+Use só os tokens do DESIGN.md. Se faltar um valor, pergunte antes de inventar.
+Ao entregar, diga quais itens das duas listas você conferiu.
+```
+
+</CopyPromptBlock>
+
+3. Peça o site normalmente. Se a IA quebrar uma regra, mande ela revisar a tela contra os dois arquivos.
+
+## Baixe os 3 estilos prontos, grátis
+
+Montei 3 estilos completos pra você não começar do zero. Cada um vem com o DESIGN.md e os mesmos valores em CSS, em tema do Tailwind e em JSON, mais o ANTI_PATTERNS.md.
+
+<DesignPackDownload />
+
+## Quer o resto da biblioteca?
+
+Esses dois arquivos são a base. No Premium estão os prompts completos de todos os sites cinematográficos, as animações de scroll com código, as skills pro Claude Code e a mentoria pronta: o método do primeiro site ao primeiro cliente.
+
+<PremiumOffer
+  guia="os-2-arquivos-mais-importantes-para-sites-com-ia"
+  title="Todos os templates, animações e a mentoria pronta"
+  price="R$ 129,90, pagamento único e acesso vitalício."
+  perks="Mentoria pronta: o método do primeiro site ao primeiro cliente | Os prompts completos de todos os templates cinematográficos | As 10 animações de scroll Premium, com prompt e código | As skills cinematográficas pro Claude Code | Grupo VIP no Discord | Pagamento via Hotmart, garantia de 7 dias"
+  ctaLabel="Quero o Premium"
+  secondaryLabel="Ver os templates grátis"
+  secondaryHref="/projetos"
+/>
+
+Bastidores e templates novos no **[@rafha.gpt](https://www.instagram.com/rafha.gpt/)** →

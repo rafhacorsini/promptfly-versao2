@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { Inter } from "next/font/google";
 import CookieConsent from "@/components/CookieConsent";
+import AttributionCapture from "@/components/AttributionCapture";
 import "./globals.css";
 
 const inter = Inter({
@@ -138,6 +139,7 @@ export default function RootLayout({
           dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteJsonLd) }}
         />
         {children}
+        <AttributionCapture />
         <CookieConsent />
       </body>
     </html>

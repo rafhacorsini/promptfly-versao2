@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { track } from "@vercel/analytics";
+import { track } from "@/lib/track";
 import { Copy, Check, Lock } from "lucide-react";
 import type { AnimacaoView } from "@/lib/animacoes";
 import AnimacaoPreview from "./AnimacaoPreview";

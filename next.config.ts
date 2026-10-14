@@ -1,6 +1,13 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+  // O zip do Design Pack é montado no servidor lendo estes arquivos: garante que vão junto no deploy.
+  outputFileTracingIncludes: {
+    "/api/design-pack": ["./src/content/design-pack/**/*"],
+    "/design-pack": ["./src/content/design-pack/source/*"],
+    "/guias/[slug]": ["./src/content/design-pack/source/*"],
+  },
+
   images: {
     formats: ["image/avif", "image/webp"],
     deviceSizes: [640, 750, 828, 1080, 1200, 1920],

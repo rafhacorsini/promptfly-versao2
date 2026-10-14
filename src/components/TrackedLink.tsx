@@ -1,6 +1,6 @@
 "use client";
 
-import { track } from "@vercel/analytics";
+import { track } from "@/lib/track";
 
 /**
  * <a> comum que dispara um evento no Vercel Analytics ao clicar. Serve pra

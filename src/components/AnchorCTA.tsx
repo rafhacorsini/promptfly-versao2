@@ -1,6 +1,6 @@
 "use client";
 
-import { track } from "@vercel/analytics";
+import { track } from "@/lib/track";
 import styles from "./AnchorCTA.module.css";
 
 /** Chamada leve no meio do guia que desce até uma seção da própria página. */

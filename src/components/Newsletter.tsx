@@ -1,7 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import { track } from "@vercel/analytics";
+import { track } from "@/lib/track";
+import { getAttribution } from "@/lib/attribution";
 import premium from "@/content/premium.json";
 import styles from "./Newsletter.module.css";
 
@@ -23,7 +24,7 @@ export default function Newsletter() {
       const res = await fetch("/api/subscribe", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email }),
+        body: JSON.stringify({ email, ...getAttribution() }),
       });
 
       if (res.ok) {

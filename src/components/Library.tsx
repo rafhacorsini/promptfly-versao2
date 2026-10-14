@@ -3,7 +3,7 @@
 import { useMemo, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { track } from "@vercel/analytics";
+import { track } from "@/lib/track";
 import {
   MessageSquareText,
   Sparkles,

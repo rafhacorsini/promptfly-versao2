@@ -2,7 +2,7 @@
 
 import { useRef, useState } from "react";
 import { Copy, Check } from "lucide-react";
-import { track } from "@vercel/analytics";
+import { track } from "@/lib/track";
 import styles from "./CopyPromptBlock.module.css";
 
 /**
