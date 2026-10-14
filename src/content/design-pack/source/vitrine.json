@@ -40,7 +40,22 @@
     "radius-input": "980px",
     "spacing-section": "90px",
     "spacing-gap": "20px",
-    "spacing-card": "28px"
+    "spacing-card": "28px",
+    "color-paper": "#fafafc",
+    "color-control": "#e6e6e8",
+    "color-outline": "#86868b",
+    "text-title": "19px",
+    "text-title--line-height": "23px",
+    "text-title--letter-spacing": "0.228px",
+    "text-title--font-weight": "600",
+    "text-kicker": "21px",
+    "text-kicker--line-height": "21px",
+    "text-kicker--letter-spacing": "0.231px",
+    "text-kicker--font-weight": "600",
+    "shadow-ring": "0 0 0 1px #e6e6e8",
+    "shadow-ring-strong": "0 0 0 1px #86868b",
+    "radius-nav": "20px",
+    "radius-link": "10px"
   },
   "do": [
     "Use color-canvas (#ffffff) como fundo padrão da história do produto e reserve color-band (#f5f5f7) para faixas de largura total e para o rodapé.",
@@ -59,5 +74,78 @@
     "Não ponha o título do hero em peso 700 nem com tracking mais aberto que -1.2px em 80px.",
     "Não crie pílulas coloridas para rótulos de lançamento. Use só o texto em color-status, 12px, sem fundo.",
     "Não cubra as imagens do produto com painéis densos dentro de caixas. Deixe espaço branco em volta delas."
+  ],
+  "tagline": "Um produto numa galeria branca. A imagem é o evento principal, e a tipografia e os controles azuis ficam quietos em volta dela.",
+  "components": [
+    {
+      "name": "Navegação global",
+      "role": "Barra fixa de utilidades",
+      "spec": "Barra branca de 44px de altura com a marca e links em text-caption (12px/400) na cor color-ink. Os controles não têm caixa. Quando o menu abre, a superfície passa a color-paper, com borda de 1px em color-line e blur de 20px."
+    },
+    {
+      "name": "Navegação do produto",
+      "role": "Cabeçalho da página do produto e controles de conversão",
+      "spec": "Barra branca com o nome do produto em font-display, text-title (19px/600), e controles em pílula alinhados à direita. Se a barra flutuar sobre a página, use radius-nav (20px) e color-line como limite de 1px."
+    },
+    {
+      "name": "Botão contornado",
+      "role": "Controle secundário",
+      "spec": "Fundo transparente, texto color-ink, contorno de 1px em color-outline e radius-pill. Texto em text-caption. Nunca dê cor de preenchimento a esse botão."
+    },
+    {
+      "name": "Botão de conversão",
+      "role": "Controle principal e compacto",
+      "spec": "Preenchimento color-cta, texto color-cta-ink em text-caption (12px/400) e radius-pill. Fica pequeno, dentro da barra do produto ou da cápsula de preço."
+    },
+    {
+      "name": "Hero do produto",
+      "role": "Abertura do lançamento",
+      "spec": "Palco branco de borda a borda. Rótulo do produto centralizado em text-kicker, depois a frase em text-hero (80px/600, linha de 84px, tracking de -1.2px). A imagem do produto vem logo abaixo, sem cartão em volta."
+    },
+    {
+      "name": "Cápsula de preço flutuante",
+      "role": "Contexto de compra sobre a imagem",
+      "spec": "Cápsula color-canvas com radius-card perto da parte de baixo da imagem. Preço em text-small com peso 600 e texto de apoio compacto. O botão de conversão fica dentro dela. Sem sombra."
+    },
+    {
+      "name": "Navegação de seção",
+      "role": "Atalhos dentro de uma página longa",
+      "spec": "Lista horizontal de rótulos em text-body com peso 500, cor color-ink, fundo transparente e 28px de respiro vertical. Sem cartão e sem sublinhado."
+    },
+    {
+      "name": "Palco de destaques",
+      "role": "Seção de carrossel de recursos",
+      "spec": "Fundo color-band de borda a borda. Título grande em color-ink de um lado e um link em color-link do outro. Cada slide é um cartão color-canvas com radius-card e sem sombra."
+    },
+    {
+      "name": "Cartão de mídia",
+      "role": "Vitrine de um detalhe do produto",
+      "spec": "Superfície color-canvas, radius-card, sem borda e sem sombra. A imagem fica centralizada, com a frase do recurso acima em text-heading (40px/600). A mídia pode passar da borda do cartão."
+    },
+    {
+      "name": "Bloco editorial",
+      "role": "História longa do produto",
+      "spec": "Rótulo pequeno em text-kicker, frase grande alinhada à esquerda e parágrafo em text-body. A imagem é enorme e entra pelo lado oposto ou por baixo."
+    },
+    {
+      "name": "Rótulo de lançamento",
+      "role": "Anotação de produto novo",
+      "spec": "Texto simples em color-status, text-caption com peso 600. Sem pílula, sem fundo e sem borda."
+    },
+    {
+      "name": "Campo de busca",
+      "role": "Busca da navegação global",
+      "spec": "Fundo color-canvas, contorno de 1px em color-outline, radius-input, 24px de respiro à esquerda e 45px à direita. Fica escondido até a navegação expandir."
+    }
+  ],
+  "elevation": "A separação vem do branco sobre color-band, dos cantos de 28px e de contornos raros de 1px (shadow-ring). Nada de sombra projetada. As únicas marcas parecidas com elevação são os anéis de 1px em navegação e controles selecionados (shadow-ring-strong).",
+  "imagery": "Fotografia de produto em alta resolução, isolada em fundo branco ou neutro, muitas vezes cortada em escala grande para a dobra e a espessura virarem a composição. Mãos aparecem no hero para dar noção de tamanho. As imagens ficam soltas no branco, sem moldura, ou dentro de cartões brancos de 28px sobre a faixa cinza. Interface do produto só aparece dentro das telas dos aparelhos. Ícones são pequenos, monocromáticos e ficam só na navegação global.",
+  "layout": "A página abre com a navegação global compacta, seguida da barra do produto, e então um hero branco centralizado: rótulo, frase enorme, texto de pré-venda, a imagem dominante e a cápsula de preço. A história segue por uma faixa cinza de destaques com cartões brancos que avançam na horizontal e por seções editoriais largas, com texto à esquerda e imagem enorme entrando pela direita. A navegação de seção apoia a rolagem longa. Tudo é espaçoso e guiado pela imagem, sem linhas de grade visíveis e sem pilhas de cartões.",
+  "prompts": [
+    "Crie um hero com fundo color-canvas: rótulo do produto centralizado em font-display text-kicker, frase centralizada em text-hero na cor color-ink, e a imagem do produto logo abaixo, sem cartão em volta.",
+    "Crie uma barra do produto com o nome em font-display text-title, um botão contornado (color-outline, radius-pill) e um botão de conversão color-cta com texto color-cta-ink em text-caption.",
+    "Crie uma seção de destaques com fundo color-band, título em color-ink, um link em color-link e um cartão color-canvas com radius-card, sem sombra, e uma frase em text-heading.",
+    "Crie uma seção editorial branca com frase grande à esquerda, parágrafo em text-body com o tracking do token e uma foto grande cortada no lado direito.",
+    "Crie uma cápsula de preço flutuante color-canvas com radius-card sobre a imagem, preço em text-small peso 600 e um botão de conversão compacto dentro, sem sombra."
   ]
 }

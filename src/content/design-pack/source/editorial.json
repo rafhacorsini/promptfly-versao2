@@ -40,7 +40,22 @@
     "radius-input": "14px",
     "spacing-section": "120px",
     "spacing-gap": "20px",
-    "spacing-card": "24px"
+    "spacing-card": "24px",
+    "color-paper": "#fafafa",
+    "color-control": "#e0e0e0",
+    "color-outline": "#767676",
+    "text-title": "19px",
+    "text-title--line-height": "1.2",
+    "text-title--letter-spacing": "-0.02em",
+    "text-title--font-weight": "700",
+    "text-kicker": "12px",
+    "text-kicker--line-height": "1.3",
+    "text-kicker--letter-spacing": "0.06em",
+    "text-kicker--font-weight": "600",
+    "shadow-ring": "0 0 0 1px #d4d4d4",
+    "shadow-ring-strong": "0 0 0 1px #767676",
+    "radius-nav": "14px",
+    "radius-link": "4px"
   },
   "do": [
     "Use color-canvas (#f5f5f5) como fundo padrão e color-band (#ebebeb) para quebrar o ritmo com uma faixa de borda a borda.",
@@ -59,5 +74,68 @@
     "Não use o mesmo raio em tudo. Cartões usam radius-card, botões usam radius-pill.",
     "Não use mais de uma cor de destaque. O resto é neutro.",
     "Não prenda uma imagem pequena num cartão quando ela pode ocupar a tela inteira."
+  ],
+  "tagline": "Uma revista de portfólio. Tipografia gigante e apertada, assimetria de propósito e uma única cor quente usada só em preenchimento.",
+  "components": [
+    {
+      "name": "Navegação",
+      "role": "Cabeçalho do site",
+      "spec": "Grade de 4 colunas: logo em text-title à esquerda, hora ou local, links centrais em text-caption maiúsculos e, à direita, um botão em pílula com fundo color-ink e texto branco. Sem caixa em volta da barra."
+    },
+    {
+      "name": "Hero gigante",
+      "role": "Abertura do site",
+      "spec": "Título em text-hero (peso 800, tracking de -0.045em, maiúsculo), grudado no canto de baixo à esquerda e ocupando boa parte da tela. A imagem ou o personagem fica solto no fundo, sem cartão, e o título passa ao lado ou por baixo, nunca cobrindo o rosto."
+    },
+    {
+      "name": "Botão de conversão",
+      "role": "Chamada principal",
+      "spec": "Preenchimento color-cta, texto color-cta-ink e radius-pill. É o único uso do laranja como fundo. Nunca use esse laranja como cor de texto."
+    },
+    {
+      "name": "Botão escuro",
+      "role": "Chamada secundária",
+      "spec": "Fundo color-ink, texto branco, radius-pill e text-caption."
+    },
+    {
+      "name": "Tag de seção",
+      "role": "Rótulo antes de um título",
+      "spec": "Texto em text-kicker, maiúsculo, entre colchetes, com contorno de 1px em color-line e radius-link. Exemplo: [ BIBLIOTECA ]."
+    },
+    {
+      "name": "Cartão",
+      "role": "Recurso, template ou guia",
+      "spec": "Superfície color-paper, radius-card, borda de 1px em color-line, sem sombra. A imagem ocupa o cartão inteiro quando puder."
+    },
+    {
+      "name": "Faixa",
+      "role": "Quebra de ritmo",
+      "spec": "Seção de borda a borda em color-band, com bordas de 1px em color-line em cima e embaixo. Pelo menos uma faixa por página."
+    },
+    {
+      "name": "Bloco de texto pequeno",
+      "role": "Apoio assimétrico ao título",
+      "spec": "Parágrafo curto em text-body (peso 300), com largura máxima de uns 260px, alinhado no lado oposto ao título, com um rótulo de status em text-caption embaixo."
+    },
+    {
+      "name": "Campo de formulário",
+      "role": "E-mail e busca",
+      "spec": "Fundo color-paper, contorno de 1px em color-outline, radius-input e texto em color-ink. Foco com contorno de 3px em color-ink."
+    },
+    {
+      "name": "Rótulo de status",
+      "role": "Anotação de disponibilidade",
+      "spec": "Texto simples em color-status com text-caption e um ponto verde antes. Sem pílula colorida."
+    }
+  ],
+  "elevation": "Sem sombra projetada. A separação vem de faixas color-band, de bordas de 1px em color-line (shadow-ring) e do contraste entre tamanhos de letra. No máximo uma linha de contorno em controles selecionados (shadow-ring-strong).",
+  "imagery": "Personagens, retratos e capturas de tela com função na história, nunca foto de banco decorativa. Imagem grande, solta no fundo claro, sem moldura, e se possível ocupando a tela inteira. Se a imagem tiver fundo branco, ela se funde com a página usando mix-blend-mode: multiply. Ícones só quando carregam informação.",
+  "layout": "Mobile primeiro. No desktop, o título ocupa o canto de baixo à esquerda e um texto curto fica no canto oposto, com a imagem entre os dois. No celular, título e texto sobem e a imagem fica centralizada embaixo. Seções separadas por no mínimo 120px, uma faixa de borda a borda por página, e nada centralizado só por hábito.",
+  "prompts": [
+    "Crie um hero em color-canvas com o título em text-hero (peso 800, tracking apertado, maiúsculo) no canto de baixo à esquerda, um parágrafo curto em text-body no canto oposto e a imagem solta entre os dois, sem cartão.",
+    "Crie uma navegação em grade de 4 colunas: logo em text-title, links centrais em text-caption maiúsculos e um botão em pílula com fundo color-ink e texto branco à direita.",
+    "Crie uma tag de seção em text-kicker, maiúscula, entre colchetes, com contorno de 1px em color-line e radius-link, seguida de um título em text-heading.",
+    "Crie um botão de conversão com fundo color-cta, texto color-cta-ink e radius-pill, e um link de texto em color-link ao lado.",
+    "Crie uma faixa de borda a borda em color-band e uma grade de cartões color-paper com radius-card, sem sombra, cada um com a imagem ocupando o cartão inteiro."
   ]
 }

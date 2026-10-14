@@ -40,7 +40,22 @@
     "radius-input": "980px",
     "spacing-section": "96px",
     "spacing-gap": "20px",
-    "spacing-card": "28px"
+    "spacing-card": "28px",
+    "color-paper": "#1d1d1f",
+    "color-control": "#2c2c2e",
+    "color-outline": "#6e6e73",
+    "text-title": "19px",
+    "text-title--line-height": "23px",
+    "text-title--letter-spacing": "0.228px",
+    "text-title--font-weight": "600",
+    "text-kicker": "21px",
+    "text-kicker--line-height": "21px",
+    "text-kicker--letter-spacing": "0.231px",
+    "text-kicker--font-weight": "600",
+    "shadow-ring": "0 0 0 1px #424245",
+    "shadow-ring-strong": "0 0 0 1px #6e6e73",
+    "radius-nav": "20px",
+    "radius-link": "10px"
   },
   "do": [
     "Use color-canvas (#000000) como fundo padrão e color-band (#161617) para faixas de largura total, cartões e rodapé.",
@@ -59,5 +74,73 @@
     "Não use texto cinza escuro sobre preto. Se não passa no contraste, suba a cor.",
     "Não crie pílulas coloridas de status. Use só o texto em color-status, 12px, sem fundo.",
     "Não use mais de um azul. Link e conversão já têm o seu."
+  ],
+  "tagline": "Uma sala preta com o produto iluminado. O preto some, a imagem brilha, e a cor fica só nos links e no botão de conversão.",
+  "components": [
+    {
+      "name": "Navegação global",
+      "role": "Barra fixa de utilidades",
+      "spec": "Barra color-canvas de 44px com links em text-caption na cor color-ink. Sem caixas. Quando abre, a superfície passa a color-paper, com borda de 1px em color-line."
+    },
+    {
+      "name": "Faixa de aviso",
+      "role": "Mensagem curta acima do hero",
+      "spec": "Faixa de largura total em color-paper, texto em text-small na cor color-ink e um link em color-link no fim. Uma linha só."
+    },
+    {
+      "name": "Hero do produto",
+      "role": "Abertura do lançamento",
+      "spec": "Imagem do produto ocupando a tela inteira sobre color-canvas. Rótulo em text-kicker e a frase em text-hero alinhados à esquerda, na parte de baixo, sobre a imagem. O botão de conversão fica logo abaixo da frase."
+    },
+    {
+      "name": "Botão de conversão",
+      "role": "Controle principal",
+      "spec": "Preenchimento color-cta, texto color-cta-ink em text-caption e radius-pill. Compacto. Nunca ocupa a largura da tela."
+    },
+    {
+      "name": "Cápsula de preço",
+      "role": "Contexto de compra",
+      "spec": "Cápsula color-paper com radius-pill, preço em text-small peso 600 na cor color-ink e o botão de conversão dentro. Sem sombra."
+    },
+    {
+      "name": "Faixa de destaques",
+      "role": "Seção de recursos",
+      "spec": "Fundo color-band de borda a borda, título em color-ink e cartões color-paper com radius-card e sem sombra. A mídia fica centralizada com a frase em text-heading acima."
+    },
+    {
+      "name": "Cartão de mídia",
+      "role": "Vitrine de um detalhe",
+      "spec": "Superfície color-paper, radius-card, sem borda brilhante e sem sombra. A imagem pode passar da borda do cartão."
+    },
+    {
+      "name": "Controle de carrossel",
+      "role": "Pausa e pontos de navegação",
+      "spec": "Pílula pequena em color-control com radius-pill e ícones em color-muted. Pontos e pausa agrupados, sem caixa em volta."
+    },
+    {
+      "name": "Bloco editorial",
+      "role": "História longa do produto",
+      "spec": "Rótulo pequeno em text-kicker, frase grande à esquerda em color-ink e parágrafo em text-body na cor color-muted. A imagem entra pelo lado oposto."
+    },
+    {
+      "name": "Rótulo de lançamento",
+      "role": "Anotação de produto novo",
+      "spec": "Texto simples em color-status, text-caption com peso 600. Sem pílula e sem fundo."
+    },
+    {
+      "name": "Campo de busca",
+      "role": "Busca da navegação",
+      "spec": "Fundo color-paper, contorno de 1px em color-outline, radius-input e texto em color-ink."
+    }
+  ],
+  "elevation": "No escuro, a profundidade vem da troca de camadas (color-canvas, color-band, color-paper) e de anéis de 1px (shadow-ring). Sombra projetada some no preto e só suja a imagem, então não existe. Nada de brilho em volta dos elementos.",
+  "imagery": "Produto isolado no preto, com luz própria: o brilho vem da imagem, nunca da interface. Imagens grandes, às vezes cortadas, ocupando a largura inteira do palco. Cores fortes só aparecem no próprio produto (uma pulseira verde, uma tela acesa). Ícones pequenos, monocromáticos e em color-ink.",
+  "layout": "Navegação global e uma faixa de aviso no topo, depois um palco preto de tela cheia com a imagem do produto e a frase alinhada embaixo, à esquerda. A história continua em faixas grafite com cartões que avançam na horizontal e em blocos editoriais com texto à esquerda e imagem enorme do outro lado. Muito espaço vazio entre as seções, sem linhas de grade e sem pilhas de cartões.",
+  "prompts": [
+    "Crie um hero de tela cheia sobre color-canvas: imagem do produto ocupando o palco, rótulo em text-kicker e frase em text-hero alinhados à esquerda embaixo, e abaixo deles um botão de conversão color-cta.",
+    "Crie uma faixa de aviso de largura total em color-paper com uma linha em text-small na cor color-ink e um link em color-link no final.",
+    "Crie uma seção de destaques com fundo color-band e cartões color-paper com radius-card, sem sombra, cada um com uma imagem centralizada e uma frase em text-heading.",
+    "Crie uma cápsula de preço em color-paper com radius-pill, preço em text-small peso 600 e um botão de conversão color-cta compacto dentro.",
+    "Crie um bloco editorial com rótulo em text-kicker, frase grande em color-ink, parágrafo em text-body na cor color-muted e uma imagem grande entrando pela direita."
   ]
 }

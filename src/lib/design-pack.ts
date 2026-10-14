@@ -15,8 +15,18 @@ export interface StyleSummary {
   name: string;
   mode: string;
   summary: string;
-  /** Fundo, faixa, texto e destaque: só pra mostrar a paleta na página. */
-  swatches: { label: string; color: string }[];
+  /** Valores dos tokens usados só para desenhar a miniatura do estilo na página. */
+  preview: {
+    canvas: string;
+    band: string;
+    ink: string;
+    cta: string;
+    ctaInk: string;
+    radiusCard: string;
+    radiusPill: string;
+    heroWeight: string;
+    heroTracking: string;
+  };
 }
 
 const readText = (...p: string[]) => fs.readFileSync(path.join(PACK_DIR, ...p), "utf8");
@@ -34,12 +44,17 @@ export function listStyles(): StyleSummary[] {
       name: s.name,
       mode: s.mode,
       summary: s.summary,
-      swatches: [
-        { label: "Fundo", color: t["color-canvas"] },
-        { label: "Faixa", color: t["color-band"] },
-        { label: "Texto", color: t["color-ink"] },
-        { label: "Destaque", color: t["color-cta"] },
-      ],
+      preview: {
+        canvas: t["color-canvas"],
+        band: t["color-band"],
+        ink: t["color-ink"],
+        cta: t["color-cta"],
+        ctaInk: t["color-cta-ink"],
+        radiusCard: t["radius-card"],
+        radiusPill: t["radius-pill"],
+        heroWeight: t["text-hero--font-weight"],
+        heroTracking: t["text-hero--letter-spacing"],
+      },
     };
   });
 }

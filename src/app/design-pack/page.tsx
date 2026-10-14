@@ -32,8 +32,8 @@ export default function DesignPackPage() {
         <article className={styles.card}>
           <h2 className={styles.cardTitle}>DESIGN.md</h2>
           <p className={styles.cardText}>
-            As regras do que fazer: cores, fontes, tamanhos, raios e espaços, com a lista &quot;faça&quot; e
-            &quot;não faça&quot; de cada estilo. Cada valor está em 4 formatos idênticos.
+            As regras do que fazer: cores, fontes, tamanhos, raios, sombras e espaços, a descrição de cada
+            componente e a lista &quot;faça&quot; e &quot;não faça&quot; de cada estilo, com pedidos prontos pra IA.
           </p>
         </article>
         <article className={styles.card}>

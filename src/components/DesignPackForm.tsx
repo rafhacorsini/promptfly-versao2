@@ -4,12 +4,24 @@ import { useId, useState } from "react";
 import { getAttribution } from "@/lib/attribution";
 import styles from "./DesignPackForm.module.css";
 
+interface Preview {
+  canvas: string;
+  band: string;
+  ink: string;
+  cta: string;
+  ctaInk: string;
+  radiusCard: string;
+  radiusPill: string;
+  heroWeight: string;
+  heroTracking: string;
+}
+
 interface StyleOption {
   id: string;
   name: string;
   mode: string;
   summary: string;
-  swatches: { label: string; color: string }[];
+  preview?: Preview;
 }
 
 type Status = "idle" | "loading" | "done" | "error";
@@ -63,7 +75,7 @@ export default function DesignPackForm({ styles: options }: { styles: StyleOptio
       <fieldset className={styles.fieldset}>
         <legend className={styles.legend}>1. Escolha o estilo</legend>
         <div className={styles.options}>
-          {[...options, { id: "todos", name: "Os 3 estilos", mode: "", summary: "Baixe tudo e escolha depois.", swatches: [] }].map(
+          {[...options, { id: "todos", name: "Os 3 estilos", mode: "", summary: "Baixe tudo e escolha depois." } as StyleOption].map(
             (o) => (
               <label key={o.id} className={styles.option} data-checked={style === o.id}>
                 <input
@@ -78,11 +90,21 @@ export default function DesignPackForm({ styles: options }: { styles: StyleOptio
                   {o.name}
                   {o.mode && <span className={styles.mode}>{o.mode}</span>}
                 </span>
-                {o.swatches.length > 0 && (
-                  <span className={styles.swatches} aria-hidden="true">
-                    {o.swatches.map((s) => (
-                      <span key={s.label} className={styles.swatch} style={{ background: s.color }} />
-                    ))}
+                {o.preview && (
+                  <span className={styles.mock} style={{ background: o.preview.canvas }} aria-hidden="true">
+                    <span
+                      className={styles.mockTitle}
+                      style={{ color: o.preview.ink, fontWeight: o.preview.heroWeight, letterSpacing: o.preview.heroTracking }}
+                    >
+                      Aa
+                    </span>
+                    <span className={styles.mockCard} style={{ background: o.preview.band, borderRadius: o.preview.radiusCard }} />
+                    <span
+                      className={styles.mockPill}
+                      style={{ background: o.preview.cta, color: o.preview.ctaInk, borderRadius: o.preview.radiusPill }}
+                    >
+                      Comprar
+                    </span>
                   </span>
                 )}
                 <span className={styles.optionText}>{o.summary}</span>

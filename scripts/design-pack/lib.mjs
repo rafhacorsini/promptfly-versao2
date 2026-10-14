@@ -11,6 +11,7 @@ export const PACK_DIR = path.join(ROOT, "src/content/design-pack");
 export const SOURCE_DIR = path.join(PACK_DIR, "source");
 
 export const STYLE_IDS = ["vitrine", "noite", "editorial"];
+export const TOKEN_COUNT = 52;
 
 export function loadStyle(id) {
   return JSON.parse(fs.readFileSync(path.join(SOURCE_DIR, `${id}.json`), "utf8"));
@@ -37,24 +38,29 @@ export function ratio(fg, bg) {
   return (hi + 0.05) / (lo + 0.05);
 }
 
-/** Pares texto/fundo que cada estilo precisa passar. Mínimo 4.5 = WCAG AA para texto normal. */
+/**
+ * Pares que cada estilo precisa passar. Texto normal: 4.5:1 (WCAG AA).
+ * Contorno de controle (campo, botão contornado): 3:1 (WCAG 1.4.11, componentes de interface).
+ */
 export const PAIRS = [
-  ["color-ink", "color-canvas", "Texto principal sobre o fundo"],
-  ["color-ink", "color-band", "Texto principal sobre faixas e cartões"],
-  ["color-muted", "color-canvas", "Texto secundário sobre o fundo"],
-  ["color-muted", "color-band", "Texto secundário sobre faixas e cartões"],
-  ["color-link", "color-canvas", "Link sobre o fundo"],
-  ["color-link", "color-band", "Link sobre faixas e cartões"],
-  ["color-cta-ink", "color-cta", "Texto do botão de conversão"],
-  ["color-status", "color-canvas", "Texto de status sobre o fundo"],
-  ["color-status", "color-band", "Texto de status sobre faixas e cartões"],
+  ["color-ink", "color-canvas", "Texto principal sobre o fundo", 4.5],
+  ["color-ink", "color-band", "Texto principal sobre faixas", 4.5],
+  ["color-ink", "color-paper", "Texto principal sobre cartões e menus", 4.5],
+  ["color-muted", "color-canvas", "Texto secundário sobre o fundo", 4.5],
+  ["color-muted", "color-band", "Texto secundário sobre faixas", 4.5],
+  ["color-link", "color-canvas", "Link sobre o fundo", 4.5],
+  ["color-link", "color-band", "Link sobre faixas", 4.5],
+  ["color-cta-ink", "color-cta", "Texto do botão de conversão", 4.5],
+  ["color-status", "color-canvas", "Texto de status sobre o fundo", 4.5],
+  ["color-status", "color-band", "Texto de status sobre faixas", 4.5],
+  ["color-outline", "color-canvas", "Contorno de campo sobre o fundo", 3],
+  ["color-outline", "color-band", "Contorno de campo sobre faixas", 3],
 ];
-export const MIN_RATIO = 4.5;
 
 export function contrastRows(style) {
-  return PAIRS.map(([fg, bg, label]) => {
+  return PAIRS.map(([fg, bg, label, min]) => {
     const r = ratio(style.tokens[fg], style.tokens[bg]);
-    return { fg, bg, label, ratio: Math.round(r * 100) / 100, min: MIN_RATIO, pass: r >= MIN_RATIO };
+    return { fg, bg, label, ratio: Math.round(r * 100) / 100, min, pass: r >= min };
   });
 }
 
@@ -62,7 +68,10 @@ export function contrastRows(style) {
 
 const USO = {
   "color-canvas": "Fundo padrão de todas as seções.",
-  "color-band": "Faixas de largura total que alternam com o fundo, cartões e rodapé.",
+  "color-band": "Faixas de largura total que alternam com o fundo e o rodapé.",
+  "color-paper": "Menu aberto, cartões sobre faixa e preenchimentos secundários.",
+  "color-control": "Controles desativados, trilhas e superfícies discretas.",
+  "color-outline": "Contorno de campos e botões contornados, indicadores inativos.",
   "color-ink": "Títulos e texto principal.",
   "color-muted": "Texto secundário, legendas e textos legais.",
   "color-line": "Divisórias de 1px e contornos discretos. Nunca como cor de texto.",
@@ -75,15 +84,21 @@ const USO = {
   "radius-card": "Cartões e mídias contidas.",
   "radius-pill": "Botões e pílulas.",
   "radius-input": "Campos de formulário.",
+  "radius-nav": "Barra de navegação flutuante.",
+  "radius-link": "Links com área de toque e tags pequenas.",
+  "shadow-ring": "Anel de 1px discreto. Não é elevação.",
+  "shadow-ring-strong": "Anel de 1px para controle selecionado ou contornado.",
   "spacing-section": "Distância entre seções grandes.",
   "spacing-gap": "Distância entre elementos relacionados.",
   "spacing-card": "Respiro interno dos cartões.",
 };
 const TEXTOS = {
   hero: "Frase de impacto do hero.",
-  heading: "Título de seção.",
-  body: "Parágrafos e navegação.",
-  small: "Texto de apoio.",
+  heading: "Título de seção e frase de recurso.",
+  title: "Nome do produto na barra e títulos pequenos.",
+  kicker: "Rótulo curto acima de uma frase.",
+  body: "Parágrafos e navegação de seção.",
+  small: "Texto de apoio e preços.",
   caption: "Legenda, rótulo e texto de botão pequeno.",
 };
 const PROPS = {
@@ -92,10 +107,11 @@ const PROPS = {
   "--letter-spacing": "espaçamento entre letras",
   "--font-weight": "peso",
 };
+const TEXT_ORDER = ["hero", "heading", "title", "kicker", "body", "small", "caption"];
 
 export function uso(token) {
   if (USO[token]) return USO[token];
-  const m = /^text-(hero|heading|body|small|caption)(--[a-z-]+)?$/.exec(token);
+  const m = /^text-(hero|heading|title|kicker|body|small|caption)(--[a-z-]+)?$/.exec(token);
   if (m) return `${TEXTOS[m[1]]} (${PROPS[m[2] ?? ""]})`;
   throw new Error(`Token sem descrição: ${token}`);
 }
@@ -107,6 +123,7 @@ const GRUPOS = [
   ["Fontes", (t) => t.startsWith("font-")],
   ["Tipografia", (t) => t.startsWith("text-")],
   ["Raio e espaço", (t) => t.startsWith("radius-") || t.startsWith("spacing-")],
+  ["Sombras", (t) => t.startsWith("shadow-")],
 ];
 
 function lines(style, indent) {
@@ -115,12 +132,17 @@ function lines(style, indent) {
     .join("\n");
 }
 
+export function cssBlock(style) {
+  return `:root {\n${lines(style, "  ")}\n}`;
+}
+export function tailwindBlock(style) {
+  return `@theme {\n${lines(style, "  ")}\n}`;
+}
+
 export function genCss(style) {
   return `/* ${style.name} · tokens.css · Promptfly Design Pack (promptfly.com.br)
    Importe uma vez no CSS global. Os mesmos valores estão em theme.tailwind.css, tokens.json e DESIGN.md. */
-:root {
-${lines(style, "  ")}
-}
+${cssBlock(style)}
 `;
 }
 
@@ -128,9 +150,7 @@ export function genTailwind(style) {
   return `/* ${style.name} · theme.tailwind.css · Promptfly Design Pack (promptfly.com.br)
    Tailwind v4. No CSS global: @import "tailwindcss"; @import "./theme.tailwind.css";
    Gera classes como bg-canvas, text-ink, rounded-card, p-section e text-hero. */
-@theme {
-${lines(style, "  ")}
-}
+${tailwindBlock(style)}
 `;
 }
 
@@ -145,20 +165,53 @@ export function genJson(style) {
   return JSON.stringify(out, null, 2) + "\n";
 }
 
+function scaleTable(style) {
+  const t = style.tokens;
+  const rows = TEXT_ORDER.map((r) => {
+    const fam = r === "hero" || r === "heading" || r === "title" || r === "kicker" ? "font-display" : "font-text";
+    return `| ${r} | ${fam} | ${t[`text-${r}--font-weight`]} | ${t[`text-${r}`]} | ${t[`text-${r}--line-height`]} | ${t[`text-${r}--letter-spacing`]} |`;
+  }).join("\n");
+  return `### Escala tipográfica\n\n| Papel | Família | Peso | Tamanho | Altura da linha | Espaçamento |\n|---|---|---|---|---|---|\n${rows}`;
+}
+
+const SURFACES = [
+  ["color-canvas", "Fundo padrão, hero, navegação do produto e cartões sobre faixa."],
+  ["color-band", "Faixa de largura total, palco de carrossel, área muda e rodapé."],
+  ["color-paper", "Camada do menu aberto e preenchimento secundário."],
+  ["color-control", "Preenchimento de controle desativado ou discreto e borda fina de navegação."],
+];
+
 export function genDesignMd(style) {
+  const t = style.tokens;
   const tabelas = GRUPOS.map(([titulo, filtro]) => {
-    const rows = Object.entries(style.tokens)
+    const rows = Object.entries(t)
       .filter(([k]) => filtro(k))
       .map(([k, v]) => `| \`${k}\` | \`${v.replace(/\|/g, "\\|")}\` | ${uso(k)} |`)
       .join("\n");
-    return `### ${titulo}\n\n| Token | Valor | Uso |\n|---|---|---|\n${rows}`;
+    const extra = titulo === "Tipografia" ? `\n\n${scaleTable(style)}` : "";
+    return `### ${titulo}\n\n| Token | Valor | Uso |\n|---|---|---|\n${rows}${extra}`;
   }).join("\n\n");
 
   const contraste = contrastRows(style)
     .map((r) => `| ${r.fg} | ${r.bg} | ${r.ratio.toFixed(2)}:1 | ${r.min}:1 | ${r.pass ? "Passa" : "Falha"} |`)
     .join("\n");
 
+  const componentes = style.components
+    .map((c) => `### ${c.name}\n**Papel:** ${c.role}\n\n${c.spec}`)
+    .join("\n\n");
+
+  const superficies = SURFACES.map(([k, p], i) => `| ${i} | \`${k}\` | \`${t[k]}\` | ${p} |`).join("\n");
+
+  const cores = Object.entries(t)
+    .filter(([k]) => k.startsWith("color-"))
+    .map(([k, v]) => `- \`${k}\`: ${v}. ${uso(k)}`)
+    .join("\n");
+
   return `# DESIGN.md: ${style.name}
+
+> ${style.tagline}
+
+**Tema:** ${style.mode}
 
 ${style.summary}
 
@@ -166,17 +219,21 @@ ${style.summary}
 
 ## Tokens
 
-Os mesmos valores estão em tokens.css, theme.tailwind.css e tokens.json. Cor, fonte, raio e espaçamento só podem vir desta lista.
+Os mesmos valores estão em tokens.css, theme.tailwind.css e tokens.json. Cor, fonte, raio, sombra e espaçamento só podem vir desta lista.
 
 ${tabelas}
 
 ## Contraste (WCAG AA)
 
-Razão de contraste de cada par de texto e fundo. O mínimo para texto normal é 4.5:1.
+Razão de contraste de cada par. O mínimo é 4.5:1 para texto normal e 3:1 para contornos de controles.
 
-| Texto | Fundo | Razão | Mínimo | Resultado |
+| Texto ou contorno | Fundo | Razão | Mínimo | Resultado |
 |---|---|---|---|---|
 ${contraste}
+
+## Componentes
+
+${componentes}
 
 ## Faça
 
@@ -186,10 +243,52 @@ ${style.do.map((d) => `- ${d}`).join("\n")}
 
 ${style.dont.map((d) => `- ${d}`).join("\n")}
 
+## Superfícies
+
+| Nível | Token | Valor | Uso |
+|---|---|---|---|
+${superficies}
+
+## Elevação
+
+${style.elevation}
+
+## Imagens
+
+${style.imagery}
+
+## Layout
+
+${style.layout}
+
+## Guia para a IA
+
+Referência rápida de cores:
+
+${cores}
+
+Pedidos prontos (cole no Claude Code, no ChatGPT ou no Gemini):
+
+${style.prompts.map((p) => `- ${p}`).join("\n")}
+
+## Início rápido
+
+### Variáveis CSS
+
+\`\`\`css
+${cssBlock(style)}
+\`\`\`
+
+### Tailwind v4
+
+\`\`\`css
+${tailwindBlock(style)}
+\`\`\`
+
 ## Antes de entregar
 
 - Revise a tela contra cada item de Faça e Não faça e diga quais você conferiu.
-- Confirme que nenhuma cor, fonte, raio ou espaçamento fora da tabela de tokens foi usado.
+- Confirme que nenhuma cor, fonte, raio, sombra ou espaçamento fora da tabela de tokens foi usado.
 - Teste em 360px, 768px e 1280px, sem rolagem horizontal e com navegação por teclado.
 `;
 }

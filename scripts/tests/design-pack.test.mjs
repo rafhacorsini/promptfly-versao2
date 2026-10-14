@@ -2,7 +2,7 @@ import { test } from "node:test";
 import assert from "node:assert/strict";
 import fs from "node:fs";
 import path from "node:path";
-import { PACK_DIR, STYLE_IDS, PAIRS, MIN_RATIO, loadStyle, outputs, ratio, contrastRows } from "../design-pack/lib.mjs";
+import { PACK_DIR, STYLE_IDS, PAIRS, TOKEN_COUNT, loadStyle, outputs, ratio, contrastRows } from "../design-pack/lib.mjs";
 
 const read = (...p) => fs.readFileSync(path.join(PACK_DIR, ...p), "utf8");
 
@@ -50,6 +50,15 @@ for (const id of STYLE_IDS) {
     assert.deepEqual(css, md);
   });
 
+  test(`${id}: o início rápido do DESIGN.md (CSS e Tailwind) tem os mesmos valores dos tokens`, () => {
+    const md = read(id, "DESIGN.md");
+    const quick = md.split("\n## Início rápido")[1].split("\n## Antes de entregar")[0];
+    const blocks = [...quick.matchAll(/```css\n([\s\S]*?)\n```/g)].map((m) => m[1]);
+    assert.equal(blocks.length, 2, "esperava um bloco CSS e um bloco Tailwind");
+    assert.deepEqual(parseCssVars(blocks[0], ":root"), style.tokens, "início rápido (:root) difere dos tokens");
+    assert.deepEqual(parseCssVars(blocks[1], "@theme"), style.tokens, "início rápido (@theme) difere dos tokens");
+  });
+
   test(`${id}: arquivos gerados estão em dia com a fonte (rode npm run design-pack:build)`, () => {
     for (const [name, content] of Object.entries(outputs(style))) {
       assert.equal(read(id, name), content, `${id}/${name} está desatualizado`);
@@ -57,9 +66,9 @@ for (const id of STYLE_IDS) {
   });
 
   test(`${id}: todos os pares de texto e fundo passam no contraste WCAG AA`, () => {
-    for (const [fg, bg] of PAIRS) {
+    for (const [fg, bg, , min] of PAIRS) {
       const r = ratio(style.tokens[fg], style.tokens[bg]);
-      assert.ok(r >= MIN_RATIO, `${id}: ${fg} sobre ${bg} = ${r.toFixed(2)}:1 (mínimo ${MIN_RATIO}:1)`);
+      assert.ok(r >= min, `${id}: ${fg} sobre ${bg} = ${r.toFixed(2)}:1 (mínimo ${min}:1)`);
     }
   });
 
@@ -73,10 +82,30 @@ for (const id of STYLE_IDS) {
     }
   });
 
-  test(`${id}: tem os 37 tokens esperados e 7 itens em Faça e Não faça`, () => {
-    assert.equal(Object.keys(style.tokens).length, 37);
+  test(`${id}: tem os ${TOKEN_COUNT} tokens esperados e 7 itens em Faça e Não faça`, () => {
+    assert.equal(Object.keys(style.tokens).length, TOKEN_COUNT);
     assert.equal(style.do.length, 7);
     assert.equal(style.dont.length, 7);
+  });
+
+  test(`${id}: todo token citado nos textos (componentes, faça, não faça, pedidos) existe`, () => {
+    const textos = [
+      style.tagline, style.summary, style.elevation, style.imagery, style.layout,
+      ...style.do, ...style.dont, ...style.prompts,
+      ...style.components.flatMap((c) => [c.name, c.role, c.spec]),
+    ].join("\n");
+    const re = /\b((?:color|font|text|radius|spacing|shadow)-[a-z]+(?:-[a-z]+)*)\b/g;
+    const citados = new Set([...textos.matchAll(re)].map((m) => m[1]));
+    assert.ok(citados.size > 10, "poucos tokens citados: o regex pode estar errado");
+    for (const nome of citados) assert.ok(nome in style.tokens, `${id}: token citado e inexistente: ${nome}`);
+  });
+
+  test(`${id}: tem componentes, 5 pedidos prontos e as seções do formato completo`, () => {
+    assert.ok(style.components.length >= 8, "poucos componentes");
+    assert.equal(style.prompts.length, 5);
+    const md = read(id, "DESIGN.md");
+    const secoes = ["Tokens", "Contraste", "Componentes", "Faça", "Não faça", "Superfícies", "Elevação", "Imagens", "Layout", "Guia para a IA", "Início rápido"];
+    for (const h of secoes) assert.ok(md.includes(`\n## ${h}`), `${id}: falta a seção ${h}`);
   });
 }
 
@@ -89,6 +118,7 @@ test("nenhum arquivo do pacote usa travessão (regra de copy do site)", () => {
   const files = [];
   for (const id of STYLE_IDS) for (const f of fs.readdirSync(path.join(PACK_DIR, id))) files.push(path.join(id, f));
   files.push("shared/ANTI_PATTERNS.md", "shared/LEIA-ME.md");
+  for (const id of STYLE_IDS) files.push(path.join("source", `${id}.json`));
   for (const f of files) assert.ok(!read(f).includes("—"), `${f} tem travessão`);
 });
 
