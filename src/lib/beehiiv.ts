@@ -1,4 +1,5 @@
 import { cleanTag } from "./attribution-core";
+import { buildCustomFields } from "./subscriber-core";
 
 export const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
@@ -11,6 +12,7 @@ export type SubscribeResult = { ok: true } | { ok: false; status: number; error:
 export async function subscribeToNewsletter(
   email: string,
   origin: { source?: unknown; campaign?: unknown; medium: string; page?: string },
+  extra: { firstName?: unknown; style?: unknown } = {},
 ): Promise<SubscribeResult> {
   const apiKey = process.env.BEEHIIV_API_KEY;
   const pubId = process.env.BEEHIIV_PUBLICATION_ID;
@@ -18,6 +20,7 @@ export async function subscribeToNewsletter(
 
   const source = cleanTag(origin.source);
   const campaign = cleanTag(origin.campaign);
+  const customFields = buildCustomFields(extra);
 
   const res = await fetch(`https://api.beehiiv.com/v2/publications/${pubId}/subscriptions`, {
     method: "POST",
@@ -30,6 +33,7 @@ export async function subscribeToNewsletter(
       utm_medium: origin.medium,
       ...(campaign ? { utm_campaign: campaign } : {}),
       ...(origin.page ? { referring_site: origin.page } : {}),
+      ...(customFields.length ? { custom_fields: customFields } : {}),
     }),
   });
 

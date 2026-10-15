@@ -82,6 +82,7 @@ export default function DesignPackForm({
   const uid = useId();
   const [style, setStyle] = useState(options[0]?.id ?? "vitrine");
   const [all, setAll] = useState(false);
+  const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [status, setStatus] = useState<Status>("idle");
   const [error, setError] = useState("");
@@ -101,7 +102,7 @@ export default function DesignPackForm({
       const res = await fetch("/api/design-pack", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, style: choice, utm_source, utm_campaign }),
+        body: JSON.stringify({ email, name, style: choice, utm_source, utm_campaign }),
       });
 
       if (!res.ok) {
@@ -218,31 +219,50 @@ export default function DesignPackForm({
           </div>
         ) : (
           <>
-            <label className={styles.emailLabel} htmlFor={`${uid}-email`}>
-              Seu e-mail
-            </label>
-            <div className={styles.row}>
-              <input
-                id={`${uid}-email`}
-                className={styles.input}
-                type="email"
-                inputMode="email"
-                autoComplete="email"
-                placeholder="seu@email.com"
-                required
-                value={email}
-                disabled={status === "loading"}
-                aria-describedby={`${uid}-notes`}
-                onChange={(e) => {
-                  setEmail(e.target.value);
-                  if (status === "error") setStatus("idle");
-                }}
-              />
-              <button className={styles.button} type="submit" disabled={status === "loading"}>
-                <Download size={18} strokeWidth={2.4} aria-hidden="true" />
-                {status === "loading" ? "Preparando..." : "Baixar o .zip grátis"}
-              </button>
+            <div className={styles.fields}>
+              <div className={styles.field}>
+                <label className={styles.emailLabel} htmlFor={`${uid}-name`}>
+                  Primeiro nome <span className={styles.optional}>(opcional)</span>
+                </label>
+                <input
+                  id={`${uid}-name`}
+                  className={styles.input}
+                  type="text"
+                  autoComplete="given-name"
+                  placeholder="Como você se chama?"
+                  maxLength={40}
+                  value={name}
+                  disabled={status === "loading"}
+                  onChange={(e) => setName(e.target.value)}
+                />
+              </div>
+              <div className={styles.field}>
+                <label className={styles.emailLabel} htmlFor={`${uid}-email`}>
+                  Seu e-mail
+                </label>
+                <input
+                  id={`${uid}-email`}
+                  className={styles.input}
+                  type="email"
+                  inputMode="email"
+                  autoComplete="email"
+                  placeholder="seu@email.com"
+                  required
+                  value={email}
+                  disabled={status === "loading"}
+                  aria-describedby={`${uid}-notes`}
+                  onChange={(e) => {
+                    setEmail(e.target.value);
+                    if (status === "error") setStatus("idle");
+                  }}
+                />
+              </div>
             </div>
+
+            <button className={styles.button} type="submit" disabled={status === "loading"}>
+              <Download size={18} strokeWidth={2.4} aria-hidden="true" />
+              {status === "loading" ? "Preparando..." : "Baixar o .zip grátis"}
+            </button>
 
             {status === "error" && (
               <p className={styles.error} role="alert">

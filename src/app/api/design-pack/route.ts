@@ -13,7 +13,7 @@ const LIMIT_PER_HOUR = 10;
  * newsletter (Beehiiv, com a origem da visita). O arquivo nunca fica em /public.
  */
 export async function POST(req: NextRequest) {
-  let body: { email?: unknown; style?: unknown; utm_source?: unknown; utm_campaign?: unknown };
+  let body: { email?: unknown; name?: unknown; style?: unknown; utm_source?: unknown; utm_campaign?: unknown };
   try {
     body = await req.json();
   } catch {
@@ -48,7 +48,7 @@ export async function POST(req: NextRequest) {
       campaign: body.utm_campaign,
       medium: "design-pack",
       page: "https://promptfly.com.br/design-pack",
-    });
+    }, { firstName: body.name, style: body.style });
     if (!result.ok) return NextResponse.json({ error: result.error }, { status: result.status });
   }
 
