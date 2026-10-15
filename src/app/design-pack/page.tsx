@@ -174,7 +174,7 @@ export default function DesignPackPage() {
         <div className={styles.sectionHead}>
           <span className={styles.tag}>[ O QUE VEM NO .ZIP ]</span>
           <h2 id="zip-t" className={styles.h2}>
-            6 arquivos. Você só precisa de 2.
+            Um guia em PDF e os arquivos prontos.
           </h2>
           <p className={styles.sectionLead}>
             O DESIGN.md e o ANTI_PATTERNS.md são os que importam. Os outros 3 têm os mesmos valores em formato de

@@ -8,7 +8,8 @@
     "start": "next start",
     "lint": "eslint",
     "design-pack:build": "node scripts/design-pack/build.mjs",
-    "test": "node --test \"scripts/tests/*.test.mjs\""
+    "test": "node --test \"scripts/tests/*.test.mjs\"",
+    "design-pack:ebook": "node scripts/design-pack/ebook.mjs"
   },
   "dependencies": {
     "@upstash/redis": "^1.38.0",

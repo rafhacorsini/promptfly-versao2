@@ -1,7 +1,8 @@
 import styles from "./ZipContents.module.css";
 
 const ARQUIVOS = [
-  { f: "LEIA-ME.md", d: "Comece por aqui. Explica como usar em 3 passos." },
+  { f: "Guia-Design-Pack.pdf", d: "Comece por aqui. O ebook que explica tudo: o que são os 2 arquivos, como usar e como personalizar." },
+  { f: "LEIA-ME.md", d: "Resumo rápido do que vem na pasta e do passo a passo." },
   { f: "ANTI_PATTERNS.md", d: "A lista do que a IA nunca pode fazer. Vale pra todos os estilos." },
   { f: "DESIGN.md", d: "As regras do estilo: tokens, componentes, faça e não faça, guia pra IA." },
   { f: "tokens.css", d: "Os mesmos valores em variáveis CSS, pra importar no projeto." },
@@ -16,6 +17,7 @@ export default function ZipContents() {
       <div className={styles.grid}>
         <pre className={styles.tree} aria-label="Pastas dentro do arquivo .zip">
           {`promptfly-design-pack/
+├── Guia-Design-Pack.pdf   ← leia primeiro
 ├── LEIA-ME.md
 ├── ANTI_PATTERNS.md
 └── vitrine/   ← seu estilo

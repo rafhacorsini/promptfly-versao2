@@ -67,11 +67,13 @@ export function listStyles(): StyleSummary[] {
   });
 }
 
-/** Monta o .zip: LEIA-ME e ANTI_PATTERNS na raiz e uma pasta por estilo escolhido. */
+/** Monta o .zip: guia em PDF, LEIA-ME e ANTI_PATTERNS na raiz e uma pasta por estilo escolhido. */
 export function buildZip(choice: StyleId | "todos"): Uint8Array {
   const ids = choice === "todos" ? [...STYLE_IDS] : [choice];
   const root = "promptfly-design-pack";
   const files: Record<string, Uint8Array> = {
+    // O ebook em PDF é a porta de entrada: explica os 2 arquivos e como usar.
+    [`${root}/Guia-Design-Pack.pdf`]: new Uint8Array(fs.readFileSync(path.join(PACK_DIR, "shared", "Guia-Design-Pack.pdf"))),
     [`${root}/LEIA-ME.md`]: strToU8(readText("shared", "LEIA-ME.md")),
     [`${root}/ANTI_PATTERNS.md`]: strToU8(readText("shared", "ANTI_PATTERNS.md")),
   };

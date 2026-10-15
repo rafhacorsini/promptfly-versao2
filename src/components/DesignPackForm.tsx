@@ -191,7 +191,7 @@ export default function DesignPackForm({
           <div className={styles.stepText}>
             <p className={`${styles.stepTitle} ${styles.onDark}`}>Coloque seu e-mail e clique em baixar</p>
             <p className={styles.panelHint}>
-              Você vai baixar <strong>{chosenName}</strong> e o ANTI_PATTERNS.md, num arquivo .zip.
+              Você vai baixar <strong>{chosenName}</strong>, o ANTI_PATTERNS.md e o guia em PDF, num arquivo .zip.
             </p>
           </div>
         </div>
@@ -205,7 +205,7 @@ export default function DesignPackForm({
               Procure o arquivo <strong>{fileName}</strong> na pasta Downloads do seu computador ou celular.
             </p>
             <p className={styles.successText}>
-              <strong>Próximo passo:</strong> descompacte e abra o LEIA-ME.md. Ele explica como usar em 3 passos.
+              <strong>Próximo passo:</strong> descompacte e abra o <strong>Guia-Design-Pack.pdf</strong>. É o ebook que explica tudo, do zero.
             </p>
             <div className={styles.successActions}>
               <button type="submit" className={styles.ghost}>

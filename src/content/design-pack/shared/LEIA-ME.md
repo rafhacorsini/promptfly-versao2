@@ -1,5 +1,7 @@
 # Promptfly Design Pack
 
+**Comece pelo Guia-Design-Pack.pdf.** É um ebook que explica, do zero, o que são os 2 arquivos, como usar, como personalizar e o que cada estilo faz. Este LEIA-ME é só o resumo.
+
 Os 2 arquivos que impedem a IA de fazer site feio:
 
 - **DESIGN.md** diz o que fazer: cores, fontes, tamanhos, raios, espaços e as regras de uso.
@@ -7,7 +9,13 @@ Os 2 arquivos que impedem a IA de fazer site feio:
 
 ## O que vem na pasta
 
-Cada estilo tem 4 arquivos com exatamente os mesmos valores:
+| Arquivo | Para quê |
+|---|---|
+| Guia-Design-Pack.pdf | O manual completo, em ebook. Leia primeiro |
+| LEIA-ME.md | Este resumo |
+| ANTI_PATTERNS.md | A lista do que a IA nunca pode fazer. Vale para todos os estilos |
+
+Cada pasta de estilo tem 4 arquivos com exatamente os mesmos valores:
 
 | Arquivo | Para quê |
 |---|---|
@@ -16,7 +24,6 @@ Cada estilo tem 4 arquivos com exatamente os mesmos valores:
 | theme.tailwind.css | O mesmo, no formato do Tailwind v4 (`@theme`) |
 | tokens.json | O mesmo, em JSON, pra qualquer ferramenta |
 
-O ANTI_PATTERNS.md é um só e vale para todos os estilos.
 
 ## Como usar em 3 passos
 
