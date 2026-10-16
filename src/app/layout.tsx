@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import { Inter } from "next/font/google";
 import CookieConsent from "@/components/CookieConsent";
 import AttributionCapture from "@/components/AttributionCapture";
+import { site } from "@/content/site";
 import "./globals.css";
 
 const inter = Inter({
@@ -109,6 +110,7 @@ const websiteJsonLd = {
     "@type": "Organization",
     name: "Promptfly",
     url: BASE_URL,
+    sameAs: [site.instagram.url],
     logo: {
       "@type": "ImageObject",
       url: `${BASE_URL}/logo.png`,

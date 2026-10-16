@@ -7,6 +7,10 @@ const GUIDES_DIR = path.join(process.cwd(), "src/content/guias");
 export interface GuideFrontmatter {
   title: string;
   description: string;
+  /** Título curto (até ~55 caracteres) só pro <title> do Google e das IAs. Sem ele, usa o title. */
+  seoTitle?: string;
+  /** Descrição de até 160 caracteres só pro Google e pras IAs. Sem ela, usa a description. */
+  seoDescription?: string;
   date: string;
   tags: string[];
   readTime: string;
@@ -35,6 +39,8 @@ export function getAllGuides(): Guide[] {
       slug,
       title: data.title ?? slug,
       description: data.description ?? "",
+      seoTitle: data.seoTitle,
+      seoDescription: data.seoDescription,
       date: data.date ?? "",
       tags: data.tags ?? [],
       readTime: data.readTime ?? "5 min",

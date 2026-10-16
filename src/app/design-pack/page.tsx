@@ -6,6 +6,8 @@ import TwoFiles from "@/components/TwoFiles";
 import ZipContents from "@/components/ZipContents";
 import StepCards from "@/components/StepCards";
 import CopyPromptBlock from "@/components/CopyPromptBlock";
+import JsonLd from "@/components/JsonLd";
+import { faqJsonLd } from "@/lib/jsonld";
 import styles from "./page.module.css";
 
 const TITLE = "Design Pack grátis: DESIGN.md e ANTI_PATTERNS.md";
@@ -49,6 +51,7 @@ const FAQ = [
 export default function DesignPackPage() {
   return (
     <div className={styles.page}>
+      <JsonLd data={faqJsonLd(FAQ)} />
       {/* ── Hero ── */}
       <header className={styles.hero}>
         <div className={styles.heroText}>

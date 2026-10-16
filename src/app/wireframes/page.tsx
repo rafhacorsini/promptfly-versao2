@@ -8,6 +8,8 @@ import WireframeLegend from "@/components/WireframeLegend";
 import WireframeZip from "@/components/WireframeZip";
 import StepCards from "@/components/StepCards";
 import CopyPromptBlock from "@/components/CopyPromptBlock";
+import JsonLd from "@/components/JsonLd";
+import { faqJsonLd } from "@/lib/jsonld";
 import styles from "./page.module.css";
 
 const TITLE = "Wireframe Pack grátis: mande a imagem e a IA monta o site";
@@ -54,6 +56,7 @@ export default function WireframesPage() {
 
   return (
     <div className={styles.page}>
+      <JsonLd data={faqJsonLd(FAQ)} />
       {/* ── Hero ── */}
       <header className={styles.hero}>
         <div className={styles.heroText}>

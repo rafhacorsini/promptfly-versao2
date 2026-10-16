@@ -19,6 +19,8 @@ import skillsProduct from "@/content/skills-product.json";
 import { toThumb } from "@/lib/media";
 import TrackedLink from "@/components/TrackedLink";
 import WireframePair from "@/components/WireframePair";
+import JsonLd from "@/components/JsonLd";
+import { faqJsonLd, productJsonLd } from "@/lib/jsonld";
 import styles from "./page.module.css";
 
 const TITLE = "Promptfly Premium: wireframes, templates, animações e skills";
@@ -104,6 +106,15 @@ export default function PremiumPage() {
 
   return (
     <div className={styles.page}>
+      <JsonLd data={faqJsonLd(faqs)} />
+      <JsonLd
+        data={productJsonLd({
+          name: "Promptfly Premium",
+          description: DESCRIPTION,
+          path: "/premium",
+          price: site.premium.price,
+        })}
+      />
       {/* ── HERO ── */}
       <section className={styles.hero}>
         <div className={styles.heroInner}>

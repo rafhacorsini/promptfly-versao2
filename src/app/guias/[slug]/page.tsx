@@ -67,16 +67,21 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   if (!source) return {};
   const { data } = matter(source);
 
+  // seoTitle/seoDescription (opcionais) valem só pro Google e pras IAs: curtos e com a palavra de busca primeiro.
+  // O título da página e o do compartilhamento social continuam sendo o editorial (data.title).
+  const seoTitle: string = data.seoTitle ?? data.title;
+  const seoDescription: string = data.seoDescription ?? data.description;
+
   return {
-    title: data.title,
-    description: data.description,
+    title: seoTitle,
+    description: seoDescription,
     alternates: { canonical: `${BASE}/guias/${slug}` },
     ...(data.membersOnly
       ? { robots: { index: false, follow: false } }
       : {}),
     openGraph: {
       title: data.title,
-      description: data.description,
+      description: seoDescription,
       type: "article",
       url: `${BASE}/guias/${slug}`,
       publishedTime: data.date,
@@ -88,7 +93,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     twitter: {
       card: "summary_large_image",
       title: data.title,
-      description: data.description,
+      description: seoDescription,
     },
   };
 }
