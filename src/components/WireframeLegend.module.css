@@ -1,0 +1,102 @@
+.wrap {
+  container-type: inline-size;
+  margin: 1.5rem 0 2rem;
+  font-family: var(--font-primary);
+  line-height: 1.45;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--spacing-sm);
+}
+
+@container (min-width: 460px) {
+  .grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@container (min-width: 760px) {
+  .grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+.card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  padding: 1rem;
+  background: #ffffff;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+}
+
+/* Miniaturas com as mesmas formas dos wireframes: cinza claro de fundo, blocos escuros e cinza médio. */
+.sample {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 0.35rem;
+  height: 4.5rem;
+  margin-bottom: 0.3rem;
+  padding: 0.7rem;
+  background: #d9d9d9;
+  border-radius: 10px;
+}
+
+.sImg {
+  align-items: center;
+  color: #d9d9d9;
+  background: #222222;
+}
+
+.barT {
+  display: block;
+  width: 70%;
+  height: 0.7rem;
+  border-radius: 999px;
+  background: #6a6a6a;
+}
+
+.barP {
+  display: block;
+  width: 90%;
+  height: 0.28rem;
+  border-radius: 999px;
+  background: #6a6a6a;
+}
+
+.barShort {
+  width: 55%;
+}
+
+.pill {
+  display: block;
+  width: 55%;
+  height: 1.1rem;
+  border-radius: 999px;
+  background: #222222;
+}
+
+.dot {
+  display: block;
+  width: 1.8rem;
+  height: 1.8rem;
+  border-radius: 50%;
+  background: #222222;
+}
+
+.t {
+  font-size: 1rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: var(--color-title);
+}
+
+.d {
+  font-size: 0.88rem;
+  color: var(--color-text);
+  text-wrap: pretty;
+}

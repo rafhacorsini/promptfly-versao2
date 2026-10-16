@@ -1,0 +1,119 @@
+---
+title: "Como criar sites com IA usando wireframes (é só mandar a imagem)"
+description: "Em vez de descrever o layout com palavras, você manda a imagem de um wireframe e a IA monta o site seguindo a estrutura. O método em 3 passos, 4 exemplos reais e um pack de wireframes grátis."
+date: "2026-10-16"
+tags: ["grátis", "wireframe", "claude code"]
+readTime: "8 min"
+category: "workflows"
+premium: false
+---
+
+Descrever um layout com palavras é difícil. "Um hero com título grande, uma imagem no meio e uns cards do lado" pode virar mil sites diferentes. Já uma imagem só tem uma leitura.
+
+Este guia mostra o método que eu uso: mandar para a IA a **imagem de um wireframe** e deixar que ela monte o site seguindo a estrutura. Não precisa saber programar.
+
+<GuideSummary items="Um wireframe é o esqueleto de uma página: só caixas e barras mostrando onde cada coisa fica. | Você manda essa imagem para a IA e diz o tema do site. | A IA monta a página seguindo a mesma estrutura, bloco por bloco. | Se algo sair fora do lugar, você pede para ela comparar com o wireframe e corrigir. | No fim do guia tem um pack de wireframes grátis, com exemplos e prompts." />
+
+## O problema: a IA não adivinha o layout
+
+Quando você pede um site só com palavras, a IA decide o layout sozinha. E ela decide sempre do mesmo jeito: título no meio, dois botões, três cards iguais embaixo.
+
+Quanto mais você descreve, mais confuso fica: posição, tamanho, o que passa por cima do quê. Uma imagem resolve tudo isso de uma vez, porque mostra a posição de cada bloco.
+
+## O que é um wireframe
+
+É o desenho do esqueleto de uma página. Sem cor, sem foto, sem texto de verdade: só formas.
+
+<WireframeLegend />
+
+O wireframe responde uma pergunta só: **onde fica cada coisa**. O resto (cor, fonte, estilo, textos) você define no pedido.
+
+## O método em 3 passos
+
+<StepCards steps="Escolha um wireframe::Pegue o que combina com o seu projeto. Na dúvida, escolha pelo bloco principal: o que aparece logo no topo da página. | Mande a imagem pra IA::Anexe a imagem no Claude, no ChatGPT ou no Gemini, escreva o tema do seu site e peça para seguir a estrutura. | Compare e ajuste::Peça para a IA comparar o resultado com o wireframe e corrigir o que ficou fora do lugar." />
+
+O pedido que acompanha a imagem pode ser bem curto:
+
+<CopyPromptBlock guia="como-criar-sites-com-wireframes" label="Pedido pra mandar junto com a imagem" buttonLabel="Copiar pedido">
+
+```text
+Crie um site seguindo exatamente a estrutura deste wireframe, bloco por bloco, na mesma ordem e na mesma posição.
+Os blocos escuros com ícone de imagem são imagens, as barras cinza são textos, as pílulas são botões e os círculos são botões redondos ou selos.
+O tema do site é: [DESCREVA O SEU PROJETO].
+Escreva textos reais em português. Não use lorem ipsum. Se faltar alguma informação, pergunte antes de inventar.
+```
+
+</CopyPromptBlock>
+
+Troque só o que está entre colchetes. O resto explica para a IA como ler a imagem.
+
+## Na prática: 4 exemplos
+
+Em cada exemplo, à esquerda está o wireframe que foi enviado e à direita o site que a IA montou. Repare que a estrutura se mantém: o que é título gigante no wireframe vira título gigante no site, o que é imagem vira imagem.
+
+<WireframePair id="wireframe-01" />
+
+<WireframePair id="wireframe-02" />
+
+<WireframePair id="wireframe-03" />
+
+<WireframePair id="wireframe-04" />
+
+O tema muda em cada um (colecionáveis digitais, imobiliária, iluminação, marca de produto). A **estrutura** vem do wireframe, e o **tema** vem do seu pedido. É por isso que o mesmo wireframe serve para vários tipos de site.
+
+## Como deixar o resultado melhor
+
+O wireframe resolve o layout, mas não decide o estilo. Se você não disser nada, a IA escolhe cor e fonte sozinha, e aí volta o "cara de IA".
+
+A solução é usar o wireframe junto com o Design Pack, que também é grátis: o `DESIGN.md` diz as cores, fontes e espaços, e o `ANTI_PATTERNS.md` diz o que nunca fazer. Aí o pedido fica assim:
+
+<CopyPromptBlock guia="como-criar-sites-com-wireframes" label="Wireframe + Design Pack" buttonLabel="Copiar pedido">
+
+```text
+Antes de começar, leia DESIGN.md e ANTI_PATTERNS.md.
+Crie um site seguindo exatamente a estrutura deste wireframe, bloco por bloco.
+Use só os tokens do DESIGN.md para cor, fonte, raio e espaçamento.
+O tema do site é: [DESCREVA O SEU PROJETO].
+```
+
+</CopyPromptBlock>
+
+Quer entender os 2 arquivos? Leia o guia [Os 2 arquivos mais importantes pra quem faz sites com IA](/guias/os-2-arquivos-mais-importantes-para-sites-com-ia).
+
+## Quando a IA erra
+
+Vai acontecer: um bloco na ordem errada, uma seção que sumiu, um título pequeno demais. Não peça "deixa mais parecido". Peça para ela mesma comparar:
+
+<CopyPromptBlock guia="como-criar-sites-com-wireframes" label="Revisar contra o wireframe" buttonLabel="Copiar pedido">
+
+```text
+Compare o site que você criou com o wireframe anexado.
+Liste tudo que está fora de posição, fora de ordem ou faltando.
+Depois corrija, sem mudar o que já está igual.
+```
+
+</CopyPromptBlock>
+
+Para a versão de celular, o pedido é parecido: mande manter a mesma ordem dos blocos, empilhados em uma coluna, em 360px e sem rolagem horizontal.
+
+## Baixe o pack de wireframes, grátis
+
+Montei um pack com os wireframes, os sites de exemplo e todos esses pedidos prontos. Coloque o e-mail e o arquivo baixa na hora, aqui mesmo.
+
+<WireframePackForm />
+
+## Quer o resto da biblioteca?
+
+O wireframe é o primeiro passo. Depois vêm as animações de scroll, os templates completos e as skills pro Claude Code, tudo no Premium, junto com a mentoria pronta: o método do primeiro site ao primeiro cliente.
+
+<PremiumOffer
+  guia="como-criar-sites-com-wireframes"
+  title="Wireframes, templates, animações, skills e a mentoria pronta"
+  price="R$ 129,90, pagamento único e acesso vitalício."
+  perks="Mentoria pronta: o método do primeiro site ao primeiro cliente | Os wireframes prontos pra mandar pra IA | Os prompts completos de todos os templates cinematográficos | As 10 animações de scroll Premium, com prompt e código | As skills cinematográficas pro Claude Code | Grupo VIP no Discord | Pagamento via Hotmart, garantia de 7 dias"
+  ctaLabel="Quero o Premium"
+  secondaryLabel="Ver os templates grátis"
+  secondaryHref="/projetos"
+/>
+
+Bastidores e templates novos no **[@rafha.gpt](https://www.instagram.com/rafha.gpt/)** →

@@ -84,6 +84,16 @@ export const resources: Resource[] = [
     ],
   },
   {
+    slug: "wireframes",
+    title: "Wireframe Pack: mande a imagem e a IA monta o site",
+    description:
+      "Wireframes prontos para mandar para a IA, com exemplos de sites criados a partir deles e os prompts. O guia mostra o método e o pack baixa grátis com o seu e-mail.",
+    category: "workflows",
+    tools: ["Claude", "ChatGPT", "Gemini"],
+    access: "free",
+    guideSlug: "como-criar-sites-com-wireframes",
+  },
+  {
     slug: "os-2-arquivos",
     title: "Os 2 arquivos que impedem a IA de fazer site feio",
     description:
@@ -265,6 +275,7 @@ export const resources: Resource[] = [
 /** Ordem dos cards em "Recursos em destaque". Aceita slugs daqui e ids de projects.json. */
 export const featuredSlugs = [
   "jurado",
+  "wireframes",
   "os-2-arquivos",
   "app-jurado",
   "anti-patterns",

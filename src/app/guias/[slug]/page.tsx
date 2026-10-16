@@ -36,6 +36,9 @@ import GuideSummary from "@/components/GuideSummary";
 import WithWithout from "@/components/WithWithout";
 import DesignMdAnatomy from "@/components/DesignMdAnatomy";
 import ZipContents from "@/components/ZipContents";
+import WireframePair from "@/components/WireframePair";
+import WireframeLegend from "@/components/WireframeLegend";
+import WireframePackForm from "@/components/WireframePackForm";
 import AnimacaoPreview from "@/components/AnimacaoPreview";
 import styles from "./page.module.css";
 
@@ -47,6 +50,7 @@ const mdxComponents = {
   Checklist, PromptCarousel, CopyPromptBlock, ProjectShowcase, PremiumOffer, AnchorCTA,
   BeforeAfter, ResourcePrompt, GuideVideo, AnimacaoPreview, DesignPackDownload,
   TwoFiles, StepCards, GuideSummary, WithWithout, DesignMdAnatomy, ZipContents,
+  WireframePair, WireframeLegend, WireframePackForm,
 };
 
 interface Props {

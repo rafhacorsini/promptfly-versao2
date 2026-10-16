@@ -1,0 +1,34 @@
+[
+  {
+    "id": "wireframe-01",
+    "title": "Título gigante com personagem no centro",
+    "niche": "Colecionáveis digitais",
+    "notes": "Faixa de navegação, título enorme atrás da imagem principal, cartões menores ao lado e uma grade de palavras com divisórias.",
+    "wireframe": "wireframes/wireframe-01.png",
+    "example": "exemplos/site-01.jpg"
+  },
+  {
+    "id": "wireframe-02",
+    "title": "Hero de tela cheia com recorte embaixo",
+    "niche": "Imobiliária",
+    "notes": "Imagem grande ocupando o topo, título sobreposto, selos de números na lateral e botão central no recorte da base.",
+    "wireframe": "wireframes/wireframe-02.png",
+    "example": "exemplos/site-02.jpg"
+  },
+  {
+    "id": "wireframe-03",
+    "title": "Produto em destaque com seletor",
+    "niche": "Iluminação e objetos",
+    "notes": "Fundo escuro, título à esquerda, três miniaturas para trocar o produto e etiquetas flutuando sobre a imagem.",
+    "wireframe": "wireframes/wireframe-03.png",
+    "example": "exemplos/site-03.jpg"
+  },
+  {
+    "id": "wireframe-04",
+    "title": "Nome da marca enorme sobre o produto",
+    "niche": "Marca de produto",
+    "notes": "Moldura clara em volta do hero, título gigante cortado pelo produto e uma miniatura no canto inferior.",
+    "wireframe": "wireframes/wireframe-04.png",
+    "example": "exemplos/site-04.jpg"
+  }
+]

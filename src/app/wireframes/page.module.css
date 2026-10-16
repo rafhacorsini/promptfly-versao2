@@ -1,0 +1,403 @@
+.page {
+  max-width: 1160px;
+  margin: 0 auto;
+  padding: clamp(2rem, 6vw, 4.5rem) clamp(1rem, 4vw, 2.5rem) clamp(3rem, 8vw, 5rem);
+  display: flex;
+  flex-direction: column;
+  gap: clamp(4rem, 10vw, 7rem);
+  font-family: var(--font-primary);
+}
+
+/* ── Elementos comuns ── */
+.tag {
+  align-self: flex-start;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  color: var(--color-title);
+  border: 1px solid #cfcfcf;
+  border-radius: 4px;
+  padding: 4px 10px;
+}
+
+.ctas {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  width: 100%;
+  max-width: 380px;
+}
+
+.ctaPrimary,
+.ctaSecondary,
+.ctaLight,
+.ctaOutline {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  min-height: 3.25rem;
+  padding: 0 1.5rem;
+  font-size: 1rem;
+  font-weight: 800;
+  text-decoration: none;
+  border-radius: var(--radius-lg);
+  transition: transform 0.2s ease;
+}
+
+.ctaPrimary {
+  color: #ffffff;
+  background: var(--color-title);
+}
+
+.ctaSecondary {
+  color: var(--color-title);
+  background: #ffffff;
+  border: 1px solid rgba(0, 0, 0, 0.15);
+}
+
+.ctaPrimary:hover,
+.ctaSecondary:hover,
+.ctaLight:hover,
+.ctaOutline:hover {
+  transform: translateY(-1px);
+}
+
+.ctaPrimary:focus-visible,
+.ctaSecondary:focus-visible,
+.ctaLight:focus-visible,
+.ctaOutline:focus-visible,
+.faqQ:focus-visible,
+.finalNote a:focus-visible {
+  outline: 3px solid var(--color-accent);
+  outline-offset: 3px;
+}
+
+/* ── Hero ── */
+.hero {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: clamp(2.5rem, 6vw, 3.5rem);
+  align-items: center;
+}
+
+.heroText {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.title {
+  margin: 0;
+  font-size: clamp(2.4rem, 6.4vw, 4.6rem);
+  font-weight: 800;
+  line-height: 0.98;
+  letter-spacing: -0.05em;
+  color: var(--color-title);
+  text-wrap: balance;
+}
+
+.accent {
+  color: var(--color-accent);
+}
+
+.lead {
+  margin: 0;
+  max-width: 52ch;
+  font-size: clamp(1.02rem, 1.5vw, 1.18rem);
+  line-height: 1.6;
+  color: var(--color-text);
+  text-wrap: pretty;
+}
+
+.steps {
+  list-style: none;
+  margin: 0.25rem 0 0.5rem;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+}
+
+.steps li {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--color-title);
+}
+
+.stepNum {
+  display: grid;
+  place-items: center;
+  width: 1.85rem;
+  height: 1.85rem;
+  border-radius: 50%;
+  background: var(--color-accent);
+  color: var(--color-title);
+  font-size: 0.85rem;
+  font-weight: 800;
+}
+
+/* Ilustração: o wireframe e o site que saiu dele, lado a lado e levemente inclinados */
+.visual {
+  position: relative;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.9rem;
+  align-items: start;
+}
+
+.shot {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin: 0;
+  min-width: 0;
+}
+
+.shotLabel {
+  align-self: flex-start;
+  padding: 2px 8px;
+  font-size: 0.7rem;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--color-title);
+  background: #ffffff;
+  border: 1px solid rgba(0, 0, 0, 0.18);
+  border-radius: 4px;
+}
+
+.shotLabelDark {
+  color: #ffffff;
+  background: var(--color-title);
+  border-color: var(--color-title);
+}
+
+.shotImg {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: var(--radius-lg);
+  border: 1px solid rgba(0, 0, 0, 0.15);
+  background: #ffffff;
+}
+
+.arrowBubble {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  z-index: 2;
+  display: grid;
+  place-items: center;
+  width: 2.75rem;
+  height: 2.75rem;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  background: var(--color-accent);
+  color: var(--color-title);
+  border: 3px solid var(--color-bg);
+}
+
+/* ── Seções ── */
+.pairs {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--spacing-md);
+}
+
+@media (min-width: 1024px) {
+  .pairs {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .pairs figure {
+    margin: 0;
+  }
+}
+
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(1.5rem, 3vw, 2rem);
+  scroll-margin-top: 80px;
+}
+
+.sectionHead {
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+  max-width: 720px;
+}
+
+.h2 {
+  margin: 0;
+  font-size: clamp(1.8rem, 4.4vw, 3rem);
+  font-weight: 800;
+  line-height: 1.02;
+  letter-spacing: -0.04em;
+  color: var(--color-title);
+  text-wrap: balance;
+}
+
+.sectionLead {
+  margin: 0;
+  font-size: clamp(1rem, 1.4vw, 1.1rem);
+  line-height: 1.6;
+  color: var(--color-text);
+  text-wrap: pretty;
+}
+
+/* O download ganha uma moldura pra se destacar do resto da página. */
+.download {
+  padding: clamp(1.25rem, 4vw, 2.5rem);
+  background: #ffffff;
+  border: 1px solid var(--color-border);
+  border-radius: calc(var(--radius-lg) + 6px);
+}
+
+/* ── FAQ ── */
+.faq {
+  display: flex;
+  flex-direction: column;
+  background: #ffffff;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+}
+
+.faqItem {
+  border-bottom: 1px dashed rgba(0, 0, 0, 0.12);
+}
+
+.faqItem:last-child {
+  border-bottom: 0;
+}
+
+.faqQ {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  padding: 1.1rem 1.25rem;
+  font-size: 1.02rem;
+  font-weight: 700;
+  color: var(--color-title);
+  cursor: pointer;
+  list-style: none;
+}
+
+.faqQ::-webkit-details-marker {
+  display: none;
+}
+
+.faqQ::after {
+  content: "+";
+  flex-shrink: 0;
+  font-size: 1.4rem;
+  font-weight: 400;
+  line-height: 1;
+}
+
+.faqItem[open] .faqQ::after {
+  content: "−";
+}
+
+.faqA {
+  margin: 0;
+  padding: 0 1.25rem 1.2rem;
+  font-size: 0.97rem;
+  line-height: 1.6;
+  color: var(--color-text);
+  text-wrap: pretty;
+}
+
+/* ── Fechamento ── */
+.final {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 1rem;
+  padding: clamp(1.75rem, 5vw, 3rem);
+  background: var(--color-title);
+  border-radius: calc(var(--radius-lg) + 6px);
+  color: #ffffff;
+}
+
+.finalTitle {
+  margin: 0;
+  font-size: clamp(1.6rem, 4vw, 2.6rem);
+  font-weight: 800;
+  line-height: 1.05;
+  letter-spacing: -0.04em;
+  text-wrap: balance;
+}
+
+.finalText {
+  margin: 0;
+  max-width: 52ch;
+  font-size: 1.02rem;
+  line-height: 1.6;
+  color: #e6e6e6;
+}
+
+.ctaLight {
+  color: var(--color-title);
+  background: var(--color-accent);
+}
+
+.ctaOutline {
+  color: #ffffff;
+  border: 1px solid rgba(255, 255, 255, 0.4);
+}
+
+.finalNote {
+  margin: 0.5rem 0 0;
+  font-size: 0.92rem;
+  color: #e6e6e6;
+}
+
+.finalNote a {
+  color: #ffffff;
+  font-weight: 700;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+/* ── Tablet e desktop ── */
+@media (min-width: 768px) {
+  .ctas {
+    flex-direction: row;
+    max-width: none;
+  }
+
+  .steps {
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 0.5rem 1.5rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .hero {
+    grid-template-columns: 1.1fr 0.9fr;
+  }
+
+  .shot:first-child {
+    transform: rotate(-2deg);
+  }
+
+  .shot:last-child {
+    transform: rotate(2deg) translateY(1.5rem);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ctaPrimary,
+  .ctaSecondary,
+  .ctaLight,
+  .ctaOutline {
+    transition: none;
+  }
+}

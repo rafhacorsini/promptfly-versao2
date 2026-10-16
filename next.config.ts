@@ -4,6 +4,7 @@ const nextConfig: NextConfig = {
   // O zip do Design Pack é montado no servidor lendo estes arquivos: garante que vão junto no deploy.
   outputFileTracingIncludes: {
     "/api/design-pack": ["./src/content/design-pack/**/*"],
+    "/api/wireframe-pack": ["./src/content/wireframe-pack/**/*"],
     "/design-pack": ["./src/content/design-pack/source/*"],
     "/guias/[slug]": ["./src/content/design-pack/source/*"],
   },

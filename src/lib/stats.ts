@@ -10,6 +10,7 @@ export const TRACKED_EVENTS = [
   "animacao_copy",
   "anchor_cta_click",
   "design_pack_download",
+  "wireframe_pack_download",
 ] as const;
 export type TrackedEvent = (typeof TRACKED_EVENTS)[number];
 

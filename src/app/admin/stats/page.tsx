@@ -24,6 +24,7 @@ const NOMES: Record<string, string> = {
   anchor_cta_click: "Cliques em botão de guia",
   newsletter_signup: "Inscrições (formulário da home)",
   design_pack_download: "Downloads do Design Pack",
+  wireframe_pack_download: "Downloads do Wireframe Pack",
 };
 
 const ordenar = (o: Record<string, number | string>) =>
