@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { redis } from "@/lib/redis";
+import { clientIp } from "@/lib/security-core";
 import { isTrackedEvent, recordEvent } from "@/lib/stats";
 
 export const dynamic = "force-dynamic";
@@ -18,7 +19,7 @@ export async function POST(req: NextRequest) {
 
   try {
     // Limite simples por IP e por minuto: o IP só vira chave temporária do limite e expira em 60s.
-    const ip = req.headers.get("x-forwarded-for")?.split(",")[0].trim() || "anon";
+    const ip = clientIp(req.headers);
     const bucket = `rl:track:${ip}:${Math.floor(Date.now() / 60000)}`;
     const n = await redis.incr(bucket);
     if (n === 1) await redis.expire(bucket, 60);

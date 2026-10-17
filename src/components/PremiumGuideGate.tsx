@@ -105,9 +105,10 @@ export default function PremiumGuideGate({ purchaseUrl }: Props) {
               <>
                 <h3 className={styles.modalTitle}>Verifique seu e-mail</h3>
                 <p className={styles.modalText}>
-                  Enviamos um acesso para <strong>{emailInput}</strong>. Clique no link do
-                  e-mail <strong>ou</strong> digite o código de 6 dígitos abaixo. Vale por
-                  15 minutos.
+                  Se <strong>{emailInput}</strong> tiver uma compra, o acesso chega em instantes.
+                  Clique no link do e-mail <strong>ou</strong> digite o código de 6 dígitos
+                  abaixo. Vale por 15 minutos. Não chegou? Olhe o spam e confira se é o mesmo
+                  e-mail que você usou na compra.
                 </p>
                 <form onSubmit={verifyCode} className={styles.form}>
                   <input

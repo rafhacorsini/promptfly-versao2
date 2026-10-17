@@ -1,16 +1,15 @@
 import { NextRequest, NextResponse } from "next/server";
+import { checkAdminPassword } from "@/lib/admin-auth";
 
 const GITHUB_TOKEN = process.env.GITHUB_TOKEN;
 const GITHUB_REPO = process.env.GITHUB_REPO ?? "rafhacorsini/promptfly-versao2";
 const FILE_PATH = "src/content/template-product.json";
-const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD;
 
 export async function POST(req: NextRequest) {
-  const { password, data } = await req.json();
+  const { password, data } = await req.json().catch(() => ({}));
 
-  if (!ADMIN_PASSWORD || password !== ADMIN_PASSWORD) {
-    return NextResponse.json({ error: "Senha incorreta." }, { status: 401 });
-  }
+  const denied = await checkAdminPassword(req, password);
+  if (denied) return denied;
 
   if (!GITHUB_TOKEN) {
     return NextResponse.json({ error: "GITHUB_TOKEN não configurado." }, { status: 500 });

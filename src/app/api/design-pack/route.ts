@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { redis } from "@/lib/redis";
+import { clientIp } from "@/lib/security-core";
 import { EMAIL_RE, subscribeToNewsletter } from "@/lib/beehiiv";
 import { buildZip, isStyleChoice } from "@/lib/design-pack";
 import { recordEvent } from "@/lib/stats";
@@ -29,7 +30,7 @@ export async function POST(req: NextRequest) {
   }
 
   try {
-    const ip = req.headers.get("x-forwarded-for")?.split(",")[0].trim() || "anon";
+    const ip = clientIp(req.headers);
     const bucket = `rl:dp:${ip}:${Math.floor(Date.now() / 3600000)}`;
     const n = await redis.incr(bucket);
     if (n === 1) await redis.expire(bucket, 3600);

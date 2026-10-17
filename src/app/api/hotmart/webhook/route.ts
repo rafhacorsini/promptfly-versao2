@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { grantAccess, revokeAccess } from "@/lib/access";
 import { recordRefund, recordSale } from "@/lib/stats";
+import { safeEqual } from "@/lib/security-core";
 
 // Eventos que LIBERAM acesso
 const GRANT_EVENTS = new Set([
@@ -47,7 +48,7 @@ export async function POST(req: NextRequest) {
   const bodyToken = typeof body.hottok === "string" ? body.hottok : undefined;
   const token = headerToken ?? bodyToken;
 
-  if (token !== expected) {
+  if (!safeEqual(token, expected)) {
     return NextResponse.json({ error: "Token inválido." }, { status: 401 });
   }
 

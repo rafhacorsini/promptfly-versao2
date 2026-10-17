@@ -1,9 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import { readEvents, readSales } from "@/lib/stats";
+import { checkAdminPassword } from "@/lib/admin-auth";
 
 export const dynamic = "force-dynamic";
-
-const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD;
 
 /** Inscritos ativos da newsletter agrupados por origem (utm_source), direto do Beehiiv. */
 async function newsletterBySource() {
@@ -35,9 +34,8 @@ async function newsletterBySource() {
 
 export async function POST(req: NextRequest) {
   const { password } = await req.json().catch(() => ({}));
-  if (!ADMIN_PASSWORD || password !== ADMIN_PASSWORD) {
-    return NextResponse.json({ error: "Senha incorreta." }, { status: 401 });
-  }
+  const denied = await checkAdminPassword(req, password);
+  if (denied) return denied;
 
   const [events, sales, newsletter] = await Promise.all([readEvents(), readSales(), newsletterBySource()]);
   return NextResponse.json({ events, sales, newsletter });

@@ -1,15 +1,13 @@
 import { NextRequest, NextResponse } from "next/server";
 import { grantAccess } from "@/lib/access";
 import { premium } from "@/lib/premium";
-
-const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD;
+import { checkAdminPassword } from "@/lib/admin-auth";
 
 export async function POST(req: NextRequest) {
-  const { password, emails } = await req.json();
+  const { password, emails } = await req.json().catch(() => ({}));
 
-  if (!ADMIN_PASSWORD || password !== ADMIN_PASSWORD) {
-    return NextResponse.json({ error: "Senha incorreta." }, { status: 401 });
-  }
+  const denied = await checkAdminPassword(req, password);
+  if (denied) return denied;
 
   if (!Array.isArray(emails) || emails.length === 0) {
     return NextResponse.json({ error: "Nenhum e-mail informado." }, { status: 400 });
