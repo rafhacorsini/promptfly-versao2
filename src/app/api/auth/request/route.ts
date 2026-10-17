@@ -58,7 +58,7 @@ export async function POST(req: NextRequest) {
 
   const resend = new Resend(apiKey);
   try {
-    await resend.emails.send({
+    const { error: sendError } = await resend.emails.send({
       from,
       to: normalized,
       subject: "Seu acesso à Promptfly",
@@ -73,6 +73,8 @@ export async function POST(req: NextRequest) {
         </div>
       `,
     });
+    // O Resend não lança erro quando recusa o envio: devolve { error }.
+    if (sendError) throw new Error(`${sendError.name}: ${sendError.message}`);
   } catch (err) {
     console.error("Erro ao enviar e-mail de login:", err);
     return NextResponse.json({ error: "Não foi possível enviar o e-mail." }, { status: 502 });

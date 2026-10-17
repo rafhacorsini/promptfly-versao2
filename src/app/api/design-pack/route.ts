@@ -1,9 +1,10 @@
-import { NextRequest, NextResponse } from "next/server";
+import { after, NextRequest, NextResponse } from "next/server";
 import { redis } from "@/lib/redis";
 import { clientIp } from "@/lib/security-core";
 import { EMAIL_RE, subscribeToNewsletter } from "@/lib/beehiiv";
 import { buildZip, isStyleChoice } from "@/lib/design-pack";
 import { recordEvent } from "@/lib/stats";
+import { enrollInDrip } from "@/lib/drip";
 
 export const dynamic = "force-dynamic";
 
@@ -62,6 +63,16 @@ export async function POST(req: NextRequest) {
   } catch (err) {
     console.error("design-pack: evento:", err);
   }
+
+  // Boas-vindas por e-mail (3 e-mails). Roda depois que o download já foi entregue.
+  after(() =>
+    enrollInDrip("design-pack", email, {
+      name: body.name,
+      style: body.style,
+      source: body.utm_source,
+      campaign: body.utm_campaign,
+    }),
+  );
 
   const zip = buildZip(body.style);
   return new NextResponse(Buffer.from(zip), {

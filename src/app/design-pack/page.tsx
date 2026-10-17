@@ -44,7 +44,7 @@ const FAQ = [
   },
   {
     q: "É grátis mesmo?",
-    a: "É. Você só informa o e-mail, que entra na newsletter do Promptfly (1 e-mail por semana). Dá pra sair quando quiser.",
+    a: "É. Você só informa o e-mail, que entra na newsletter do Promptfly (1 e-mail por semana) e recebe 3 e-mails de boas-vindas nos primeiros dias, sobre como usar o pack. Dá pra sair quando quiser.",
   },
 ];
 

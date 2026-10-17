@@ -281,7 +281,7 @@ export default function DesignPackForm({
               <p className={styles.note}>
                 <Mail size={16} strokeWidth={2.4} aria-hidden="true" />
                 <span>
-                  Seu e-mail entra na newsletter do Promptfly: 1 e-mail por semana, e dá pra sair quando quiser.
+                  Seu e-mail entra na newsletter do Promptfly (1 e-mail por semana) e você recebe 3 e-mails de boas-vindas nos primeiros dias, sobre como usar o pack. Dá pra sair quando quiser.
                 </span>
               </p>
             </div>
